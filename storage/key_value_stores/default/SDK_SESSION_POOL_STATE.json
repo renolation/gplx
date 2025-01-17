@@ -1,0 +1,111 @@
+{
+  "usableSessionsCount": 2,
+  "retiredSessionsCount": 0,
+  "sessions": [
+    {
+      "id": "session_87FUMOpoBV",
+      "cookieJar": {
+        "version": "tough-cookie@5.1.0",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2025-01-17T11:04:38.657Z",
+      "createdAt": "2025-01-17T10:14:38.657Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_XocI4vbVH4",
+      "cookieJar": {
+        "version": "tough-cookie@5.1.0",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": ".AspNetCore.Antiforgery.wbgpCZtQwYE",
+            "value": "CfDJ8Fr1PDpj3HJOpAH82KwLT-seKTcbKdDb4K_Z-z29wPJ1Nqcoj2iLaA-SwfsuwRdnIMvN4HP_2RzL6Q9jsb2cRUTasuR2KeyzbBAOAsPczagwCle7XPXw2ZU8RqjVO0wM3mPkY0MCfdy7KpJuFBxfYWw",
+            "expires": "2025-01-17T11:04:44.116Z",
+            "domain": "taplaixe.vn",
+            "path": "/",
+            "httpOnly": true,
+            "hostOnly": true,
+            "creation": "2025-01-17T10:14:44.118Z",
+            "lastAccessed": "2025-01-17T10:14:44.118Z"
+          },
+          {
+            "key": "_ga_7PP17KXL6V",
+            "value": "GS1.1.1737108881.1.0.1737108881.0.0.0",
+            "expires": "2026-02-21T10:14:41.967Z",
+            "domain": "taplaixe.vn",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2025-01-17T10:14:44.118Z",
+            "lastAccessed": "2025-01-17T10:14:44.118Z"
+          },
+          {
+            "key": "_ga",
+            "value": "GA1.1.540144038.1737108882",
+            "expires": "2026-02-21T10:14:41.967Z",
+            "domain": "taplaixe.vn",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2025-01-17T10:14:44.118Z",
+            "lastAccessed": "2025-01-17T10:14:44.118Z"
+          },
+          {
+            "key": "__gads",
+            "value": "ID=22fb6dee6576706e:T=1737108883:RT=1737108883:S=ALNI_MazxgEQ-MTHj1P9tUxEjzsv1_o5Ew",
+            "expires": "2026-02-11T10:14:43.000Z",
+            "domain": "taplaixe.vn",
+            "path": "/",
+            "secure": true,
+            "hostOnly": false,
+            "creation": "2025-01-17T10:14:44.118Z",
+            "lastAccessed": "2025-01-17T10:14:44.118Z"
+          },
+          {
+            "key": "__gpi",
+            "value": "UID=00000fedf1f47eca:T=1737108883:RT=1737108883:S=ALNI_MZBozTrgLq3Ygt75Uh5PBgIAGMiow",
+            "expires": "2026-02-11T10:14:43.000Z",
+            "domain": "taplaixe.vn",
+            "path": "/",
+            "secure": true,
+            "hostOnly": false,
+            "creation": "2025-01-17T10:14:44.118Z",
+            "lastAccessed": "2025-01-17T10:14:44.118Z"
+          },
+          {
+            "key": "__eoi",
+            "value": "ID=b4958f727b2868ac:T=1737108883:RT=1737108883:S=AA-AfjZJnnC9RYf1Ol55S8chk6yr",
+            "expires": "2025-07-16T10:14:43.000Z",
+            "domain": "taplaixe.vn",
+            "path": "/",
+            "secure": true,
+            "hostOnly": false,
+            "creation": "2025-01-17T10:14:44.118Z",
+            "lastAccessed": "2025-01-17T10:14:44.118Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2025-01-17T11:04:38.659Z",
+      "createdAt": "2025-01-17T10:14:38.659Z",
+      "usageCount": 2,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    }
+  ]
+}
