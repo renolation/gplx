@@ -12,8 +12,6 @@ export class Answer {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  questionId: number;
 
   @Column()
   text: string;

@@ -4,7 +4,6 @@ import {
   Column,
   ManyToOne,
   OneToMany,
-  JoinColumn,
 } from 'typeorm';
 import { Chapter } from './chapter.entity';
 import { Answer } from './answer.entity';
@@ -15,21 +14,21 @@ export class Question {
   id: number;
 
   @Column()
-  newColumn: number;
-
-  @Column()
-  chapterId: number;
+  index: number;
 
   @Column()
   text: string;
 
+  @Column({nullable: true})
+  image: string;
+
   @Column()
   explain: string;
 
-  @Column()
+  @Column({nullable: true})
   type: string;
 
-  @Column()
+  @Column({default: false})
   isImportant: boolean;
 
   @Column()

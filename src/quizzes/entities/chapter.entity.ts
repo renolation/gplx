@@ -7,6 +7,9 @@ export class Chapter {
   id: number;
 
   @Column()
+  index: number;
+
+  @Column()
   name: string;
 
   @OneToMany(() => Question, (question) => question.chapter)
