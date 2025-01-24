@@ -5,6 +5,9 @@ import { QuizzesModule } from './quizzes/quizzes.module';
 import { Quiz } from './quizzes/entities/quiz.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GetterModule } from './getter/getter.module';
+import { Answer } from "./quizzes/entities/answer.entity";
+import { Chapter } from "./quizzes/entities/chapter.entity";
+import { Question } from "./quizzes/entities/question.entity";
 
 @Module({
   imports: [
@@ -18,7 +21,7 @@ import { GetterModule } from './getter/getter.module';
       ssl: {
         rejectUnauthorized: false,
       },
-      entities: [Quiz],
+      entities: [Quiz, Answer, Chapter, Question],
       synchronize: true,
     }),
     QuizzesModule,

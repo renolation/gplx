@@ -5,8 +5,8 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
-} from '@nestjs/common';
+  Delete, Query
+} from "@nestjs/common";
 import { GetterService } from './getter.service';
 import { CreateGetterDto } from './dto/create-getter.dto';
 import { UpdateGetterDto } from './dto/update-getter.dto';
@@ -25,14 +25,17 @@ export class GetterController {
     return this.getterService.findAll();
   }
 
+
+  @Get('/url')
+  findByUrl(@Query('link') link: string) {
+    console.log(link);
+    return this.getterService.findByUrl(`https://${link}`);
+  }
+
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.getterService.findOne(+id);
-  }
-
-  @Get('/url/:url')
-  findByUrl(@Param('url') url: string) {
-    return this.getterService.findByUrl(`https://${url}`);
   }
 
   @Patch(':id')
