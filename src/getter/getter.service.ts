@@ -120,6 +120,9 @@ export class GetterService {
       // console.log("Question is exist");
       return isExist;
     }
+    if(question.chapter.index === 8){
+      question.isImportant = true;
+    }
     return this.questionRepository.save(question);
   }
 

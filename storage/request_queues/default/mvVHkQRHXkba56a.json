@@ -1,9 +1,0 @@
-{
-	"id": "mvVHkQRHXkba56a",
-	"json": "{\"id\":\"mvVHkQRHXkba56a\",\"url\":\"https://taplaixe.vn/\",\"loadedUrl\":\"https://taplaixe.vn/\",\"uniqueKey\":\"https://taplaixe.vn\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2025-01-17T10:14:45.189Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://taplaixe.vn",
-	"url": "https://taplaixe.vn/"
-}
