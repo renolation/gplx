@@ -1,18 +1,30 @@
 import 'package:equatable/equatable.dart';
+import 'package:gplx_app/core/common/features/domain/entities/chapter_entity.dart';
 import 'question_model.dart';
 
-class ChapterModel extends Equatable {
-  final int id;
-  final int index;
-  final String name;
-  final List<QuestionModel> questions;
+class ChapterModel extends ChapterEntity {
+
 
   const ChapterModel({
-    required this.id,
-    required this.index,
-    required this.name,
-    this.questions = const [],
+    required super.id,
+    required super.index,
+    required super.name,
+    super.questions = const [],
   });
+
+   ChapterModel copyWith({
+    int? id,
+    int? index,
+    String? name,
+    List<QuestionModel>? questions,
+  }) {
+    return ChapterModel(
+      id: id ?? this.id,
+      index: index ?? this.index,
+      name: name ?? this.name,
+      questions: questions ?? this.questions,
+    );
+  }
 
   factory ChapterModel.fromJson(Map<String, dynamic> json) {
     return ChapterModel(
@@ -31,7 +43,7 @@ class ChapterModel extends Equatable {
       'id': id,
       'index': index,
       'name': name,
-      'questions': questions.map((e) => e.toJson()).toList(),
+      'questions': questions.map((e) => (e as QuestionModel).toJson()).toList(),
     };
   }
 

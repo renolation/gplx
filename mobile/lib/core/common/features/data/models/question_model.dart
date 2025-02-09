@@ -20,6 +20,32 @@ class QuestionModel extends QuestionEntity {
     answers: answers,
   );
 
+  QuestionModel copyWith({
+    int? id,
+    int? index,
+    String? text,
+    String? image,
+    String? explain,
+    String? type,
+    bool? isImportant,
+    String? vehicle,
+    ChapterModel? chapter,
+    List<AnswerModel>? answers,
+  }) {
+    return QuestionModel(
+      id: id ?? this.id,
+      index: index ?? this.index,
+      text: text ?? this.text,
+      image: image ?? this.image,
+      explain: explain ?? this.explain,
+      type: type ?? this.type,
+      isImportant: isImportant ?? this.isImportant,
+      vehicle: vehicle ?? this.vehicle,
+      chapter: chapter ?? this.chapter as ChapterModel,
+      answers: answers ?? this.answers as List<AnswerModel>,
+    );
+  }
+
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
     return QuestionModel(
       id: json['id'] as int,
