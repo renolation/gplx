@@ -1,5 +1,7 @@
 
 
+import 'dart:convert';
+
 import 'package:gplx_app/core/errors/exceptions.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -22,12 +24,14 @@ class QuestionRemoteDataSrcImpl extends QuestionRemoteDataSrc {
   @override
   Future<List<QuestionModel>> getQuestions() async {
     try {
-
       final data = await _client
-          .from('questions')
-          .select();
+          .from('question')
+          .select('*, answer(*), chapter(*)');
+      print(data);
+      String jsonString = jsonEncode(data);
 
-      return data as List<QuestionModel>;
+      final jsonData = questionModelFromJson(jsonString);
+      return jsonData;
     } on ServerException {
       rethrow;
     } catch (e) {

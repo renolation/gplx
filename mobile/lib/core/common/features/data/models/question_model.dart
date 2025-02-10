@@ -3,6 +3,13 @@ import '../../domain/entities/question_entity.dart';
 import 'chapter_model.dart';
 import 'answer_model.dart';
 
+import 'dart:convert';
+
+List<QuestionModel> questionModelFromJson(String str) => List<QuestionModel>.from(json.decode(str).map((x) => QuestionModel.fromJson(x)));
+
+String questionModelToJson(List<QuestionModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+
 class QuestionModel extends QuestionEntity {
   const QuestionModel({
     required super.id,
@@ -79,6 +86,4 @@ class QuestionModel extends QuestionEntity {
     };
   }
 
-  @override
-  List<Object?> get props => super.props;
 }
