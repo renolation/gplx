@@ -49,7 +49,7 @@ final GoRouter goRouter = GoRouter(
                     return BlocProvider(
                       create: (context) => QuestionsBloc(
                         getQuestions: sl(),
-                      ),
+                      )..add(const GetQuestionsEvent()),
                       child: const QuestionsScreen(),
                     );
                   },
