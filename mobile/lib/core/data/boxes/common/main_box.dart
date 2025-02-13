@@ -2,7 +2,7 @@ part of '../../boxes.dart';
 
 abstract class MainBox {
 
-  String get boxKey;
+  CollectionSchema<dynamic> get schema;
 
   bool get isEncrypted => false;
 
@@ -43,7 +43,7 @@ abstract class MainBox {
     } else {
       final dir = await getApplicationDocumentsDirectory();
        _isar = await Isar.open(
-        [SettingsModelSchema],
+        [schema],
         directory: dir.path,
       );
     }
@@ -53,7 +53,7 @@ abstract class MainBox {
   Isar get isar {
     final result = _isar;
     if (result == null) {
-      throw Exception('[FluxBox] $boxKey is not initialized');
+      throw Exception('[FluxBox] $schema is not initialized');
     }
     return result;
   }
