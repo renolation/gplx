@@ -12,7 +12,7 @@ class QuestionEntity extends Equatable {
     this.type,
     this.isImportant = false,
     required this.vehicle,
-    required this.chapter,
+    this.chapter,
     this.answers = const [],
   });
 
@@ -24,8 +24,8 @@ class QuestionEntity extends Equatable {
   final String? type;
   final bool isImportant;
   final String vehicle;
-  final ChapterEntity chapter;
-  final List<AnswerEntity> answers;
+  final ChapterEntity? chapter;
+  final List<AnswerEntity>? answers;
 
   @override
   List<Object?> get props => [

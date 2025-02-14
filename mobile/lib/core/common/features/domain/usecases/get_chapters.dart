@@ -13,3 +13,5 @@ class GetChapters extends UseCaseWithoutParams<List<ChapterEntity>> {
   @override
   ResultFuture<List<ChapterEntity>> call() async => _repo.getChapters();
 }
+
+

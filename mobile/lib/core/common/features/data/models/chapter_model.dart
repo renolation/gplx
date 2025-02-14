@@ -37,7 +37,7 @@ class ChapterModel extends ChapterEntity {
       id: json['id'] as int,
       index: json['index'] as int,
       name: json['name'] as String,
-      questions: (json['questions'] as List<dynamic>?)
+      questions: (json['question'] as List<dynamic>?)
           ?.map((e) => QuestionModel.fromJson(e as Map<String, dynamic>))
           .toList() ??
           [],

@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gplx_app/src/chapters/presentations/bloc/chapters_bloc.dart';
 
 class ChaptersScreen extends StatelessWidget {
@@ -27,6 +28,9 @@ class ChaptersScreen extends StatelessWidget {
                 return ListTile(
                   title: Text(chapter.name),
                   subtitle: Text(chapter.questions.length.toString()),
+                  onTap: () {
+                    context.pushNamed('questions', pathParameters: {'chapterId': '${chapter.id}'});
+                  },
                 );
               },
             );

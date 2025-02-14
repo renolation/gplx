@@ -10,18 +10,18 @@ part 'questions_event.dart';
 
 class QuestionsBloc extends Bloc<QuestionsEvent ,QuestionsState> {
   QuestionsBloc({
-    required GetQuestions getQuestions,
+    required GetQuestionByChapterId getQuestionByChapterId,
 }) :
-      _getQuestions = getQuestions,
+        _getQuestionByChapterId = getQuestionByChapterId,
         super(QuestionsInitial()){
-    on<GetQuestionsEvent>(_getQuestionsHandler);
+    on<GetQuestionsByChapterIdEvent>(_getQuestionByChapterIdHandler);
   }
 
-  final GetQuestions _getQuestions;
+  final GetQuestionByChapterId _getQuestionByChapterId;
 
-  Future<void> _getQuestionsHandler(GetQuestionsEvent event, Emitter<QuestionsState> emit) async {
+  Future<void> _getQuestionByChapterIdHandler(GetQuestionsByChapterIdEvent event, Emitter<QuestionsState> emit) async {
     emit(QuestionsLoading());
-    final questions = await _getQuestions();
+    final questions = await _getQuestionByChapterId(event.chapterId);
     questions.fold(
           (failure) => emit(QuestionsError(failure.message)),
           (questions) => emit(QuestionsLoaded(questions as List<QuestionModel>)),

@@ -9,4 +9,5 @@ abstract class QuestionRepo {
 
   ResultFuture<List<QuestionEntity>> getQuestions();
 
+  ResultFuture<List<QuestionEntity>> getQuestionsByChapterId(int chapterId);
 }

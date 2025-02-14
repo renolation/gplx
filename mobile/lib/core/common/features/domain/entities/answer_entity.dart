@@ -14,7 +14,7 @@ class AnswerEntity extends Equatable {
   final int id;
   final String text;
   final bool isCorrect;
-  final QuestionEntity question;
+  final QuestionEntity? question;
 
   @override
   List<Object?> get props => [id, text, isCorrect, question];

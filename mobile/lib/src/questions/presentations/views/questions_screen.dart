@@ -23,7 +23,7 @@ class QuestionsScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final question = state.questions[index];
                 return ListTile(
-                  title: Text(question.text),
+                  title: Text(' ${question.text} ${question.chapter!.name}'),
                   subtitle: Text(question.explain!),
                 );
               },

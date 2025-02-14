@@ -14,3 +14,12 @@ class GetQuestions extends UseCaseWithoutParams<List<QuestionEntity>> {
   @override
   ResultFuture<List<QuestionEntity>> call() async => _repo.getQuestions();
 }
+
+class GetQuestionByChapterId extends UseCaseWithParams<List<QuestionEntity>, int> {
+  const GetQuestionByChapterId(this._repo);
+
+  final QuestionRepo _repo;
+
+  @override
+  ResultFuture<List<QuestionEntity>> call(int params) async => _repo.getQuestionsByChapterId(params);
+}

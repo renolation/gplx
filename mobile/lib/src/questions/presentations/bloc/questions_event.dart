@@ -13,3 +13,9 @@ abstract class QuestionsEvent extends Equatable {
 class GetQuestionsEvent extends QuestionsEvent {
   const GetQuestionsEvent();
 }
+
+class GetQuestionsByChapterIdEvent extends QuestionsEvent {
+  const GetQuestionsByChapterIdEvent(this.chapterId);
+
+  final int chapterId;
+}

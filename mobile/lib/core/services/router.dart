@@ -46,12 +46,14 @@ final GoRouter goRouter = GoRouter(
               routes: <RouteBase>[
                 GoRoute(
                   name: 'questions',
-                  path: 'questions',
+                  path: 'questions/:chapterId',
                   builder: (BuildContext context, GoRouterState state) {
+                    int chapterId =  int.parse(state.pathParameters['chapterId']!);
                     return BlocProvider(
                       create: (context) => QuestionsBloc(
-                        getQuestions: sl(),
-                      )..add(const GetQuestionsEvent()),
+                        // getQuestions: sl(),
+                        getQuestionByChapterId: sl(),
+                      )..add(GetQuestionsByChapterIdEvent(chapterId)),
                       child: const QuestionsScreen(),
                     );
                   },

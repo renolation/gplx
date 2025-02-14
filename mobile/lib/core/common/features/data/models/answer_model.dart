@@ -31,7 +31,7 @@ class AnswerModel extends AnswerEntity {
       id: json['id'] as int,
       text: json['text'] as String,
       isCorrect: json['isCorrect'] as bool,
-      question: QuestionModel.fromJson(json['question'] as Map<String, dynamic>),
+      question: json['question'] == null ? null : QuestionModel.fromJson(json['question'] as Map<String, dynamic>),
     );
   }
 

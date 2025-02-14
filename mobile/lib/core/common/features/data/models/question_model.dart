@@ -20,12 +20,9 @@ class QuestionModel extends QuestionEntity {
     super.type,
     super.isImportant = false,
     required super.vehicle,
-    required ChapterModel chapter,
-    List<AnswerModel> answers = const [],
-  }) : super(
-    chapter: chapter,
-    answers: answers,
-  );
+     super.chapter,
+   super.answers = const [],
+  });
 
   QuestionModel copyWith({
     int? id,
@@ -63,8 +60,8 @@ class QuestionModel extends QuestionEntity {
       type: json['type'] as String?,
       isImportant: json['isImportant'] as bool? ?? false,
       vehicle: json['vehicle'] as String,
-      chapter: ChapterModel.fromJson(json['chapter'] as Map<String, dynamic>),
-      answers: (json['answers'] as List<dynamic>?)
+      chapter: json['chapter'] == null ? null :  ChapterModel.fromJson(json['chapter'] as Map<String, dynamic>),
+      answers: (json['answer'] as List<dynamic>?)
           ?.map((e) => AnswerModel.fromJson(e as Map<String, dynamic>))
           .toList() ??
           [],
@@ -82,7 +79,7 @@ class QuestionModel extends QuestionEntity {
       'isImportant': isImportant,
       'vehicle': vehicle,
       'chapter': (chapter as ChapterModel).toJson(),
-      'answers': answers.map((e) => (e as AnswerModel).toJson()).toList(),
+      'answers': answers?.map((e) => (e as AnswerModel).toJson()).toList(),
     };
   }
 

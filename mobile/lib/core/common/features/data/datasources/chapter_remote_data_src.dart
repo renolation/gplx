@@ -25,8 +25,8 @@ class ChapterRemoteDataSrcImpl extends ChapterRemoteDataSrc {
     try {
       final data = await _client
           .from('chapter')
-          .select();
-      print(data);
+          .select('*, question(*)');
+      // print(data);
       String jsonString = jsonEncode(data);
 
       return chapterModelFromJson(jsonString);
