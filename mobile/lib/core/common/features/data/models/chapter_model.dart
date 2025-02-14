@@ -1,9 +1,15 @@
 import 'package:equatable/equatable.dart';
 import 'package:gplx_app/core/common/features/domain/entities/chapter_entity.dart';
 import 'question_model.dart';
+import 'dart:convert';
+
+List<ChapterModel> chapterModelFromJson(String str) => List<ChapterModel>.from(json.decode(str).map((x) => ChapterModel.fromJson(x)));
+
+String chapterModelToJson(List<ChapterModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+
 
 class ChapterModel extends ChapterEntity {
-
 
   const ChapterModel({
     required super.id,

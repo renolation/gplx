@@ -18,7 +18,22 @@ class TheoryScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const Text('theory'),
+      body: ListView(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.question_answer),
+            onPressed: () {
+              context.goNamed('questions');
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.wheelchair_pickup),
+            onPressed: () {
+              context.goNamed('chapters');
+            },
+          ),
+        ],
+      ),
     );
   }
 }

@@ -19,7 +19,6 @@ class QuestionsBloc extends Bloc<QuestionsEvent ,QuestionsState> {
 
   final GetQuestions _getQuestions;
 
-
   Future<void> _getQuestionsHandler(GetQuestionsEvent event, Emitter<QuestionsState> emit) async {
     emit(QuestionsLoading());
     final questions = await _getQuestions();

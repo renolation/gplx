@@ -12,5 +12,4 @@ abstract class QuestionsEvent extends Equatable {
 
 class GetQuestionsEvent extends QuestionsEvent {
   const GetQuestionsEvent();
-
 }

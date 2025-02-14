@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gplx_app/src/chapters/presentations/bloc/chapters_bloc.dart';
+import 'package:gplx_app/src/chapters/presentations/views/chapters_screen.dart';
 import 'package:gplx_app/src/questions/presentations/views/questions_screen.dart';
 
 import '../../src/home/presentations/views/home_screen.dart';
@@ -51,6 +53,18 @@ final GoRouter goRouter = GoRouter(
                         getQuestions: sl(),
                       )..add(const GetQuestionsEvent()),
                       child: const QuestionsScreen(),
+                    );
+                  },
+                ),
+                GoRoute(
+                  name: 'chapters',
+                  path: 'chapters',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return BlocProvider(
+                      create: (context) => ChaptersBloc(
+                        getChapters: sl(),
+                      )..add(const GetChaptersEvent()),
+                      child: const ChaptersScreen(),
                     );
                   },
                 ),

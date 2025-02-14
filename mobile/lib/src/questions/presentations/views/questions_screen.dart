@@ -12,14 +12,6 @@ class QuestionsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Questions'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              context.read<QuestionsBloc>().add(const GetQuestionsEvent());
-            },
-          ),
-        ],
       ),
       body: BlocBuilder<QuestionsBloc, QuestionsState>(
         builder: (context, state) {
