@@ -18,6 +18,7 @@ class QuestionsBloc extends Bloc<QuestionsEvent ,QuestionsState> {
     on<GetQuestionsByChapterIdEvent>(_getQuestionByChapterIdHandler);
     on<IncreaseQuestionIndexEvent>(_increaseQuestionIndexHandler);
     on<DecreaseQuestionIndexEvent>(_decreaseQuestionIndexHandler);
+    on<GoToQuestionEvent>(_goToQuestionHandler);
     on<SelectAnswerEvent>(_selectAnswerHandler);
     on<CheckAnswerEvent>(_checkAnswerHandler);
   }
@@ -40,6 +41,10 @@ class QuestionsBloc extends Bloc<QuestionsEvent ,QuestionsState> {
   void _decreaseQuestionIndexHandler(DecreaseQuestionIndexEvent event, Emitter<QuestionsState> emit) {
     if((state as QuestionsLoaded).index == 0) return;
     emit((state as QuestionsLoaded).copyWith(index: (state as QuestionsLoaded).index + -1));
+  }
+
+  void _goToQuestionHandler(GoToQuestionEvent event, Emitter<QuestionsState> emit) {
+    emit((state as QuestionsLoaded).copyWith(index: event.index));
   }
 
   void _selectAnswerHandler(SelectAnswerEvent event, Emitter<QuestionsState> emit) {

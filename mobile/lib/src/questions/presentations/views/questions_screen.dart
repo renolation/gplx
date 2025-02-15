@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gplx_app/core/common/features/data/models/answer_model.dart';
+import 'package:gplx_app/core/common/features/data/models/question_model.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../bloc/questions_bloc.dart';
 
@@ -40,12 +43,15 @@ class QuestionsScreen extends StatelessWidget {
                       itemCount: state.questions.length,
                       scrollDirection: Axis.horizontal,
                       controller: scrollController,
-                      itemBuilder: (context, i) {
-                        return Container(
-                          padding: const EdgeInsets.all(8.0),
-                          height: 40,
-                          color: i == index ? Colors.red : Colors.blue,
-                          child: Center(child: Text('Câu ${state.questions[i].index}')),
+                      itemBuilder: (ctx, i) {
+                        return InkWell(
+                          onTap:() => context.read<QuestionsBloc>().add(GoToQuestionEvent(i)),
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            height: 40,
+                            color: i == index ? Colors.red : Colors.blue,
+                            child: Center(child: Text('Câu ${state.questions[i].index}')),
+                          ),
                         );
                       },
                     ),
@@ -108,6 +114,73 @@ class QuestionsScreen extends StatelessWidget {
           }
         },
       ),
+      bottomSheet: BlocSelector<QuestionsBloc, QuestionsState, List<QuestionModel>>(selector: (state) {
+        if (state is QuestionsLoaded) {
+          
+         return state.questions;
+        }
+        return [];
+      }, builder: (context, state) {
+        return Container(
+          color: Colors.blue,
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 10),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextButton(
+                  onPressed: () {},
+                  child: Text(state.length.toString()),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  showMaterialModalBottomSheet(
+                    context: context,
+                    expand: false,
+                    builder: (ctx) => Material(
+                      clipBehavior: Clip.antiAlias,
+                      child: Container(
+                        height: 400,
+                        color: Colors.white,
+                        child: GridView.builder(
+                          padding: EdgeInsets.zero,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 6,
+                            childAspectRatio: 1,
+                          ),
+                          itemCount: state.length,
+                          itemBuilder: (ctx, index) {
+                            return InkWell(
+                              onTap: () {
+                                context.read<QuestionsBloc>().add(GoToQuestionEvent(index));
+                                ctx.pop();
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  color: Colors.blue,
+                                ),
+                                child: Center(child: Text('${state[index].index}')),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('Button'),
+              ),
+              Expanded(
+                child: TextButton(
+                  onPressed: () {},
+                  child: Text('Finish'),
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

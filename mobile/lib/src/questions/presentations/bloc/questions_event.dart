@@ -38,3 +38,8 @@ class SelectAnswerEvent extends QuestionsEvent {
 class CheckAnswerEvent extends QuestionsEvent {
   const CheckAnswerEvent();
 }
+
+class GoToQuestionEvent extends QuestionsEvent {
+  const GoToQuestionEvent(this.index);
+  final int index;
+}

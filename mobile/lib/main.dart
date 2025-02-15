@@ -10,7 +10,8 @@ Future<void> main() async {
 
   await Supabase.initialize(
     url: 'https://bmkeuakzujzaerolpyga.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJta2V1YWt6dWp6YWVyb2xweWdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc3MTcyNjIsImV4cCI6MjA1MzI5MzI2Mn0.SNawrx1J4iXqbWG7th2AYfC6vMMqldEIggr1iI5fJ-Y',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJta2V1YWt6dWp6YWVyb2xweWdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc3MTcyNjIsImV4cCI6MjA1MzI5MzI2Mn0.SNawrx1J4iXqbWG7th2AYfC6vMMqldEIggr1iI5fJ-Y',
   );
   // await initBoxes();
   await init();
@@ -19,8 +20,6 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -35,5 +34,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
