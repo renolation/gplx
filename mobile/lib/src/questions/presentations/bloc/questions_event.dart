@@ -27,3 +27,14 @@ class IncreaseQuestionIndexEvent extends QuestionsEvent {
 class DecreaseQuestionIndexEvent extends QuestionsEvent {
   const DecreaseQuestionIndexEvent();
 }
+
+class SelectAnswerEvent extends QuestionsEvent {
+  const SelectAnswerEvent(this.answer, this.index);
+
+  final AnswerModel answer;
+  final int index;
+}
+
+class CheckAnswerEvent extends QuestionsEvent {
+  const CheckAnswerEvent();
+}

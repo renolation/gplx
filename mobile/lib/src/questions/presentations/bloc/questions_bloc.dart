@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gplx_app/core/common/features/domain/usecases/get_questions.dart';
 
+import '../../../../core/common/features/data/models/answer_model.dart';
 import '../../../../core/common/features/data/models/question_model.dart';
 import 'package:equatable/equatable.dart';
 
@@ -17,6 +18,8 @@ class QuestionsBloc extends Bloc<QuestionsEvent ,QuestionsState> {
     on<GetQuestionsByChapterIdEvent>(_getQuestionByChapterIdHandler);
     on<IncreaseQuestionIndexEvent>(_increaseQuestionIndexHandler);
     on<DecreaseQuestionIndexEvent>(_decreaseQuestionIndexHandler);
+    on<SelectAnswerEvent>(_selectAnswerHandler);
+    on<CheckAnswerEvent>(_checkAnswerHandler);
   }
 
   final GetQuestionByChapterId _getQuestionByChapterId;
@@ -38,4 +41,25 @@ class QuestionsBloc extends Bloc<QuestionsEvent ,QuestionsState> {
     if((state as QuestionsLoaded).index == 0) return;
     emit((state as QuestionsLoaded).copyWith(index: (state as QuestionsLoaded).index + -1));
   }
+
+  void _selectAnswerHandler(SelectAnswerEvent event, Emitter<QuestionsState> emit) {
+    final updatedQuestions = List<QuestionModel>.from((state as QuestionsLoaded).questions);
+    updatedQuestions[event.index] = updatedQuestions[event.index].copyWith(selectedAnswer: event.answer);
+
+    emit((state as QuestionsLoaded).copyWith(questions: updatedQuestions));
+  }
+
+  void _checkAnswerHandler(CheckAnswerEvent event, Emitter<QuestionsState> emit) {
+    final updatedQuestions = List<QuestionModel>.from((state as QuestionsLoaded).questions);
+    QuestionModel currentQuestion = updatedQuestions[(state as QuestionsLoaded).index];
+    AnswerModel correctAnswer = currentQuestion.answers!.firstWhere((element) => element.isCorrect == true) as AnswerModel;
+    if(currentQuestion.selectedAnswer == correctAnswer){
+      updatedQuestions[(state as QuestionsLoaded).index] = currentQuestion.copyWith(isCorrect: true, status: 1);
+    } else {
+      updatedQuestions[(state as QuestionsLoaded).index] = currentQuestion.copyWith(isCorrect: false, status: 2);
+    }
+
+    emit((state as QuestionsLoaded).copyWith(questions: updatedQuestions));
+  }
+
 }
