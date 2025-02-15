@@ -29,6 +29,7 @@ class ChaptersScreen extends StatelessWidget {
                   title: Text(chapter.name),
                   subtitle: Text(chapter.questions.length.toString()),
                   onTap: () {
+
                     context.pushNamed('questions', pathParameters: {'chapterId': '${chapter.id}'});
                   },
                 );

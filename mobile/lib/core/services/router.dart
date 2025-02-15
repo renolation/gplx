@@ -15,66 +15,54 @@ final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey<NavigatorState>(de
 
 final GoRouter goRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/home',
+  initialLocation: '/theory',
   routes: <RouteBase>[
-    StatefulShellRoute.indexedStack(
-      builder: (BuildContext context, GoRouterState state, StatefulNavigationShell navigationShell) {
-        return ScaffoldWithNavBar(navigationShell: navigationShell);
-      },
-      branches: <StatefulShellBranch>[
-        StatefulShellBranch(
-          navigatorKey: _homeNavigatorKey,
-          routes: <RouteBase>[
-            GoRoute(
-              path: '/home',
-              builder: (context, state) => const HomeScreen(),
-              // routes: <RouteBase>[
-              //   GoRoute(
-              //     path: 'details',
-              //     builder: (BuildContext context, GoRouterState state) => const DetailsScreen(label: 'A'),
-              //   ),
-              // ],
-            ),
-          ],
-        ),
-        StatefulShellBranch(
-          routes: <RouteBase>[
-            GoRoute(
-              name: 'theory',
-              path: '/theory',
-              builder: (BuildContext context, GoRouterState state) => const TheoryScreen(),
-              routes: <RouteBase>[
-                GoRoute(
-                  name: 'questions',
-                  path: 'questions/:chapterId',
-                  builder: (BuildContext context, GoRouterState state) {
-                    int chapterId =  int.parse(state.pathParameters['chapterId']!);
-                    return BlocProvider(
-                      create: (context) => QuestionsBloc(
-                        // getQuestions: sl(),
-                        getQuestionByChapterId: sl(),
-                      )..add(GetQuestionsByChapterIdEvent(chapterId)),
-                      child: const QuestionsScreen(),
-                    );
-                  },
-                ),
-                GoRoute(
-                  name: 'chapters',
-                  path: 'chapters',
-                  builder: (BuildContext context, GoRouterState state) {
-                    return BlocProvider(
-                      create: (context) => ChaptersBloc(
-                        getChapters: sl(),
-                      )..add(const GetChaptersEvent()),
-                      child: const ChaptersScreen(),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
+
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const HomeScreen(),
+      // routes: <RouteBase>[
+      //   GoRoute(
+      //     path: 'details',
+      //     builder: (BuildContext context, GoRouterState state) => const DetailsScreen(label: 'A'),
+      //   ),
+      // ],
+    ),
+
+    GoRoute(
+      name: 'theory',
+      path: '/theory',
+      builder: (BuildContext context, GoRouterState state) => const TheoryScreen(),
+      routes: <RouteBase>[
+        GoRoute(
+          name: 'chapters',
+          path: 'chapters',
+          builder: (BuildContext context, GoRouterState state) {
+            return BlocProvider(
+              create: (context) => ChaptersBloc(
+                getChapters: sl(),
+              )..add(const GetChaptersEvent()),
+              child: const ChaptersScreen(),
+            );
+          },
         ),
       ],
+    ),
+
+
+    GoRoute(
+      name: 'questions',
+      path: '/questions/:chapterId',
+      builder: (BuildContext context, GoRouterState state) {
+        int chapterId =  int.parse(state.pathParameters['chapterId']!);
+        return BlocProvider(
+          create: (context) => QuestionsBloc(
+            // getQuestions: sl(),
+            getQuestionByChapterId: sl(),
+          )..add(GetQuestionsByChapterIdEvent(chapterId)),
+          child: const QuestionsScreen(),
+        );
+      },
     ),
   ],
 );
