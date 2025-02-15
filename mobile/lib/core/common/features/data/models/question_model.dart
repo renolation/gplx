@@ -22,7 +22,12 @@ class QuestionModel extends QuestionEntity {
     required super.vehicle,
      super.chapter,
    super.answers = const [],
+    this.status = 0,
+    this.isCorrect = false,
   });
+
+  final int status;
+  final bool isCorrect;
 
   QuestionModel copyWith({
     int? id,

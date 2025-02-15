@@ -12,11 +12,20 @@ class QuestionsLoading extends QuestionsState {}
 
 class QuestionsLoaded extends QuestionsState {
   final List<QuestionModel> questions;
+  final int index;
 
-  const QuestionsLoaded(this.questions);
+  const QuestionsLoaded(this.questions,{this.index = 0});
+
+
+  QuestionsLoaded copyWith({List<QuestionModel>? questions, int? index}) {
+    return QuestionsLoaded(
+      questions ?? this.questions,
+      index: index ?? this.index,
+    );
+  }
 
   @override
-  List<Object> get props => [questions];
+  List<Object> get props => [questions, index];
 }
 
 class QuestionsError extends QuestionsState {

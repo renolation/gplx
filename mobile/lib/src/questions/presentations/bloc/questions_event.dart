@@ -19,3 +19,11 @@ class GetQuestionsByChapterIdEvent extends QuestionsEvent {
 
   final int chapterId;
 }
+
+class IncreaseQuestionIndexEvent extends QuestionsEvent {
+  const IncreaseQuestionIndexEvent();
+}
+
+class DecreaseQuestionIndexEvent extends QuestionsEvent {
+  const DecreaseQuestionIndexEvent();
+}

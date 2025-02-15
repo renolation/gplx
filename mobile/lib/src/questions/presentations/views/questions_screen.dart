@@ -18,15 +18,23 @@ class QuestionsScreen extends StatelessWidget {
           if (state is QuestionsLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is QuestionsLoaded) {
-            return ListView.builder(
-              itemCount: state.questions.length,
-              itemBuilder: (context, index) {
-                final question = state.questions[index];
-                return ListTile(
-                  title: Text(' ${question.text} ${question.chapter!.name}'),
-                  subtitle: Text(question.explain!),
-                );
-              },
+            final index = state.index;
+            return Column(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    context.read<QuestionsBloc>().add(const DecreaseQuestionIndexEvent());
+                  },
+                  child: Text('Previous'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    context.read<QuestionsBloc>().add(const IncreaseQuestionIndexEvent());
+                  },
+                  child: Text('Next'),
+                ),
+                Text('index: $index ${state.questions[index].text}'),
+              ],
             );
           } else if (state is QuestionsError) {
             return Center(child: Text(state.message));
