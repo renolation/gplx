@@ -1,9 +1,8 @@
 
+import 'package:hive_ce_flutter/hive_flutter.dart';
 
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
-import 'package:gplx_app/core/data/boxes/settings/settings_model.dart';
-import 'package:isar/isar.dart';
 
 part 'boxes/settings.dart';
 
@@ -16,7 +15,7 @@ part 'boxes/settings/general_extension.dart';
 
 Future<void> initBoxes() async {
 
-  await Isar.initializeIsarCore();
+  await Hive.initFlutter();
 
   await SettingsBox().init();
 

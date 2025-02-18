@@ -2,7 +2,7 @@ part of '../../boxes.dart';
 
 abstract class MainBox {
 
-  CollectionSchema<dynamic> get schema;
+  String get boxKey;
 
   bool get isEncrypted => false;
 
@@ -11,7 +11,8 @@ abstract class MainBox {
 
   bool _isInitialized = false;
 
-  Isar? _isar;
+  Box? _box;
+
 
   Future<void> init() async {
     if (_isInitialized) {
@@ -41,19 +42,15 @@ abstract class MainBox {
       //   );
       // }
     } else {
-      final dir = await getApplicationDocumentsDirectory();
-       _isar = await Isar.open(
-        [schema],
-        directory: dir.path,
-      );
+      _box = await Hive.openBox(boxKey);
     }
     _isInitialized = true;
   }
 
-  Isar get isar {
-    final result = _isar;
+  Box get box {
+    final result = _box;
     if (result == null) {
-      throw Exception('[FluxBox] $schema is not initialized');
+      throw Exception('[FluxBox] $boxKey is not initialized');
     }
     return result;
   }

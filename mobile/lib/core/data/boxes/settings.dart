@@ -9,5 +9,5 @@ class SettingsBox extends MainBox {
   SettingsBox._internal();
 
   @override
-  CollectionSchema<dynamic> get schema => SettingsModelSchema;
+  String get boxKey => BoxKeys.hiveSettingsBox;
 }
