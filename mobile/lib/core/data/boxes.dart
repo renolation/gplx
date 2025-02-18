@@ -6,12 +6,14 @@ import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 
 part 'boxes/settings.dart';
+part 'boxes/questions.dart';
 
 
 part 'boxes/common/box_keys.dart';
 part 'boxes/common/main_box.dart';
 
 part 'boxes/settings/general_extension.dart';
+part 'boxes/questions/learn_extension.dart';
 
 
 Future<void> initBoxes() async {
