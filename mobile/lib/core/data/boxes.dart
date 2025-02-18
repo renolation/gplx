@@ -1,4 +1,5 @@
 
+import 'package:gplx_app/core/common/features/data/models/question_model.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 
 import 'dart:convert';
@@ -16,7 +17,7 @@ part 'boxes/settings/general_extension.dart';
 Future<void> initBoxes() async {
 
   await Hive.initFlutter();
-
+  Hive.registerAdapter(QuestionModelAdapter());
   await SettingsBox().init();
 
 }

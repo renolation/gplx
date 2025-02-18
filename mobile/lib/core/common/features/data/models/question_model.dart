@@ -1,38 +1,91 @@
-import 'package:equatable/equatable.dart';
+import 'package:hive_ce/hive.dart';
 import '../../domain/entities/question_entity.dart';
 import 'chapter_model.dart';
 import 'answer_model.dart';
 
 import 'dart:convert';
+part 'question_model.g.dart';
 
 List<QuestionModel> questionModelFromJson(String str) =>
     List<QuestionModel>.from(json.decode(str).map((x) => QuestionModel.fromJson(x)));
 
 String questionModelToJson(List<QuestionModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@HiveType(typeId: 0)
 class QuestionModel extends QuestionEntity {
+
+  @HiveField(0)
+  final int id;
+
+  @HiveField(1)
+  final int index;
+
+  @HiveField(2)
+  final String text;
+
+  @HiveField(3)
+  final String? image;
+
+  @HiveField(4)
+  final String explain;
+
+  @HiveField(5)
+  final String? type;
+
+  @HiveField(6)
+  final bool isImportant;
+
+  @HiveField(7)
+  final String vehicle;
+
+  @HiveField(8)
+  final ChapterModel? chapter;
+
+  @HiveField(9)
+  final List<AnswerModel> answers;
+
+  //note: 0: not answered, 1: answered and correct, 2: answered and incorrect
+  @HiveField(10)
+  final int status;
+
+  @HiveField(11)
+  final bool isCorrect;
+
+  @HiveField(12)
+  final AnswerModel? selectedAnswer;
+
+  @HiveField(13)
+  final int? chapterId;
+
   const QuestionModel({
-    required super.id,
-    required super.index,
-    required super.text,
-    super.image,
-    required super.explain,
-    super.type,
-    super.isImportant = false,
-    required super.vehicle,
-    super.chapter,
-    super.answers = const [],
+    required this.id,
+    required this.index,
+    required this.text,
+    this.image,
+    required this.explain,
+    this.type,
+    this.isImportant = false,
+    required this.vehicle,
+    this.chapter,
+    this.answers = const [],
     this.status = 0,
     this.isCorrect = false,
     this.selectedAnswer,
     this.chapterId,
-  });
+  }): super(
+     id: id,
+    index: index,
+    text: text,
+    image: image,
+    explain: explain,
+    type: type,
+    isImportant: isImportant,
+    vehicle: vehicle,
+    chapter: chapter,
+    answers: answers,
+  );
 
-  //note: 0: not answered, 1: answered and correct, 2: answered and incorrect
-  final int status;
-  final bool isCorrect;
-  final AnswerModel? selectedAnswer;
-  final int? chapterId;
+
 
   QuestionModel copyWith({
     int? id,
@@ -59,8 +112,6 @@ class QuestionModel extends QuestionEntity {
       type: type ?? this.type,
       isImportant: isImportant ?? this.isImportant,
       vehicle: vehicle ?? this.vehicle,
-      chapter: chapter ?? this.chapter as ChapterModel,
-      answers: answers ?? this.answers as List<AnswerModel>,
       status: status ?? this.status,
       isCorrect: isCorrect ?? this.isCorrect,
       selectedAnswer: selectedAnswer ?? this.selectedAnswer,
@@ -69,8 +120,7 @@ class QuestionModel extends QuestionEntity {
   }
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [status, isCorrect, selectedAnswer];
+  List<Object?> get props => [id, index, text, image, explain, type, isImportant, vehicle, chapter, answers, status, isCorrect, selectedAnswer, chapterId];
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
     return QuestionModel(
@@ -101,7 +151,11 @@ class QuestionModel extends QuestionEntity {
       'isImportant': isImportant,
       'vehicle': vehicle,
       'chapter': (chapter as ChapterModel).toJson(),
-      'answers': answers?.map((e) => (e as AnswerModel).toJson()).toList(),
+      'answers': answers.map((e) => e.toJson()).toList(),
+      'status': status,
+      'isCorrect': isCorrect,
+      'selectedAnswer': selectedAnswer?.toJson(),
+      'chapterId': chapterId,
     };
   }
 }

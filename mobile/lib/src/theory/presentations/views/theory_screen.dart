@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gplx_app/core/data/boxes.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 
 class TheoryScreen extends StatelessWidget {
   const TheoryScreen({super.key});
@@ -20,7 +22,11 @@ class TheoryScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-
+          ValueListenableBuilder(valueListenable: SettingsBox().box.listenable(), builder: (context, box, _){
+            return TextButton(onPressed: (){
+              SettingsBox().hasFinishedOnboarding = !SettingsBox().hasFinishedOnboarding;
+            }, child: Text('Settings ${SettingsBox().hasFinishedOnboarding}'));
+          }),
           IconButton(
             icon: const Icon(Icons.wheelchair_pickup),
             onPressed: () {
