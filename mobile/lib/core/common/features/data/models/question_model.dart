@@ -25,12 +25,14 @@ class QuestionModel extends QuestionEntity {
     this.status = 0,
     this.isCorrect = false,
     this.selectedAnswer,
+    this.chapterId,
   });
 
   //note: 0: not answered, 1: answered and correct, 2: answered and incorrect
   final int status;
   final bool isCorrect;
   final AnswerModel? selectedAnswer;
+  final int? chapterId;
 
   QuestionModel copyWith({
     int? id,
@@ -46,6 +48,7 @@ class QuestionModel extends QuestionEntity {
     int? status,
     bool? isCorrect,
     AnswerModel? selectedAnswer,
+    int? chapterId,
   }) {
     return QuestionModel(
       id: id ?? this.id,
@@ -61,6 +64,7 @@ class QuestionModel extends QuestionEntity {
       status: status ?? this.status,
       isCorrect: isCorrect ?? this.isCorrect,
       selectedAnswer: selectedAnswer ?? this.selectedAnswer,
+      chapterId: chapterId ?? this.chapterId,
     );
   }
 
@@ -82,6 +86,7 @@ class QuestionModel extends QuestionEntity {
       answers:
           (json['answer'] as List<dynamic>?)?.map((e) => AnswerModel.fromJson(e as Map<String, dynamic>)).toList() ??
               [],
+      chapterId: json['chapterId'] as int?,
     );
   }
 
