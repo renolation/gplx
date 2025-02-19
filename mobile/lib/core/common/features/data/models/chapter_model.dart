@@ -2,21 +2,43 @@ import 'package:equatable/equatable.dart';
 import 'package:gplx_app/core/common/features/domain/entities/chapter_entity.dart';
 import 'question_model.dart';
 import 'dart:convert';
+import 'package:hive_ce/hive.dart';
+
+part 'chapter_model.g.dart';
+
 
 List<ChapterModel> chapterModelFromJson(String str) => List<ChapterModel>.from(json.decode(str).map((x) => ChapterModel.fromJson(x)));
 
 String chapterModelToJson(List<ChapterModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 
-
+@HiveType(typeId: 2)
 class ChapterModel extends ChapterEntity {
 
+  @HiveField(0)
+  final int id;
+
+  @HiveField(1)
+  final int index;
+
+  @HiveField(2)
+  final String name;
+
+  @HiveField(3)
+  final List<QuestionModel> questions;
+
+
+
   const ChapterModel({
-    required super.id,
-    required super.index,
-    required super.name,
-    super.questions = const [],
-  });
+    required this.id,
+    required this.index,
+    required this.name,
+    this.questions = const [],
+  }): super(
+    id: id,
+    index: index,
+    name: name,
+    questions: questions);
 
    ChapterModel copyWith({
     int? id,

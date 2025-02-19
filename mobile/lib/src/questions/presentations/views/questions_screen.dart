@@ -77,7 +77,7 @@ class QuestionsScreen extends StatelessWidget {
                           ListTile(
                             title: Text(' ${answer.isCorrect} ${answer.text}'),
                             leading: Radio<AnswerModel>(
-                              value: answer as AnswerModel,
+                              value: answer,
                               fillColor: WidgetStateProperty.resolveWith<Color>(
                                 (states) {
                                   if (state.questions[index].status == 0) {

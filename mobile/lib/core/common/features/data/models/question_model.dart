@@ -4,16 +4,18 @@ import 'chapter_model.dart';
 import 'answer_model.dart';
 
 import 'dart:convert';
+
 part 'question_model.g.dart';
 
 List<QuestionModel> questionModelFromJson(String str) =>
-    List<QuestionModel>.from(json.decode(str).map((x) => QuestionModel.fromJson(x)));
+    List<QuestionModel>.from(
+        json.decode(str).map((x) => QuestionModel.fromJson(x)));
 
-String questionModelToJson(List<QuestionModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String questionModelToJson(List<QuestionModel> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 @HiveType(typeId: 0)
 class QuestionModel extends QuestionEntity {
-
   @HiveField(0)
   final int id;
 
@@ -72,20 +74,34 @@ class QuestionModel extends QuestionEntity {
     this.isCorrect = false,
     this.selectedAnswer,
     this.chapterId,
-  }): super(
-     id: id,
-    index: index,
-    text: text,
-    image: image,
-    explain: explain,
-    type: type,
-    isImportant: isImportant,
-    vehicle: vehicle,
-    chapter: chapter,
-    answers: answers,
-  );
+  }) : super(
+          id: id,
+          index: index,
+          text: text,
+          image: image,
+          explain: explain,
+          type: type,
+          isImportant: isImportant,
+          vehicle: vehicle,
+          chapter: chapter,
+          answers: answers,
+        );
 
-
+  factory QuestionModel.empty() => const QuestionModel(
+        id: 0,
+        index: 0,
+        text: '',
+        image: '',
+        explain: '',
+        type: '',
+        isImportant: false,
+        vehicle: '',
+        answers: [],
+        status: 0,
+        isCorrect: false,
+        selectedAnswer: null,
+        chapterId: 0,
+      );
 
   QuestionModel copyWith({
     int? id,
@@ -112,6 +128,7 @@ class QuestionModel extends QuestionEntity {
       type: type ?? this.type,
       isImportant: isImportant ?? this.isImportant,
       vehicle: vehicle ?? this.vehicle,
+      answers: answers ?? this.answers,
       status: status ?? this.status,
       isCorrect: isCorrect ?? this.isCorrect,
       selectedAnswer: selectedAnswer ?? this.selectedAnswer,
@@ -120,7 +137,22 @@ class QuestionModel extends QuestionEntity {
   }
 
   @override
-  List<Object?> get props => [id, index, text, image, explain, type, isImportant, vehicle, chapter, answers, status, isCorrect, selectedAnswer, chapterId];
+  List<Object?> get props => [
+        id,
+        index,
+        text,
+        image,
+        explain,
+        type,
+        isImportant,
+        vehicle,
+        chapter,
+        answers,
+        status,
+        isCorrect,
+        selectedAnswer,
+        chapterId
+      ];
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
     return QuestionModel(
@@ -132,10 +164,13 @@ class QuestionModel extends QuestionEntity {
       type: json['type'] as String?,
       isImportant: json['isImportant'] as bool? ?? false,
       vehicle: json['vehicle'] as String,
-      chapter: json['chapter'] == null ? null : ChapterModel.fromJson(json['chapter'] as Map<String, dynamic>),
-      answers:
-          (json['answer'] as List<dynamic>?)?.map((e) => AnswerModel.fromJson(e as Map<String, dynamic>)).toList() ??
-              [],
+      chapter: json['chapter'] == null
+          ? null
+          : ChapterModel.fromJson(json['chapter'] as Map<String, dynamic>),
+      answers: (json['answer'] as List<dynamic>?)
+              ?.map((e) => AnswerModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
       chapterId: json['chapterId'] as int?,
     );
   }

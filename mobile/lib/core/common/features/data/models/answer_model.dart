@@ -1,16 +1,35 @@
 import 'package:equatable/equatable.dart';
 import 'package:gplx_app/core/common/features/domain/entities/answer_entity.dart';
 import 'question_model.dart';
+import 'package:hive_ce/hive.dart';
 
+part 'answer_model.g.dart';
+
+@HiveType(typeId: 1)
 class AnswerModel extends AnswerEntity {
+  @HiveField(0)
+  final int id;
 
+  @HiveField(1)
+  final String text;
+
+  @HiveField(2)
+  final bool isCorrect;
+
+  @HiveField(3)
+  final QuestionModel question;
 
   const AnswerModel({
-    required super.id,
-    required super.text,
-    required super.isCorrect,
-    required super.question,
-  });
+    required this.id,
+    required this.text,
+    required this.isCorrect,
+    required this.question,
+  }) : super(
+          id: id,
+          text: text,
+          isCorrect: isCorrect,
+          question: question,
+        );
 
   AnswerModel copyWith({
     int? id,
@@ -31,7 +50,7 @@ class AnswerModel extends AnswerEntity {
       id: json['id'] as int,
       text: json['text'] as String,
       isCorrect: json['isCorrect'] as bool,
-      question: json['question'] == null ? null : QuestionModel.fromJson(json['question'] as Map<String, dynamic>),
+      question: QuestionModel.fromJson(json['question'] as Map<String, dynamic>),
     );
   }
 

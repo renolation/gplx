@@ -28,6 +28,11 @@ class TheoryScreen extends StatelessWidget {
               SettingsBox().hasFinishedOnboarding = !SettingsBox().hasFinishedOnboarding;
             }, child: Text('Settings ${SettingsBox().hasFinishedOnboarding}'));
           }),
+          ValueListenableBuilder(valueListenable: QuestionsBox().box.listenable(), builder: (context, box, _){
+            return TextButton(onPressed: (){
+
+            }, child: Text('Question ${QuestionsBox().question.text}'));
+          }),
           IconButton(
             icon: const Icon(Icons.wheelchair_pickup),
             onPressed: () {

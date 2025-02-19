@@ -11,6 +11,7 @@ class BoxKeys {
 
   static const String hasFinishedOnboarding = 'hasFinishedOnboarding';
   static const String listQuestions = 'listQuestions';
+  static const String question = 'question';
   static const String indexTypeQuestion = 'indexTypeQuestion';
 
 

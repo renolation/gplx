@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gplx_app/core/common/features/domain/usecases/get_questions.dart';
+import 'package:gplx_app/core/data/boxes.dart';
 
 import '../../../../core/common/features/data/models/answer_model.dart';
 import '../../../../core/common/features/data/models/question_model.dart';
@@ -57,13 +58,13 @@ class QuestionsBloc extends Bloc<QuestionsEvent ,QuestionsState> {
   void _checkAnswerHandler(CheckAnswerEvent event, Emitter<QuestionsState> emit) {
     final updatedQuestions = List<QuestionModel>.from((state as QuestionsLoaded).questions);
     QuestionModel currentQuestion = updatedQuestions[(state as QuestionsLoaded).index];
-    AnswerModel correctAnswer = currentQuestion.answers!.firstWhere((element) => element.isCorrect == true) as AnswerModel;
+    AnswerModel correctAnswer = currentQuestion.answers.firstWhere((element) => element.isCorrect == true);
     if(currentQuestion.selectedAnswer == correctAnswer){
       updatedQuestions[(state as QuestionsLoaded).index] = currentQuestion.copyWith(isCorrect: true, status: 1);
     } else {
       updatedQuestions[(state as QuestionsLoaded).index] = currentQuestion.copyWith(isCorrect: false, status: 2);
     }
-
+    QuestionsBox().question = updatedQuestions[(state as QuestionsLoaded).index];
     emit((state as QuestionsLoaded).copyWith(questions: updatedQuestions));
   }
 

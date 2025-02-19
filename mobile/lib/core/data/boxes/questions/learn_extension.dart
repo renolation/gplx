@@ -16,10 +16,10 @@ extension LearnExtension on QuestionsBox {
 
   //note: get all questions from box
   List<QuestionModel> get listQuestions {
-    return box.get(
+    return (box.get(
       BoxKeys.listQuestions,
       defaultValue: [],
-    );
+    ) as List).cast<QuestionModel>();
   }
 
   //note: set/save all questions to box
@@ -29,6 +29,12 @@ extension LearnExtension on QuestionsBox {
       return;
     }
     box.put(BoxKeys.listQuestions, value);
+  }
+
+  addQuestion(QuestionModel question) {
+    final questions = listQuestions;
+    questions.add(question);
+    listQuestions = questions;
   }
 
   //note: get question by index and type
@@ -49,4 +55,21 @@ extension LearnExtension on QuestionsBox {
     list.add(value);
     box.put(BoxKeys.listQuestions, list);
   }
+
+  void updateQuestion(QuestionModel question) {
+    final questions = listQuestions;
+    final index = questions.indexWhere((element) => element.id == question.id);
+    if (index == -1) addQuestion(question);
+    questions[index] = question;
+    listQuestions = questions;
+  }
+
+  QuestionModel get question {
+    return box.get(BoxKeys.question, defaultValue: QuestionModel.empty());
+  }
+
+  set question(QuestionModel question) {
+      box.put(BoxKeys.question, question);
+  }
+
 }
