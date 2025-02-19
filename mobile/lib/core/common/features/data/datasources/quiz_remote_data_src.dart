@@ -32,7 +32,6 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
           .select('*, question(*)');
       // print(data);
       String jsonString = jsonEncode(data);
-
       return quizModelFromJson(jsonString);
     }on ServerException {
       rethrow;
@@ -47,11 +46,12 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
       final data = await _client
           .from('quiz')
           .select('*, question(*)')
-          .eq('quizId', quizId);
+          .eq('id', quizId)
+          .limit(1)
+      ;
       // print(data);
       String jsonString = jsonEncode(data);
-      Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-      return QuizModel.fromJson(jsonMap);
+      return quizModelFromJson(jsonString).first;
     }on ServerException {
       rethrow;
     } catch (e){
