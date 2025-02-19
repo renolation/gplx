@@ -1,8 +1,7 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gplx_app/src/quiz/presentations/bloc/quizzes_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:gplx_app/src/quizzes/presentations/bloc/quizzes_bloc.dart';
 
 class QuizzesScreen extends StatelessWidget {
   const QuizzesScreen({super.key});
@@ -14,7 +13,7 @@ class QuizzesScreen extends StatelessWidget {
         title: Text('Quizzes'),
       ),
       body: BlocBuilder<QuizzesBloc, QuizzesState>(
-        builder: (context, state){
+        builder: (context, state) {
           if (state is QuizzesLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is QuizzesLoaded) {
@@ -22,13 +21,13 @@ class QuizzesScreen extends StatelessWidget {
               itemCount: state.quizzes.length,
               itemBuilder: (context, index) {
                 final quiz = state.quizzes[index];
-                return ListTile(
-                  title: Text(quiz.name),
-                  subtitle: Text(quiz.questions.length.toString()),
-                  onTap: () {
-                    // context.pushNamed('questions', pathParameters: {'quizId': '${quiz.id}'});
-                  },
-                );
+                return GestureDetector(
+                    onTap: () {
+                      print('aa');
+                      context.pushNamed('quiz', pathParameters: {'quizId': '${quiz.id}'});
+
+                    },
+                    child: Text(quiz.name));
               },
             );
           } else if (state is QuizzesError) {

@@ -24,4 +24,14 @@ class QuizRepoImpl implements QuizRepo {
     }
   }
 
+  @override
+  ResultFuture<QuizEntity> getQuizById(int quizId) async {
+    try {
+      final quiz = await _remoteDataSrc.getQuizById(quizId);
+      return Right(quiz);
+    } on ServerException catch(e){
+      return Left(ServerFailure.fromException(e));
+    }
+  }
+
 }

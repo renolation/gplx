@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:gplx_app/src/chapters/presentations/bloc/chapters_bloc.dart';
 import 'package:gplx_app/src/chapters/presentations/views/chapters_screen.dart';
 import 'package:gplx_app/src/questions/presentations/views/questions_screen.dart';
-import 'package:gplx_app/src/quiz/presentations/bloc/quizzes_bloc.dart';
-import 'package:gplx_app/src/quiz/presentations/views/quizzes_screen.dart';
+import 'package:gplx_app/src/quiz/presentations/bloc/quiz_bloc.dart';
+import 'package:gplx_app/src/quiz/presentations/views/quiz_screen.dart';
+import 'package:gplx_app/src/quizzes/presentations/bloc/quizzes_bloc.dart';
+import 'package:gplx_app/src/quizzes/presentations/views/quizzes_screen.dart';
 
 import '../../src/home/presentations/views/home_screen.dart';
 import '../../src/questions/presentations/bloc/questions_bloc.dart';
@@ -63,7 +65,20 @@ final GoRouter goRouter = GoRouter(
       ],
     ),
 
-
+    GoRoute(
+      name: 'quiz',
+      path: '/quiz/:quizId',
+      builder: (BuildContext context, GoRouterState state) {
+        int quizId =  int.parse(state.pathParameters['quizId']!);
+        return BlocProvider(
+          create: (context) => QuizBloc(
+            // getQuestions: sl(),
+            getQuizById: sl(),
+          )..add(GetQuizByIdEvent(quizId)),
+          child: const QuizScreen(),
+        );
+      },
+    ),
     GoRoute(
       name: 'questions',
       path: '/questions/:chapterId',

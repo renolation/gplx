@@ -15,7 +15,8 @@ class TheoryScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.question_answer),
             onPressed: () {
-              context.goNamed('questions');
+              context.pushNamed('quiz');
+
             },
           ),
         ],

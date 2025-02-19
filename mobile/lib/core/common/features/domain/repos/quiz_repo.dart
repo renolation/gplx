@@ -9,4 +9,6 @@ abstract class QuizRepo {
 
   ResultFuture<List<QuizEntity>> getQuizzes();
 
+  ResultFuture<QuizEntity> getQuizById(int quizId);
+
 }
