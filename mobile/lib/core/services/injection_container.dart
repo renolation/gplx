@@ -1,5 +1,10 @@
 import 'package:get_it/get_it.dart';
+import 'package:gplx_app/core/common/features/data/datasources/quiz_remote_data_src.dart';
+import 'package:gplx_app/core/common/features/data/repos/quiz_repo_impl.dart';
 import 'package:gplx_app/core/common/features/domain/repos/question_repo.dart';
+import 'package:gplx_app/core/common/features/domain/repos/quiz_repo.dart';
+import 'package:gplx_app/core/common/features/domain/usecases/get_quizzes.dart';
+import 'package:gplx_app/src/quiz/presentations/bloc/quizzes_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../src/chapters/presentations/bloc/chapters_bloc.dart';
@@ -17,6 +22,7 @@ final sl = GetIt.instance;
 Future<void> init() async {
   await _initQuestions();
   await _initChapters();
+  await _initQuizzes();
 }
 
 Future<void> _initQuestions() async {
@@ -48,5 +54,16 @@ Future<void> _initChapters() async {
     ..registerLazySingleton<ChapterRemoteDataSrc>(
       () => ChapterRemoteDataSrcImpl(client: sl()),
     );
-    // ..registerLazySingleton(() => Supabase.instance.client);
+  // ..registerLazySingleton(() => Supabase.instance.client);
+}
+
+Future<void> _initQuizzes() async {
+  sl
+    ..registerFactory(
+      () => QuizzesBloc(getQuizzes: sl()),
+    )
+    ..registerLazySingleton(() => GetQuizzes(sl()))
+    ..registerLazySingleton<QuizRepo>(() => QuizRepoImpl(sl()))
+    ..registerLazySingleton<QuizRemoteDataSrc>(
+        () => QuizRemoteDataSrcImpl(client: sl()));
 }

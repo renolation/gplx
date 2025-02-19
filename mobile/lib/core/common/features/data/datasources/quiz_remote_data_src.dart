@@ -1,0 +1,41 @@
+
+
+import 'dart:convert';
+
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../../../errors/exceptions.dart';
+import '../models/chapter_model.dart';
+import '../models/quiz_model.dart';
+
+abstract class QuizRemoteDataSrc {
+  const QuizRemoteDataSrc();
+
+  Future<List<QuizModel>> getQuizzes();
+}
+
+
+class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
+  const QuizRemoteDataSrcImpl({
+    required SupabaseClient client,
+  }) : _client = client;
+
+  final SupabaseClient _client;
+
+  @override
+  Future<List<QuizModel>> getQuizzes() async {
+    try {
+      final data = await _client
+          .from('quiz')
+          .select('*, question(*)');
+      // print(data);
+      String jsonString = jsonEncode(data);
+
+      return quizModelFromJson(jsonString);
+    }on ServerException {
+      rethrow;
+    } catch (e){
+      throw ServerException(message: e.toString(), statusCode: 505);
+    }
+  }
+}

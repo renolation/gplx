@@ -33,6 +33,12 @@ class TheoryScreen extends StatelessWidget {
               context.pushNamed('chapters');
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.add_a_photo),
+            onPressed: () {
+              context.pushNamed('quizzes');
+            },
+          ),
         ],
       ),
     );

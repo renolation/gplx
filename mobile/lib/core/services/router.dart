@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:gplx_app/src/chapters/presentations/bloc/chapters_bloc.dart';
 import 'package:gplx_app/src/chapters/presentations/views/chapters_screen.dart';
 import 'package:gplx_app/src/questions/presentations/views/questions_screen.dart';
+import 'package:gplx_app/src/quiz/presentations/bloc/quizzes_bloc.dart';
+import 'package:gplx_app/src/quiz/presentations/views/quizzes_screen.dart';
 
 import '../../src/home/presentations/views/home_screen.dart';
 import '../../src/questions/presentations/bloc/questions_bloc.dart';
@@ -43,6 +45,18 @@ final GoRouter goRouter = GoRouter(
                 getChapters: sl(),
               )..add(const GetChaptersEvent()),
               child: const ChaptersScreen(),
+            );
+          },
+        ),
+        GoRoute(
+          name: 'quizzes',
+          path: 'quizzes',
+          builder: (BuildContext context, GoRouterState state) {
+            return BlocProvider(
+              create: (context) => QuizzesBloc(
+                getQuizzes: sl(),
+              )..add(const GetQuizzesEvent()),
+              child: const QuizzesScreen(),
             );
           },
         ),
