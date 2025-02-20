@@ -17,7 +17,7 @@ class AnswerModel extends AnswerEntity {
   final bool isCorrect;
 
   @HiveField(3)
-  final QuestionModel question;
+  final QuestionModel? question;
 
   const AnswerModel({
     required this.id,
@@ -50,7 +50,7 @@ class AnswerModel extends AnswerEntity {
       id: json['id'] as int,
       text: json['text'] as String,
       isCorrect: json['isCorrect'] as bool,
-      question: QuestionModel.fromJson(json['question'] as Map<String, dynamic>),
+      question: json['question'] == null ? null : QuestionModel.fromJson(json['question'] as Map<String, dynamic>),
     );
   }
 
