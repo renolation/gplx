@@ -24,8 +24,8 @@ class GetQuestionByChapterId extends UseCaseWithParams<List<QuestionEntity>, int
   ResultFuture<List<QuestionEntity>> call(int params) async => _repo.getQuestionsByChapterId(params);
 }
 
-class GetWrongQuestions extends UseCaseWithoutParams<List<QuestionEntity>> {
-  const GetWrongQuestions(this._repo);
+class GetWrongAnswers extends UseCaseWithoutParams<List<QuestionEntity>> {
+  const GetWrongAnswers(this._repo);
 
   final QuestionRepo _repo;
 

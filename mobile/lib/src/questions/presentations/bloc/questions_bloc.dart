@@ -13,10 +13,20 @@ part 'questions_event.dart';
 class QuestionsBloc extends Bloc<QuestionsEvent ,QuestionsState> {
   QuestionsBloc({
     required GetQuestionByChapterId getQuestionByChapterId,
+    required GetWrongAnswers getWrongAnswers,
 }) :
         _getQuestionByChapterId = getQuestionByChapterId,
+  _getWrongAnswers = getWrongAnswers,
         super(QuestionsInitial()){
+
+
+
     on<GetQuestionsByChapterIdEvent>(_getQuestionByChapterIdHandler);
+    on<GetWrongAnswersEvent>(_getWrongAnswersHandler);
+
+
+
+
     on<IncreaseQuestionIndexEvent>(_increaseQuestionIndexHandler);
     on<DecreaseQuestionIndexEvent>(_decreaseQuestionIndexHandler);
     on<GoToQuestionEvent>(_goToQuestionHandler);
@@ -25,6 +35,7 @@ class QuestionsBloc extends Bloc<QuestionsEvent ,QuestionsState> {
   }
 
   final GetQuestionByChapterId _getQuestionByChapterId;
+  final GetWrongAnswers _getWrongAnswers;
 
   Future<void> _getQuestionByChapterIdHandler(GetQuestionsByChapterIdEvent event, Emitter<QuestionsState> emit) async {
     emit(QuestionsLoading());
@@ -34,6 +45,17 @@ class QuestionsBloc extends Bloc<QuestionsEvent ,QuestionsState> {
           (questions) => emit(QuestionsLoaded(questions as List<QuestionModel>)),
     );
   }
+
+  Future<void> _getWrongAnswersHandler(GetWrongAnswersEvent event, Emitter<QuestionsState> emit) async {
+    emit(QuestionsLoading());
+    final questions = await _getWrongAnswers();
+    questions.fold(
+          (failure) => emit(QuestionsError(failure.message)),
+          (questions) => emit(QuestionsLoaded(questions as List<QuestionModel>)),
+    );
+  }
+
+
 
   void _increaseQuestionIndexHandler(IncreaseQuestionIndexEvent event, Emitter<QuestionsState> emit) {
     if((state as QuestionsLoaded).index == (state as QuestionsLoaded).questions.length - 1) return;
@@ -64,8 +86,6 @@ class QuestionsBloc extends Bloc<QuestionsEvent ,QuestionsState> {
     } else {
       updatedQuestions[(state as QuestionsLoaded).index] = currentQuestion.copyWith(isCorrect: false, status: 2);
     }
-
-
 
     // QuestionsBox().question = updatedQuestions[(state as QuestionsLoaded).index];
     QuestionsBox().saveAnsweredQuestion(updatedQuestions[(state as QuestionsLoaded).index]);

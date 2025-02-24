@@ -88,11 +88,28 @@ final GoRouter goRouter = GoRouter(
           create: (context) => QuestionsBloc(
             // getQuestions: sl(),
             getQuestionByChapterId: sl(),
+            getWrongAnswers: sl(),
           )..add(GetQuestionsByChapterIdEvent(chapterId)),
           child: const QuestionsScreen(),
         );
       },
     ),
+
+    GoRoute(
+      name: 'wrongAnswers',
+      path: '/wrongAnswers',
+      builder: (BuildContext context, GoRouterState state) {
+        return BlocProvider(
+          create: (context) => QuestionsBloc(
+            getQuestionByChapterId: sl(),
+            getWrongAnswers: sl(),
+          )..add(const GetWrongAnswersEvent()),
+          child: const QuestionsScreen(),
+        );
+      },
+    ),
+
+
   ],
 );
 

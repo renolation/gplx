@@ -32,9 +32,11 @@ Future<void> _initQuestions() async {
       () => QuestionsBloc(
         // getQuestions: sl(),
         getQuestionByChapterId: sl(),
+        getWrongAnswers: sl(),
       ),
     )
     ..registerLazySingleton(() => GetQuestions(sl()))
+    ..registerLazySingleton(() => GetWrongAnswers(sl()))
     ..registerLazySingleton(() => GetQuestionByChapterId(sl()))
     ..registerLazySingleton<QuestionRepo>(() => QuestionRepoImpl(sl()))
     ..registerLazySingleton<QuestionRemoteDataSrc>(
