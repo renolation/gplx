@@ -20,7 +20,7 @@ class AnswerModelAdapter extends TypeAdapter<AnswerModel> {
       id: (fields[0] as num).toInt(),
       text: fields[1] as String,
       isCorrect: fields[2] as bool,
-      question: fields[3] as QuestionModel,
+      question: fields[3] as QuestionModel?,
     );
   }
 

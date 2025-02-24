@@ -30,7 +30,7 @@ class TheoryScreen extends StatelessWidget {
           }),
           ValueListenableBuilder(valueListenable: QuestionsBox().box.listenable(), builder: (context, box, _){
             return TextButton(onPressed: (){
-            }, child: Text('Question ${QuestionsBox().question.text}'));
+            }, child: Text('Question ${QuestionsBox().wrongQuestions.length}'));
           }),
           IconButton(
             icon: const Icon(Icons.wheelchair_pickup),

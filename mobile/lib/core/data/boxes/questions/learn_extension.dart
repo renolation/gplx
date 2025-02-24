@@ -72,4 +72,28 @@ extension LearnExtension on QuestionsBox {
       box.put(BoxKeys.question, question);
   }
 
+  //note: get all questions from box
+  List<QuestionModel> get wrongQuestions {
+    return (box.get(
+      BoxKeys.wrongQuestions,
+      defaultValue: [],
+    ) as List).cast<QuestionModel>().where((e) => e.status == 2).toList();
+  }
+
+  //note: set/save all questions to box
+  void saveAnsweredQuestion(QuestionModel value) {
+    final oldList = [...wrongQuestions];
+    List<QuestionModel> list = [...oldList];
+    final index = oldList.indexWhere((element) => element.index == value.index && element.type == value.type);
+    if (index == -1) {
+      list.add(value);
+    } else {
+      list[index] = value;
+    }
+    box.put(BoxKeys.wrongQuestions, list);
+  }
+
+  bool isAnswered(QuestionModel question) {
+    return wrongQuestions.any((element) => element.index == question.index && element.type == question.type);
+  }
 }

@@ -64,7 +64,13 @@ class QuestionsBloc extends Bloc<QuestionsEvent ,QuestionsState> {
     } else {
       updatedQuestions[(state as QuestionsLoaded).index] = currentQuestion.copyWith(isCorrect: false, status: 2);
     }
-    QuestionsBox().question = updatedQuestions[(state as QuestionsLoaded).index];
+
+
+
+    // QuestionsBox().question = updatedQuestions[(state as QuestionsLoaded).index];
+    QuestionsBox().saveAnsweredQuestion(updatedQuestions[(state as QuestionsLoaded).index]);
+
+
     emit((state as QuestionsLoaded).copyWith(questions: updatedQuestions));
   }
 

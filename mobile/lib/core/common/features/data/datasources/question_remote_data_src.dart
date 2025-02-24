@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:gplx_app/core/data/boxes.dart';
 import 'package:gplx_app/core/errors/exceptions.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -13,6 +14,8 @@ abstract class QuestionRemoteDataSrc {
   Future<List<QuestionModel>> getQuestions();
 
   Future<List<QuestionModel>> getQuestionsByChapterId(int chapterId);
+
+  Future<List<QuestionModel>> getWrongAnswers();
 
 }
 
@@ -53,6 +56,17 @@ class QuestionRemoteDataSrcImpl extends QuestionRemoteDataSrc {
 
       final jsonData = questionModelFromJson(jsonString);
       return jsonData;
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(message: e.toString(), statusCode: 505);
+    }
+  }
+
+  @override
+  Future<List<QuestionModel>> getWrongAnswers() async {
+    try {
+      return QuestionsBox().wrongQuestions;
     } on ServerException {
       rethrow;
     } catch (e) {
