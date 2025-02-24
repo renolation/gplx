@@ -16,6 +16,7 @@ part 'boxes/common/main_box.dart';
 
 part 'boxes/settings/general_extension.dart';
 part 'boxes/questions/learn_extension.dart';
+part 'boxes/questions/base_extension.dart';
 
 
 Future<void> initBoxes() async {

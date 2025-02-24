@@ -12,13 +12,10 @@ class TheoryScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Home'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.question_answer),
-            onPressed: () {
-              context.pushNamed('quiz');
-
-            },
-          ),
+          ValueListenableBuilder(valueListenable: SettingsBox().box.listenable(), builder: (context, box, _){
+            return TextButton(onPressed: (){
+            }, child: Text('Type ${SettingsBox().vehicleTypeQuestion}'));
+          }),
         ],
       ),
       body: ListView(
