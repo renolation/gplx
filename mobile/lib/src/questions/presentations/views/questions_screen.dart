@@ -103,7 +103,7 @@ class QuestionsScreen extends StatelessWidget {
                     },
                     child: Text('Check answer'),
                   ),
-                  state.questions[index].status == 0 ? const SizedBox() : Text(state.questions[index].explain!),
+                  state.questions[index].status == 0 ? const SizedBox() : Text(state.questions[index].explain),
                 ],
               ),
             );

@@ -80,6 +80,14 @@ extension LearnExtension on QuestionsBox {
     ) as List).cast<QuestionModel>().where((e) => e.status == 2).toList();
   }
 
+  List<QuestionModel> get wrongQuestionsToScreen {
+    List<QuestionModel> list = [...wrongQuestions];
+    for (int i = 0; i < list.length; i++) {
+      list[i] = list[i].copyWith(status: 0, selectedAnswer: null);
+    }
+    return list;
+  }
+
   //note: set/save all questions to box
   void saveAnsweredQuestion(QuestionModel value) {
     final oldList = [...wrongQuestions];

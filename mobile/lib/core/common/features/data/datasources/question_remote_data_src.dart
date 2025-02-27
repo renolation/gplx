@@ -66,7 +66,7 @@ class QuestionRemoteDataSrcImpl extends QuestionRemoteDataSrc {
   @override
   Future<List<QuestionModel>> getWrongAnswers() async {
     try {
-      return QuestionsBox().wrongQuestions;
+      return QuestionsBox().wrongQuestionsToScreen;
     } on ServerException {
       rethrow;
     } catch (e) {
