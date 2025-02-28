@@ -24,7 +24,6 @@ class QuestionsScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           } else if (state is QuestionsLoaded) {
             final index = state.index;
-
             WidgetsBinding.instance.addPostFrameCallback((_) {
               scrollController.animateTo(
                 index * (40 + 8 * 2),

@@ -26,9 +26,6 @@ class GetWrongAnswersEvent extends QuestionsEvent {
 
 
 
-
-
-
 class IncreaseQuestionIndexEvent extends QuestionsEvent {
   const IncreaseQuestionIndexEvent();
 }

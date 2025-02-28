@@ -29,20 +29,20 @@ class TheoryScreen extends StatelessWidget {
             return TextButton(onPressed: (){
             }, child: Text('Question ${QuestionsBox().wrongQuestions.length}'));
           }),
-          IconButton(
-            icon: const Icon(Icons.wheelchair_pickup),
+          TextButton(
+            child: Text('chapter'),
             onPressed: () {
               context.pushNamed('chapters');
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.account_tree_sharp),
+          TextButton(
+            child: Text('wrong answers'),
             onPressed: () {
               context.pushNamed('wrongAnswers');
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.add_a_photo),
+          TextButton(
+            child: Text('quizzes'),
             onPressed: () {
               context.pushNamed('quizzes');
             },

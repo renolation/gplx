@@ -19,11 +19,21 @@ final class QuizLoading extends QuizState {
 
 final class QuizLoaded extends QuizState {
   final QuizModel quiz;
+  final int index;
 
-  const QuizLoaded(this.quiz);
+  const QuizLoaded(this.quiz,{this.index = 0});
+
+
+  QuizLoaded copyWith({QuizModel? quiz, int? index}) {
+    return QuizLoaded(
+      quiz ?? this.quiz,
+      index: index ?? this.index,
+    );
+  }
+
 
   @override
-  List<Object> get props => [quiz];
+  List<Object> get props => [quiz,index];
 }
 
 final class QuizError extends QuizState {

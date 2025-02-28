@@ -25,8 +25,6 @@ class QuestionsBloc extends Bloc<QuestionsEvent ,QuestionsState> {
     on<GetWrongAnswersEvent>(_getWrongAnswersHandler);
 
 
-
-
     on<IncreaseQuestionIndexEvent>(_increaseQuestionIndexHandler);
     on<DecreaseQuestionIndexEvent>(_decreaseQuestionIndexHandler);
     on<GoToQuestionEvent>(_goToQuestionHandler);

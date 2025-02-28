@@ -16,7 +16,6 @@ class QuestionsLoaded extends QuestionsState {
 
   const QuestionsLoaded(this.questions,{this.index = 0});
 
-
   QuestionsLoaded copyWith({List<QuestionModel>? questions, int? index}) {
     return QuestionsLoaded(
       questions ?? this.questions,

@@ -10,5 +10,28 @@ class GetQuizByIdEvent extends QuizEvent {
   final int id;
 
   const GetQuizByIdEvent(this.id);
+}
 
+class IncreaseQuestionIndexEvent extends QuizEvent {
+  const IncreaseQuestionIndexEvent();
+}
+
+class DecreaseQuestionIndexEvent extends QuizEvent {
+  const DecreaseQuestionIndexEvent();
+}
+
+class SelectAnswerEvent extends QuizEvent {
+  const SelectAnswerEvent(this.answer, this.index);
+
+  final AnswerModel answer;
+  final int index;
+}
+
+class CheckAnswerEvent extends QuizEvent {
+  const CheckAnswerEvent();
+}
+
+class GoToQuestionEvent extends QuizEvent {
+  const GoToQuestionEvent(this.index);
+  final int index;
 }
