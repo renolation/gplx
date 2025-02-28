@@ -35,3 +35,7 @@ class GoToQuestionEvent extends QuizEvent {
   const GoToQuestionEvent(this.index);
   final int index;
 }
+
+class ResultQuizEvent extends QuizEvent {
+  const ResultQuizEvent();
+}

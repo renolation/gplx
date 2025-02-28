@@ -36,6 +36,15 @@ final class QuizLoaded extends QuizState {
   List<Object> get props => [quiz,index];
 }
 
+final class QuizFinished extends QuizState {
+  final QuizModel quiz;
+
+  const QuizFinished(this.quiz);
+
+  @override
+  List<Object> get props => [quiz];
+}
+
 final class QuizError extends QuizState {
   final String message;
 

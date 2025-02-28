@@ -20,7 +20,15 @@ class QuizScreen extends StatelessWidget {
         } else if (state is QuizLoaded) {
           //note: body
           final index = state.index;
-          return Scaffold(
+          return state.quiz.status  == 1 ? Scaffold(
+            appBar: AppBar(
+              title: const Text('Quizzes'),
+
+            ),
+            body: const Center(
+              child: Text('Finished'),
+            ),
+          ) : Scaffold(
             appBar: AppBar(
               title: const Text('Quiz'),
             ),
