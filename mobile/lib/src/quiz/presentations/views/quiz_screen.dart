@@ -23,10 +23,71 @@ class QuizScreen extends StatelessWidget {
           return state.quiz.status  == 1 ? Scaffold(
             appBar: AppBar(
               title: const Text('Quizzes'),
-
             ),
-            body: const Center(
-              child: Text('Finished'),
+            body:  Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Text('Quiz completed'),
+                    Row(
+                      children: [
+                        Text('Correct: ${state.quiz.correctCount}'),
+                        Text('Wrong: ${state.quiz.incorrectCount}'),
+                        Text('Total: ${state.quiz.questions.length}'),
+                      ],
+                    ),
+                    TabBar(tabs: [
+                      Tab(text: 'Correct'),
+                      Tab(text: 'Wrong'),
+                      Tab(text: 'Did not answer'),
+                    ]),
+                    TabBarView(children: [
+                      ListView.builder(
+                        itemCount: state.quiz.questions.length,
+                        itemBuilder: (ctx, i) {
+                          final question = state.quiz.questions[i] as QuestionModel;
+                          if (question.status == 1) {
+                            return ListTile(
+                              title: Text('Câu ${question.index}'),
+                              subtitle: Text(question.text),
+                              trailing: Icon(Icons.check, color: Colors.green),
+                            );
+                          }
+                          return const SizedBox();
+                        },
+                      ),
+                      ListView.builder(
+                        itemCount: state.quiz.questions.length,
+                        itemBuilder: (ctx, i) {
+                          final question = state.quiz.questions[i] as QuestionModel;
+                          if (question.status == 2) {
+                            return ListTile(
+                              title: Text('Câu ${question.index}'),
+                              subtitle: Text(question.text),
+                              trailing: Icon(Icons.close, color: Colors.red),
+                            );
+                          }
+                          return const SizedBox();
+                        },
+                      ),
+                      ListView.builder(
+                        itemCount: state.quiz.questions.length,
+                        itemBuilder: (ctx, i) {
+                          final question = state.quiz.questions[i] as QuestionModel;
+                          if (question.status == 0) {
+                            return ListTile(
+                              title: Text('Câu ${question.index}'),
+                              subtitle: Text(question.text),
+                              trailing: Icon(Icons.close, color: Colors.red),
+                            );
+                          }
+                          return const SizedBox();
+                        },
+                      ),
+                    ]),
+                  ],
+                ),
+              ),
             ),
           ) : Scaffold(
             appBar: AppBar(
