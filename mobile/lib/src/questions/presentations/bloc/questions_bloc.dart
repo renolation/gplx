@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:gplx_app/core/common/features/data/models/quiz_model.dart';
 import 'package:gplx_app/core/common/features/domain/usecases/get_questions.dart';
 import 'package:gplx_app/core/data/boxes.dart';
 

@@ -35,3 +35,12 @@ class QuestionsError extends QuestionsState {
   @override
   List<Object> get props => [message];
 }
+
+class QuizFinished extends QuestionsState {
+  final QuizModel quiz;
+
+  const QuizFinished(this.quiz);
+
+  @override
+  List<Object> get props => [quiz];
+}

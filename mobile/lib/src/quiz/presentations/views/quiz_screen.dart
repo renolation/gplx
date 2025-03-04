@@ -17,81 +17,109 @@ class QuizScreen extends StatelessWidget {
             extendBodyBehindAppBar: true,
             body: Center(child: CircularProgressIndicator()),
           );
-        } else if (state is QuizLoaded) {
-          //note: body
-          final index = state.index;
-          return state.quiz.status  == 1 ? Scaffold(
+        } else if (state is QuizFinished) {
+          return Scaffold(
             appBar: AppBar(
               title: const Text('Quizzes'),
             ),
             body:  Center(
               child: SingleChildScrollView(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Quiz completed'),
-                    Row(
-                      children: [
-                        Text('Correct: ${state.quiz.correctCount}'),
-                        Text('Wrong: ${state.quiz.incorrectCount}'),
-                        Text('Total: ${state.quiz.questions.length}'),
-                      ],
+                    Container(
+                      height: 30,
+                      child: Row(
+                        children: [
+                          Text('Correct: ${state.quiz.correctCount}'),
+                          Text('Wrong: ${state.quiz.incorrectCount}'),
+                          Text('Total: ${state.quiz.questions.length}'),
+                        ],
+                      ),
                     ),
-                    TabBar(tabs: [
-                      Tab(text: 'Correct'),
-                      Tab(text: 'Wrong'),
-                      Tab(text: 'Did not answer'),
-                    ]),
-                    TabBarView(children: [
-                      ListView.builder(
-                        itemCount: state.quiz.questions.length,
-                        itemBuilder: (ctx, i) {
-                          final question = state.quiz.questions[i] as QuestionModel;
-                          if (question.status == 1) {
-                            return ListTile(
-                              title: Text('Câu ${question.index}'),
-                              subtitle: Text(question.text),
-                              trailing: Icon(Icons.check, color: Colors.green),
-                            );
-                          }
-                          return const SizedBox();
-                        },
+                    DefaultTabController(
+                      length: 3,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TabBar(
+                              tabs: [
+                                Tab(text: 'Correct'),
+                                Tab(text: 'Wrong'),
+                                Tab(text: 'Did not answer'),
+                              ]),
+                          Container(
+                            height: 100,
+                            child: TabBarView(children: [
+                              Text('a'),
+                              Text('a'),
+                              Text('a'),
+                              // ListView.builder(
+                              //   itemCount: state.quiz.questions.length,
+                              //   itemBuilder: (ctx, i) {
+                              //     final question = state.quiz.questions[i] as QuestionModel;
+                              //     if (question.status == 1) {
+                              //       return ListTile(
+                              //         title: Text('Câu ${question.index}'),
+                              //         subtitle: Text(question.text),
+                              //         trailing: Icon(Icons.check, color: Colors.green),
+                              //       );
+                              //     }
+                              //     return const SizedBox();
+                              //   },
+                              // ),
+                              // ListView.builder(
+                              //   itemCount: state.quiz.questions.length,
+                              //   itemBuilder: (ctx, i) {
+                              //     final question = state.quiz.questions[i] as QuestionModel;
+                              //     if (question.status == 2) {
+                              //       return ListTile(
+                              //         title: Text('Câu ${question.index}'),
+                              //         subtitle: Text(question.text),
+                              //         trailing: Icon(Icons.close, color: Colors.red),
+                              //       );
+                              //     }
+                              //     return const SizedBox();
+                              //   },
+                              // ),
+                              // ListView.builder(
+                              //   itemCount: state.quiz.questions.length,
+                              //   itemBuilder: (ctx, i) {
+                              //     final question = state.quiz.questions[i] as QuestionModel;
+                              //     if (question.status == 0) {
+                              //       return ListTile(
+                              //         title: Text('Câu ${question.index}'),
+                              //         subtitle: Text(question.text),
+                              //         trailing: Icon(Icons.close, color: Colors.red),
+                              //       );
+                              //     }
+                              //     return const SizedBox();
+                              //   },
+                              // ),
+                            ]),
+                          ),
+                        ],
                       ),
-                      ListView.builder(
-                        itemCount: state.quiz.questions.length,
-                        itemBuilder: (ctx, i) {
-                          final question = state.quiz.questions[i] as QuestionModel;
-                          if (question.status == 2) {
-                            return ListTile(
-                              title: Text('Câu ${question.index}'),
-                              subtitle: Text(question.text),
-                              trailing: Icon(Icons.close, color: Colors.red),
-                            );
-                          }
-                          return const SizedBox();
-                        },
-                      ),
-                      ListView.builder(
-                        itemCount: state.quiz.questions.length,
-                        itemBuilder: (ctx, i) {
-                          final question = state.quiz.questions[i] as QuestionModel;
-                          if (question.status == 0) {
-                            return ListTile(
-                              title: Text('Câu ${question.index}'),
-                              subtitle: Text(question.text),
-                              trailing: Icon(Icons.close, color: Colors.red),
-                            );
-                          }
-                          return const SizedBox();
-                        },
-                      ),
-                    ]),
+                    )
                   ],
                 ),
               ),
             ),
-          ) : Scaffold(
+          );
+
+        } else if (state is QuizLoaded) {
+          //note: body
+          final index = state.index;
+          return state.quiz.status  == 1 ? SizedBox() : Scaffold(
             appBar: AppBar(
               title: const Text('Quiz'),
+              actions: [
+                IconButton(onPressed: (){
+                  context.read<QuizBloc>().add(const ResultQuizEvent());
+                }, icon: Icon(Icons.refresh)),
+              ],
             ),
             body:SingleChildScrollView(
               child: Column(
