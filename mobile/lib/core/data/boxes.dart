@@ -2,6 +2,7 @@
 import 'package:gplx_app/core/common/features/data/models/answer_model.dart';
 import 'package:gplx_app/core/common/features/data/models/chapter_model.dart';
 import 'package:gplx_app/core/common/features/data/models/question_model.dart';
+import 'package:gplx_app/core/common/features/data/models/quiz_model.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 
 import 'dart:convert';
@@ -17,6 +18,7 @@ part 'boxes/common/main_box.dart';
 part 'boxes/settings/general_extension.dart';
 part 'boxes/questions/learn_extension.dart';
 part 'boxes/questions/base_extension.dart';
+part 'boxes/questions/quiz_extension.dart';
 
 
 Future<void> initBoxes() async {

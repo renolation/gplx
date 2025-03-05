@@ -1,9 +1,8 @@
-
-
 import 'dart:convert';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../data/boxes.dart';
 import '../../../../errors/exceptions.dart';
 import '../models/chapter_model.dart';
 import '../models/quiz_model.dart';
@@ -12,10 +11,9 @@ abstract class QuizRemoteDataSrc {
   const QuizRemoteDataSrc();
 
   Future<List<QuizModel>> getQuizzes();
-  
+
   Future<QuizModel> getQuizById(int quizId);
 }
-
 
 class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
   const QuizRemoteDataSrcImpl({
@@ -27,15 +25,22 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
   @override
   Future<List<QuizModel>> getQuizzes() async {
     try {
-      final data = await _client
-          .from('quiz')
-          .select('*, question(*)');
-      // print(data);
-      String jsonString = jsonEncode(data);
-      return quizModelFromJson(jsonString);
-    }on ServerException {
+      final quizzes = QuestionsBox().listQuizzes;
+      if (quizzes.isEmpty) {
+        final data = await _client.from('quiz').select('*, question(*)');
+        String jsonString = jsonEncode(data);
+        final fetchedQuizzes = quizModelFromJson(jsonString);
+        QuestionsBox().listQuizzes =
+            fetchedQuizzes; // Save fetched quizzes to Hive
+        return fetchedQuizzes;
+      } else {
+        return quizzes;
+      }
+    } on ServerException {
       rethrow;
-    } catch (e){
+    } on CacheException {
+      rethrow;
+    } catch (e) {
       throw ServerException(message: e.toString(), statusCode: 505);
     }
   }
@@ -43,18 +48,21 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
   @override
   Future<QuizModel> getQuizById(int quizId) async {
     try {
-      final data = await _client
-          .from('quiz')
-          .select('*, question(*)')
-          .eq('id', quizId)
-          .limit(1)
-      ;
-      // print(data);
-      String jsonString = jsonEncode(data);
-      return quizModelFromJson(jsonString).first;
-    }on ServerException {
+      final quiz = QuestionsBox().getQuizById(quizId);
+      if(quiz == null){
+        final data = await _client
+            .from('quiz')
+            .select('*, question(*)')
+            .eq('id', quizId)
+            .limit(1);
+
+        String jsonString = jsonEncode(data);
+        return quizModelFromJson(jsonString).first;
+      }
+      return quiz;
+    } on ServerException {
       rethrow;
-    } catch (e){
+    } catch (e) {
       throw ServerException(message: e.toString(), statusCode: 505);
     }
   }

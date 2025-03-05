@@ -14,6 +14,10 @@ class BoxKeys {
   static const String question = 'question';
   static const String wrongQuestions = 'wrongQuestions';
 
+  static const String listQuizzes = 'listQuizzes';
+
+
+
   static const String allQuestions = 'allQuestions';
 
   static const String vehicleTypeQuestion = 'vehicleTypeQuestion';
