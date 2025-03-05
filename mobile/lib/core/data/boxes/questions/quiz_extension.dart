@@ -25,12 +25,7 @@ extension QuizExtension on QuestionsBox {
   }
 
   QuizModel? getQuizById(int quizId) {
-    return box.get(
-      BoxKeys.listQuizzes,
-      defaultValue: [],
-    ).firstWhere(
-          (element) => element.id == quizId,
-      orElse: () => null,
-    );
+    print('aaa');
+    return listQuizzes.singleWhere((e) => e.id == quizId);
   }
 }

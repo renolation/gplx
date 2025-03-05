@@ -72,7 +72,6 @@ final GoRouter goRouter = GoRouter(
         int quizId =  int.parse(state.pathParameters['quizId']!);
         return BlocProvider(
           create: (context) => QuizBloc(
-            // getQuestions: sl(),
             getQuizById: sl(),
           )..add(GetQuizByIdEvent(quizId)),
           child: const QuizScreen(),

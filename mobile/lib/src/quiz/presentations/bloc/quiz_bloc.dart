@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gplx_app/core/common/features/domain/usecases/get_quizzes.dart';
+import 'package:gplx_app/core/data/boxes.dart';
 
 import '../../../../core/common/features/data/models/answer_model.dart';
 import '../../../../core/common/features/data/models/question_model.dart';
@@ -75,6 +76,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
       didNotAnswerCount: didNotAnswerCount,
       status: 1,
     );
+    QuestionsBox().updateQuiz(newQuiz);
     emit(QuizFinished(newQuiz));
   }
 }

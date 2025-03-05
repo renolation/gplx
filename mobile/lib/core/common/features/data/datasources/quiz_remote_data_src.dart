@@ -48,6 +48,7 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
   @override
   Future<QuizModel> getQuizById(int quizId) async {
     try {
+      print('id $quizId');
       final quiz = QuestionsBox().getQuizById(quizId);
       if(quiz == null){
         final data = await _client

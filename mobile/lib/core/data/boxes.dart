@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:gplx_app/core/common/features/data/models/answer_model.dart';
 import 'package:gplx_app/core/common/features/data/models/chapter_model.dart';
 import 'package:gplx_app/core/common/features/data/models/question_model.dart';
@@ -27,6 +29,7 @@ Future<void> initBoxes() async {
   Hive.registerAdapter(QuestionModelAdapter());
   Hive.registerAdapter(AnswerModelAdapter());
   Hive.registerAdapter(ChapterModelAdapter());
+  Hive.registerAdapter(QuizModelAdapter());
   await SettingsBox().init();
   await QuestionsBox().init();
 

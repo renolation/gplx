@@ -1,3 +1,4 @@
+import 'package:hive_ce/hive.dart';
 
 import 'dart:convert';
 
@@ -5,26 +6,72 @@ import 'package:gplx_app/core/common/features/data/models/question_model.dart';
 import 'package:gplx_app/core/common/features/domain/entities/quiz_entity.dart';
 
 
-List<QuizModel> quizModelFromJson(String str) => List<QuizModel>.from(json.decode(str).map((x) => QuizModel.fromJson(x)));
+part 'quiz_model.g.dart';
 
-String quizModelToJson(List<QuizModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+List<QuizModel> quizModelFromJson(String str) =>
+    List<QuizModel>.from(json.decode(str).map((x) => QuizModel.fromJson(x)));
 
+String quizModelToJson(List<QuizModel> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@HiveType(typeId: 3)
 class QuizModel extends QuizEntity {
+  @HiveField(0)
+  final int id;
+
+  @HiveField(1)
+  final bool isTested;
+
+  @HiveField(2)
+  final int correctCount;
+
+  @HiveField(3)
+  final int incorrectCount;
+
+  @HiveField(4)
+  final int didNotAnswerCount;
+
+  @HiveField(5)
+  final int status;
+
+  @HiveField(6)
+  final String type;
+
+  @HiveField(7)
+  final String name;
+
+  @HiveField(8)
+  final int time_to_do;
+
+  @HiveField(9)
+  final int time_used;
+
+  @HiveField(10)
+  final List<QuestionModel> questions;
 
   const QuizModel({
-    required super.id,
-    required super.isTested,
-    required super.correctCount,
-    required super.incorrectCount,
-     super.didNotAnswerCount = 0,
-    required super.status,
-    required super.type,
-    required super.name,
-    required super.time_to_do,
-    required super.time_used,
-    super.questions = const [],
-});
+    required this.id,
+    required this.isTested,
+    required this.correctCount,
+    required this.incorrectCount,
+    this.didNotAnswerCount = 0,
+    required this.status,
+    required this.type,
+    required this.name,
+    required this.time_to_do,
+    required this.time_used,
+    this.questions = const [],
+  }) : super(
+            id: 0,
+            isTested: false,
+            correctCount: 0,
+            incorrectCount: 0,
+            didNotAnswerCount: 0,
+            status: 0,
+            type: '',
+            name: '',
+            time_to_do: 0,
+            time_used: 0);
 
   QuizModel copyWith({
     int? id,
@@ -67,8 +114,8 @@ class QuizModel extends QuizEntity {
       time_to_do: json['time_to_do'] as int,
       time_used: json['time_used'] as int,
       questions: (json['question'] as List<dynamic>?)
-          ?.map((e) => QuestionModel.fromJson(e as Map<String, dynamic>))
-          .toList() ??
+              ?.map((e) => QuestionModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
           [],
     );
   }
