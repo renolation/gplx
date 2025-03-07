@@ -45,10 +45,9 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
     try {
       final data = await _client
           .from('quiz')
-          .select('*, question(*)')
+          .select('*, question(*, answer(*))')
           .eq('id', quizId)
-          .limit(1)
-      ;
+          .limit(1);
       // print(data);
       String jsonString = jsonEncode(data);
       return quizModelFromJson(jsonString).first;
