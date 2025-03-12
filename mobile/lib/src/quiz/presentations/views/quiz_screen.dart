@@ -22,13 +22,13 @@ class QuizScreen extends StatelessWidget {
             appBar: AppBar(
               title: const Text('Quizzes'),
             ),
-            body:  Center(
+            body: Center(
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Quiz completed'),
+                    const Text('Quiz completed'),
                     Container(
                       height: 30,
                       child: Row(
@@ -44,84 +44,46 @@ class QuizScreen extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          TabBar(
-                              tabs: [
-                                Tab(text: 'Correct'),
-                                Tab(text: 'Wrong'),
-                                Tab(text: 'Did not answer'),
-                              ]),
+                          const TabBar(
+                            tabs: [
+                              Tab(text: 'Correct'),
+                              Tab(text: 'Wrong'),
+                              Tab(text: 'Did not answer'),
+                            ],
+                          ),
                           Container(
                             height: 100,
-                            child: TabBarView(children: [
-                              Text('a'),
-                              Text('a'),
-                              Text('a'),
-                              // ListView.builder(
-                              //   itemCount: state.quiz.questions.length,
-                              //   itemBuilder: (ctx, i) {
-                              //     final question = state.quiz.questions[i] as QuestionModel;
-                              //     if (question.status == 1) {
-                              //       return ListTile(
-                              //         title: Text('Câu ${question.index}'),
-                              //         subtitle: Text(question.text),
-                              //         trailing: Icon(Icons.check, color: Colors.green),
-                              //       );
-                              //     }
-                              //     return const SizedBox();
-                              //   },
-                              // ),
-                              // ListView.builder(
-                              //   itemCount: state.quiz.questions.length,
-                              //   itemBuilder: (ctx, i) {
-                              //     final question = state.quiz.questions[i] as QuestionModel;
-                              //     if (question.status == 2) {
-                              //       return ListTile(
-                              //         title: Text('Câu ${question.index}'),
-                              //         subtitle: Text(question.text),
-                              //         trailing: Icon(Icons.close, color: Colors.red),
-                              //       );
-                              //     }
-                              //     return const SizedBox();
-                              //   },
-                              // ),
-                              // ListView.builder(
-                              //   itemCount: state.quiz.questions.length,
-                              //   itemBuilder: (ctx, i) {
-                              //     final question = state.quiz.questions[i] as QuestionModel;
-                              //     if (question.status == 0) {
-                              //       return ListTile(
-                              //         title: Text('Câu ${question.index}'),
-                              //         subtitle: Text(question.text),
-                              //         trailing: Icon(Icons.close, color: Colors.red),
-                              //       );
-                              //     }
-                              //     return const SizedBox();
-                              //   },
-                              // ),
-                            ]),
+                            child: const TabBarView(
+                              children: [
+                                Text('a'),
+                                Text('a'),
+                                Text('a'),
+                              ],
+                            ),
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
             ),
           );
-
         } else if (state is QuizLoaded) {
-          //note: body
           final index = state.index;
-          return state.quiz.status  == 1 ? SizedBox() : Scaffold(
+          return Scaffold(
             appBar: AppBar(
               title: const Text('Quiz'),
               actions: [
-                IconButton(onPressed: (){
-                  context.read<QuizBloc>().add(const ResultQuizEvent());
-                }, icon: Icon(Icons.refresh)),
+                IconButton(
+                  onPressed: () {
+                    context.read<QuizBloc>().add(const ResultQuizEvent());
+                  },
+                  icon: const Icon(Icons.refresh),
+                ),
               ],
             ),
-            body:SingleChildScrollView(
+            body: SingleChildScrollView(
               child: Column(
                 children: [
                   SizedBox(
@@ -130,10 +92,9 @@ class QuizScreen extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: state.quiz.questions.length,
                       scrollDirection: Axis.horizontal,
-                      // controller: scrollController,
                       itemBuilder: (ctx, i) {
                         return InkWell(
-                          onTap:() => context.read<QuizBloc>().add(GoToQuestionEvent(i)),
+                          onTap: () => context.read<QuizBloc>().add(GoToQuestionEvent(i)),
                           child: Container(
                             padding: const EdgeInsets.all(8.0),
                             height: 40,
@@ -148,56 +109,54 @@ class QuizScreen extends StatelessWidget {
                     onPressed: () {
                       context.read<QuizBloc>().add(const DecreaseQuestionIndexEvent());
                     },
-                    child: Text('Previous'),
+                    child: const Text('Previous'),
                   ),
                   TextButton(
                     onPressed: () {
                       context.read<QuizBloc>().add(const IncreaseQuestionIndexEvent());
                     },
-                    child: Text('Next'),
+                    child: const Text('Next'),
                   ),
                   Text('Câu: ${state.quiz.questions[index].index}'),
-                  Text('${state.quiz.questions[index].text}'),
-                  Container(
-                    child: Column(
-                      children: [
-                        for (final answer in state.quiz.questions[index].answers!)
-                          ListTile(
-                            title: Text(' ${answer.isCorrect} ${answer.text}'),
-                            leading: Radio<AnswerModel>(
-                              value: answer as AnswerModel,
-                              fillColor: WidgetStateProperty.resolveWith<Color>(
-                                    (states) {
-                                      QuestionModel question = state.quiz.questions[index] as QuestionModel;
-                                  if (question.status == 0) {
-                                    return Colors.black; // Default color before selection
-                                  }
-                                  return answer.isCorrect
-                                      ? Colors.green
-                                      : (answer == question.selectedAnswer ? Colors.red : Colors.black);
-                                },
-                              ),
-                              groupValue: (state.quiz.questions[index] as QuestionModel).selectedAnswer,
-                              onChanged: (value) {
-                                context.read<QuizBloc>().add(SelectAnswerEvent(value!, index));
+                  Text(state.quiz.questions[index].text),
+                  Text('$index'),
+                  Text((state.quiz.questions[index] as QuestionModel).selectedAnswer?.text ?? 'Empty'),
+                  Column(
+                    children: [
+                      for (final answer in state.quiz.questions[index].answers!)
+                        ListTile(
+                          title: Text(' ${answer.isCorrect} ${answer.text}'),
+                          leading: Radio<AnswerModel>(
+                            value: answer as AnswerModel,
+                            fillColor: MaterialStateProperty.resolveWith<Color>(
+                                  (states) {
+                                final question = state.quiz.questions[index] as QuestionModel;
+                                return answer.id == question.selectedAnswer?.id
+                                    ? Colors.green
+                                    : Colors.black;
                               },
                             ),
+                            groupValue: (state.quiz.questions[index] as QuestionModel).selectedAnswer,
+                            onChanged: (value) {
+                              context.read<QuizBloc>().add(SelectAnswerEvent(value!, index));
+                            },
                           ),
-                      ],
-                    ),
+                        ),
+                    ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      context.read<QuizBloc>().add(const CheckAnswerEvent());
-                    },
-                    child: Text('Check answer'),
-                  ),
-                  (state.quiz.questions[index] as QuestionModel).status == 0 ? const SizedBox() : Text((state.quiz.questions[index] as QuestionModel).explain),
+                  // TextButton(
+                  //   onPressed: () {
+                  //     context.read<QuizBloc>().add(const CheckAnswerEvent());
+                  //   },
+                  //   child: const Text('Check answer'),
+                  // ),
+                  // state.quiz.questions[index].status == 0
+                  //     ? const SizedBox()
+                  //     : Text(state.quiz.questions[index].explain),
                 ],
               ),
             ),
           );
-          return Text(state.quiz.name);
         } else if (state is QuizError) {
           return Scaffold(
             extendBodyBehindAppBar: true,
