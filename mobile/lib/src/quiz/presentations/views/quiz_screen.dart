@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gplx_app/core/common/features/data/models/question_model.dart';
+import 'package:gplx_app/core/common/features/data/models/quiz_model.dart';
+import 'package:gplx_app/src/quiz/presentations/views/questions_grid.dart';
 
 import '../../../../core/common/features/data/models/answer_model.dart';
-import '../../../../core/common/features/data/models/question_model.dart';
 import '../bloc/quiz_bloc.dart';
 
 class QuizScreen extends StatelessWidget {
@@ -18,52 +20,50 @@ class QuizScreen extends StatelessWidget {
             body: Center(child: CircularProgressIndicator()),
           );
         } else if (state is QuizFinished) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Quizzes'),
-            ),
-            body: Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Quiz completed'),
-                    Container(
-                      height: 30,
-                      child: Row(
-                        children: [
-                          Text('Correct: ${state.quiz.correctCount}'),
-                          Text('Wrong: ${state.quiz.incorrectCount}'),
-                          Text('Total: ${state.quiz.questions.length}'),
-                        ],
+          return DefaultTabController(
+            length: 4,
+
+            child: Scaffold(
+              appBar: AppBar(
+                title: const Text('Quizzes'),
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(100.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text('Khong dat'),
+                      SizedBox(
+                        height: 30,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text('Correct: ${state.quiz.correctCount}'),
+                            Text('Wrong: ${state.quiz.incorrectCount}'),
+                            Text('No answer: ${state.quiz.didNotAnswerCount}'),
+                            Text('Total: ${state.quiz.questions.length}'),
+                          ],
+                        ),
                       ),
-                    ),
-                    DefaultTabController(
-                      length: 3,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const TabBar(
-                            tabs: [
-                              Tab(text: 'Correct'),
-                              Tab(text: 'Wrong'),
-                              Tab(text: 'Did not answer'),
-                            ],
-                          ),
-                          Container(
-                            height: 100,
-                            child: const TabBarView(
-                              children: [
-                                Text('a'),
-                                Text('a'),
-                                Text('a'),
-                              ],
-                            ),
-                          ),
+                       TabBar(
+                        tabs: const [
+                          Tab(text: 'Total'),
+                          Tab(text: 'Correct'),
+                          Tab(text: 'Wrong'),
+                          Tab(text: 'Did not answer'),
                         ],
-                      ),
-                    ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              body: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child:  TabBarView(
+                  children: const [
+                    QuestionsGrid(),
+                    QuestionsGrid(status: 1),
+                    QuestionsGrid(status: 2),
+                    QuestionsGrid(status: 0),
                   ],
                 ),
               ),
@@ -94,12 +94,16 @@ class QuizScreen extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (ctx, i) {
                         return InkWell(
-                          onTap: () => context.read<QuizBloc>().add(GoToQuestionEvent(i)),
+                          onTap: () => context
+                              .read<QuizBloc>()
+                              .add(GoToQuestionEvent(i)),
                           child: Container(
                             padding: const EdgeInsets.all(8.0),
                             height: 40,
                             color: i == index ? Colors.red : Colors.blue,
-                            child: Center(child: Text('Câu ${state.quiz.questions[i].index}')),
+                            child: Center(
+                                child: Text(
+                                    'Câu ${state.quiz.questions[i].index}')),
                           ),
                         );
                       },
@@ -107,52 +111,63 @@ class QuizScreen extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      context.read<QuizBloc>().add(const DecreaseQuestionIndexEvent());
+                      context
+                          .read<QuizBloc>()
+                          .add(const DecreaseQuestionIndexEvent());
                     },
                     child: const Text('Previous'),
                   ),
                   TextButton(
                     onPressed: () {
-                      context.read<QuizBloc>().add(const IncreaseQuestionIndexEvent());
+                      context
+                          .read<QuizBloc>()
+                          .add(const IncreaseQuestionIndexEvent());
                     },
                     child: const Text('Next'),
                   ),
                   Text('Câu: ${state.quiz.questions[index].index}'),
                   Text(state.quiz.questions[index].text),
-                  Text('$index'),
-                  Text((state.quiz.questions[index] as QuestionModel).selectedAnswer?.text ?? 'Empty'),
                   Column(
                     children: [
-                      for (final answer in state.quiz.questions[index].answers!)
+                      for (final answer in state.quiz.questions[index].answers)
                         ListTile(
                           title: Text(' ${answer.isCorrect} ${answer.text}'),
                           leading: Radio<AnswerModel>(
-                            value: answer as AnswerModel,
-                            fillColor: MaterialStateProperty.resolveWith<Color>(
-                                  (states) {
-                                final question = state.quiz.questions[index] as QuestionModel;
-                                return answer.id == question.selectedAnswer?.id
+                            value: answer,
+                            fillColor: WidgetStateProperty.resolveWith<Color>(
+                              (states) {
+                                final question = state.quiz.questions[index];
+                                if (question.status == 0) {
+                                  return Colors
+                                      .black; // Default color before selection
+                                }
+                                return answer.isCorrect
                                     ? Colors.green
-                                    : Colors.black;
+                                    : (answer == question.selectedAnswer
+                                        ? Colors.red
+                                        : Colors.black);
                               },
                             ),
-                            groupValue: (state.quiz.questions[index] as QuestionModel).selectedAnswer,
+                            groupValue:
+                                (state.quiz.questions[index]).selectedAnswer,
                             onChanged: (value) {
-                              context.read<QuizBloc>().add(SelectAnswerEvent(value!, index));
+                              context
+                                  .read<QuizBloc>()
+                                  .add(SelectAnswerEvent(value!, index));
                             },
                           ),
                         ),
                     ],
                   ),
-                  // TextButton(
-                  //   onPressed: () {
-                  //     context.read<QuizBloc>().add(const CheckAnswerEvent());
-                  //   },
-                  //   child: const Text('Check answer'),
-                  // ),
-                  // state.quiz.questions[index].status == 0
-                  //     ? const SizedBox()
-                  //     : Text(state.quiz.questions[index].explain),
+                  TextButton(
+                    onPressed: () {
+                      context.read<QuizBloc>().add(const CheckAnswerEvent());
+                    },
+                    child: const Text('Check answer'),
+                  ),
+                  state.quiz.questions[index].status == 0
+                      ? const SizedBox()
+                      : Text(state.quiz.questions[index].explain),
                 ],
               ),
             ),
@@ -172,3 +187,4 @@ class QuizScreen extends StatelessWidget {
     );
   }
 }
+

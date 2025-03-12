@@ -53,7 +53,7 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
       if(quiz == null){
         final data = await _client
             .from('quiz')
-            .select('*, question(*)')
+            .select('*, question(*, answer(*))')
             .eq('id', quizId)
             .limit(1);
 

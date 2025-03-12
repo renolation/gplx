@@ -42,5 +42,6 @@ class QuizEntity extends Equatable {
     name,
     time_to_do,
     time_used,
+    questions,
   ];
 }
