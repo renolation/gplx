@@ -49,8 +49,8 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
   Future<QuizModel> getQuizById(int quizId) async {
     try {
       print('id $quizId');
-      final quiz = QuestionsBox().getQuizById(quizId);
-      if(quiz == null){
+      // final quiz = QuestionsBox().getQuizById(quizId);
+      // if(quiz == null){
         final data = await _client
             .from('quiz')
             .select('*, question(*, answer(*))')
@@ -59,8 +59,8 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
 
         String jsonString = jsonEncode(data);
         return quizModelFromJson(jsonString).first;
-      }
-      return quiz;
+      // }
+      // return quiz;
     } on ServerException {
       rethrow;
     } catch (e) {

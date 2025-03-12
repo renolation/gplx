@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gplx_app/core/common/features/data/models/question_model.dart';
 import 'package:gplx_app/core/common/features/data/models/quiz_model.dart';
+import 'package:gplx_app/src/quiz/presentations/bloc/counter_cubit.dart';
+import 'package:gplx_app/src/quiz/presentations/views/counter_widget.dart';
 import 'package:gplx_app/src/quiz/presentations/views/questions_grid.dart';
 
 import '../../../../core/common/features/data/models/answer_model.dart';
@@ -73,7 +75,7 @@ class QuizScreen extends StatelessWidget {
           final index = state.index;
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Quiz'),
+              title: CounterWidget(),
               actions: [
                 IconButton(
                   onPressed: () {
@@ -81,6 +83,9 @@ class QuizScreen extends StatelessWidget {
                   },
                   icon: const Icon(Icons.refresh),
                 ),
+                TextButton(onPressed: (){
+                  print(context.read<CounterCubit>().time);
+                }, child: Text('Submit')),
               ],
             ),
             body: SingleChildScrollView(

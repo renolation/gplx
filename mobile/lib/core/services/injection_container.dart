@@ -9,6 +9,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../src/chapters/presentations/bloc/chapters_bloc.dart';
 import '../../src/questions/presentations/bloc/questions_bloc.dart';
+import '../../src/quiz/presentations/bloc/counter_cubit.dart';
 import '../../src/quiz/presentations/bloc/quiz_bloc.dart';
 import '../common/features/data/datasources/chapter_remote_data_src.dart';
 import '../common/features/data/datasources/question_remote_data_src.dart';
@@ -70,6 +71,7 @@ Future<void> _initQuizzes() async {
         getQuizById: sl(),
       ),
     )
+
     ..registerLazySingleton(() => GetQuizzes(sl()))
     ..registerLazySingleton(() => GetQuizById(sl()))
     ..registerLazySingleton<QuizRepo>(() => QuizRepoImpl(sl()))
