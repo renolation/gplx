@@ -45,6 +45,7 @@ export class GetterService {
 
     async getQuiz(urls: string[]) {
         const crawler = new PlaywrightCrawler({
+            maxConcurrency: 1,
 
             requestHandler: async ({page, request, enqueueLinks}) => {
                 while (await page.locator("#btnStartExam").first().isVisible()) {
