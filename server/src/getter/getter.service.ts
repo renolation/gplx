@@ -56,12 +56,12 @@ export class GetterService {
                         .locator(".question-body")
                         .textContent();
                     // console.log(`Question Body: ${questionBody}`);
-                    const questionText = (
+                    const questionIndex = (
                         await body.locator(".question_txt").textContent()
                     )
                         .replace("Câu hỏi ", "")
                         .replace(":", "");
-                    console.log(`Question Text:                            ${questionText}`);
+                    console.log(`Question index: ${questionIndex}`);
                     const questionContent = await body
                         .locator(".question_content b")
                         .textContent();
@@ -85,10 +85,9 @@ export class GetterService {
                     //endregion
 
                     const questionEntity = new Question();
-                    questionEntity.index = parseInt(questionText);
+                    questionEntity.index = parseInt(questionIndex);
                     questionEntity.text = questionContent;
                     questionEntity.explain = explainText;
-                    questionEntity.type = "A1";
                     questionEntity.vehicle = "B";
                     questionEntity.chapter = chapter;
                     const question = await this.saveQuestionToDB(questionEntity);
@@ -110,7 +109,7 @@ export class GetterService {
                 }
             },
             requestHandlerTimeoutSecs: 30000,
-            // headless: false
+            headless: false
         });
         await crawler.run([url]);
     }

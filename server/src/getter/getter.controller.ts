@@ -20,10 +20,7 @@ export class GetterController {
     return this.getterService.create(createGetterDto);
   }
 
-  @Get()
-  findAll() {
-    return this.getterService.findAll();
-  }
+
 
 
   @Get('/url')
