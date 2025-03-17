@@ -1,10 +1,17 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
+    Column,
+    Entity,
+    PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
 export class Quiz {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column({nullable: true})
+    name: string;
+
+    @Column({nullable: true})
+    vehicle: string;
 }

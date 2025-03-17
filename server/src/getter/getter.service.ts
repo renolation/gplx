@@ -43,6 +43,67 @@ export class GetterService {
         return `This action removes a #${id} getter`;
     }
 
+    async getQuiz(urls: string[]) {
+        const crawler = new PlaywrightCrawler({
+
+            requestHandler: async ({page, request, enqueueLinks}) => {
+                while (await page.locator("#btnStartExam").first().isVisible()) {
+                    const currentUrl = page.url();
+                    console.log(`Current URL: ${currentUrl}`);
+                    await page.waitForTimeout(1500);
+                    await page.locator("#btnStartExam").first().click();
+                    await page.waitForTimeout(1500);
+                    const parentDiv = page.locator('.col-md-9.col-sm-9.col-xs-9.flex-stack');
+                    const secondChildDiv = parentDiv.locator('div:nth-child(2)');
+                    const listItems = secondChildDiv.locator('div.question-body');
+                    const count = await listItems.count();
+                    for (let i = 0; i < count; i++) {
+
+                        const listItem = listItems.nth(i);
+                        const answers = listItem.locator("blockquote a");
+                        const questionText = await listItem.locator(".question_content").textContent();
+                        const answerTexts = [];
+                        for (let i = 0; i < await answers.count(); i++) {
+                            let answerText = await answers.nth(i).textContent();
+                            answerText = answerText.trim();
+                            answerTexts.push(answerText);
+                        }
+                        const questions = await this.questionRepository.find({
+                            where: {text: questionText},
+                            relations: {
+                                answers: true
+                            }
+                        });
+
+                        let correctQuestion = null;
+                        for (const question of questions) {
+                            const questionAnswerTexts = question.answers.map(a => a.text);
+                            if (answerTexts.every((answer, index) => answer === questionAnswerTexts[index])) {
+                                correctQuestion = question;
+                                break;
+                            }
+                        }
+
+                        if (correctQuestion) {
+                            console.log(`Question: ${correctQuestion.text}`);
+                            for (const answer of correctQuestion.answers) {
+                                // console.log(`Answer: ${answer.text}, Is Correct: ${answer.isCorrect}`);
+                            }
+                        } else {
+                            console.log("Correct question not found");
+                        }
+                    }
+                    console.log(`Count of list items: ${count}`);
+
+                }
+            },
+            requestHandlerTimeoutSecs: 5000,
+            headless: false,
+        });
+        await crawler.run(urls);
+    }
+
+
     async findByUrl(url: string) {
         console.log(`Finding by url: ${url}`);
         const crawler = new PlaywrightCrawler({
