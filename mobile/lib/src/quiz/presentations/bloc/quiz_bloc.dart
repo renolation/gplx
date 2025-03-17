@@ -99,13 +99,13 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
     final quiz = (state as QuizLoaded).quiz;
 
     final correctCount = quiz.questions
-        .where((element) => (element as QuestionModel).status == 1)
+        .where((element) => element.status == 1)
         .length;
     final incorrectCount = quiz.questions
-        .where((element) => (element as QuestionModel).status == 2)
+        .where((element) => element.status == 2)
         .length;
     final didNotAnswerCount = quiz.questions
-        .where((element) => (element as QuestionModel).status == 0)
+        .where((element) => element.status == 0)
         .length;
     final newQuiz = quiz.copyWith(
       correctCount: correctCount,
@@ -113,6 +113,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
       didNotAnswerCount: didNotAnswerCount,
       status: 1,
     );
+
     QuestionsBox().updateQuiz(newQuiz);
     emit(QuizFinished(newQuiz));
   }

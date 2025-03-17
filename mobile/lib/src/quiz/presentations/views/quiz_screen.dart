@@ -84,7 +84,7 @@ class QuizScreen extends StatelessWidget {
                   icon: const Icon(Icons.refresh),
                 ),
                 TextButton(onPressed: (){
-                  print(context.read<CounterCubit>().time);
+                  // print(context.read<CounterCubit>().time);
                 }, child: Text('Submit')),
               ],
             ),
