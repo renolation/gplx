@@ -48,7 +48,7 @@ export class GetterService {
         const crawler = new PlaywrightCrawler({
             requestHandler: async ({page, request, enqueueLinks}) => {
                 console.log(`Processing: ${request.url}`);
-                await page.waitForTimeout(1000);
+                await page.waitForTimeout(1500);
                 const urlObj = new URL(request.url);
                 while (await page.locator(".btn-next").first().isVisible()) {
                     const body = page.locator(".question-body");
@@ -66,7 +66,10 @@ export class GetterService {
                         .locator(".question_content b")
                         .textContent();
 
-                    const explainText = await body.locator(".quest_explation .text_bold").textContent();
+                    let explainText = "";
+                    if (await body.locator(".quest_explation .text_bold").count() > 0) {
+                        explainText = await body.locator(".quest_explation .text_bold").textContent();
+                    }
 
                     // console.log(`Question Content: ${questionContent}`);
                     const answers = page.locator("blockquote a");
@@ -87,11 +90,11 @@ export class GetterService {
                     const questionEntity = new Question();
                     questionEntity.index = parseInt(questionIndex);
                     questionEntity.text = questionContent;
-                    questionEntity.explain = explainText;
+                    questionEntity.explain = explainText ?? '';
                     questionEntity.vehicle = "B";
                     questionEntity.chapter = chapter;
+                    console.log(questionContent);
                     const question = await this.saveQuestionToDB(questionEntity);
-
                     for (let i = 0; i < count; i++) {
                         const answer = answers.nth(i);
                         const text = await answer.textContent();
@@ -109,7 +112,7 @@ export class GetterService {
                 }
             },
             requestHandlerTimeoutSecs: 30000,
-            headless: false
+            // headless: false
         });
         await crawler.run([url]);
     }
@@ -119,11 +122,10 @@ export class GetterService {
             where: {index: question.index, text: question.text, chapter: question.chapter}
         });
         if (isExist) {
-            // console.log("Question is exist");
-            return isExist;
-        }
-        if (question.chapter.index === 8) {
-            question.isImportant = true;
+            if (question.chapter.index === 8) {
+                isExist.isImportant = true;
+                return this.questionRepository.save(isExist);
+            }
         }
         return this.questionRepository.save(question);
     }

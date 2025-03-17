@@ -22,7 +22,7 @@ export class Question {
   @Column({nullable: true})
   image: string;
 
-  @Column()
+  @Column({nullable: true})
   explain: string;
 
 
