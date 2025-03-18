@@ -46,7 +46,6 @@ export class GetterService {
     async getQuiz(urls: string[]) {
         const crawler = new PlaywrightCrawler({
             maxConcurrency: 1,
-
             requestHandler: async ({page, request, enqueueLinks}) => {
                 while (await page.locator("#btnStartExam").first().isVisible()) {
                     const currentUrl = page.url();
@@ -54,12 +53,19 @@ export class GetterService {
                     await page.waitForTimeout(1500);
                     await page.locator("#btnStartExam").first().click();
                     await page.waitForTimeout(1500);
+
+
                     const parentDiv = page.locator('.col-md-9.col-sm-9.col-xs-9.flex-stack');
                     const secondChildDiv = parentDiv.locator('div:nth-child(2)');
                     const listItems = secondChildDiv.locator('div.question-body');
+
+                    const quizNameElement = await page.locator('.flex.border-bottom p:has-text("Đề ")');
+                    const quizName = await quizNameElement.textContent();
+                    console.log(`Quiz Name: ${quizName}`);
+
+
                     const count = await listItems.count();
                     for (let i = 0; i < count; i++) {
-
                         const listItem = listItems.nth(i);
                         const answers = listItem.locator("blockquote a");
                         const questionText = await listItem.locator(".question_content").textContent();
@@ -87,9 +93,10 @@ export class GetterService {
 
                         if (correctQuestion) {
                             console.log(`Question: ${correctQuestion.text}`);
-                            for (const answer of correctQuestion.answers) {
-                                // console.log(`Answer: ${answer.text}, Is Correct: ${answer.isCorrect}`);
-                            }
+                            const quiz = new Quiz();
+                            quiz.name = quizName;
+                            quiz.vehicle = "B1";
+                            await this.saveQuestionToQuiz(correctQuestion, quiz);
                         } else {
                             console.log("Correct question not found");
                         }
@@ -178,6 +185,24 @@ export class GetterService {
         });
         await crawler.run([url]);
     }
+
+    async saveQuestionToQuiz(question: Question, quiz: Quiz): Promise<Quiz> {
+        const isExist = await this.quizRepository.findOne({
+            where: {name: quiz.name, vehicle: quiz.vehicle},
+            relations: {questions: true}
+        });
+        if (isExist) {
+            if (!isExist.questions) {
+                isExist.questions = [];
+            }
+            isExist.questions.push(question);
+            return this.quizRepository.save(isExist);
+        } else {
+            quiz.questions = [question];
+            return this.quizRepository.save(quiz);
+        }
+    }
+
 
     async saveQuestionToDB(question: Question): Promise<Question> {
         const isExist = await this.questionRepository.findOne({

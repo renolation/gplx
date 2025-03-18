@@ -1,8 +1,11 @@
 import {
     Column,
     Entity,
-    PrimaryGeneratedColumn,
+    PrimaryGeneratedColumn, ManyToOne,
+    OneToMany,
+    ManyToMany, JoinTable,
 } from 'typeorm';
+import { Question } from './question.entity';
 
 @Entity()
 export class Quiz {
@@ -14,4 +17,8 @@ export class Quiz {
 
     @Column({nullable: true})
     vehicle: string;
+
+    @ManyToMany(() => Question, (question) => question.quizzes)
+    @JoinTable()
+    questions: Question[];
 }
