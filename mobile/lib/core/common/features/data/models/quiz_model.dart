@@ -104,15 +104,15 @@ class QuizModel extends QuizEntity {
   factory QuizModel.fromJson(Map<String, dynamic> json) {
     return QuizModel(
       id: json['id'] as int,
-      isTested: json['isTested'] as bool,
-      correctCount: json['correctCount'] as int,
-      incorrectCount: json['incorrectCount'] as int,
-      didNotAnswerCount: json['didNotAnswerCount'] as int,
-      status: json['status'] as int,
+      isTested: json['isTested'] as bool? ?? false,
+      correctCount: json['correctCount'] as int? ?? 0,
+      incorrectCount: json['incorrectCount'] as int? ?? 0,
+      didNotAnswerCount: json['didNotAnswerCount'] as int? ?? 0,
+      status: json['status'] as int? ?? 0,
       type: json['type'] as String,
       name: json['name'] as String,
-      time_to_do: json['time_to_do'] as int,
-      time_used: json['time_used'] as int,
+      time_to_do: json['time_to_do'] as int? ?? 0,
+      time_used: json['time_used'] as int? ?? 0,
       questions: (json['question'] as List<dynamic>?)
               ?.map((e) => QuestionModel.fromJson(e as Map<String, dynamic>))
               .toList() ??

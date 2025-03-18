@@ -108,7 +108,7 @@ class QuizScreen extends StatelessWidget {
                             color: i == index ? Colors.red : Colors.blue,
                             child: Center(
                                 child: Text(
-                                    'Câu ${state.quiz.questions[i].index}')),
+                                    'Câu ${i+1}')),
                           ),
                         );
                       },
@@ -130,7 +130,7 @@ class QuizScreen extends StatelessWidget {
                     },
                     child: const Text('Next'),
                   ),
-                  Text('Câu: ${state.quiz.questions[index].index}'),
+                  Text('Câu: ${index + 1}'),
                   Text(state.quiz.questions[index].text),
                   Column(
                     children: [
