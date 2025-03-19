@@ -21,7 +21,13 @@ extension QuizExtension on QuestionsBox {
     final quizzes = listQuizzes;
     quizzes.removeWhere((element) => element.id == quiz.id);
     quizzes.add(quiz);
-    listQuizzes = quizzes;
+    listQuizzes = [...quizzes];
+  }
+
+  void deleteQuizzes() {
+    listQuizzes = [];
+  }
+
   }
 
   QuizModel? getQuizById(int quizId) {

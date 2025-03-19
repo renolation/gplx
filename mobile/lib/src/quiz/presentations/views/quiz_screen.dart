@@ -5,6 +5,7 @@ import 'package:gplx_app/core/common/features/data/models/quiz_model.dart';
 import 'package:gplx_app/src/quiz/presentations/bloc/counter_cubit.dart';
 import 'package:gplx_app/src/quiz/presentations/views/counter_widget.dart';
 import 'package:gplx_app/src/quiz/presentations/views/questions_grid.dart';
+import 'package:gplx_app/src/quizzes/presentations/bloc/quizzes_bloc.dart';
 
 import '../../../../core/common/features/data/models/answer_model.dart';
 import '../bloc/quiz_bloc.dart';
@@ -27,6 +28,12 @@ class QuizScreen extends StatelessWidget {
             child: Scaffold(
               appBar: AppBar(
                 title: const Text('Quizzes'),
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(100.0),
                   child: Column(

@@ -65,7 +65,6 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
       quiz.questions.asMap().forEach((i, question) {
         // question.index = i + 1;
         quiz.questions[i] = question.copyWith(index: i + 1);
-        print('a');
       });
       return quiz;
     } on ServerException {
