@@ -38,7 +38,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
       if (quiz.status == 1) {
         return emit(QuizFinished(quiz as QuizModel));
       } else {
-        return emit(QuizLoaded(quiz as QuizModel));
+        return emit(QuizLoaded(quiz as QuizModel, index: 0));
       }
     });
   }
@@ -63,55 +63,58 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
   }
 
   void _selectAnswerHandler(SelectAnswerEvent event, Emitter<QuizState> emit) {
+    final updatedQuestions =
+        List<QuestionModel>.from((state as QuizLoaded).quiz.questions);
 
-    final updatedQuestions = List<QuestionModel>.from((state as QuizLoaded).quiz.questions);
+    updatedQuestions[event.index] =
+        updatedQuestions[event.index].copyWith(selectedAnswer: event.answer);
 
-    updatedQuestions[event.index] = updatedQuestions[event.index].copyWith(selectedAnswer: event.answer);
-
-    final quizModel = (state as QuizLoaded).quiz.copyWith(questions: updatedQuestions);
+    final quizModel =
+        (state as QuizLoaded).quiz.copyWith(questions: updatedQuestions);
 
     emit((state as QuizLoaded).copyWith(quiz: quizModel));
 
     print((state as QuizLoaded));
-
   }
 
   void _checkAnswerHandler(CheckAnswerEvent event, Emitter<QuizState> emit) {
-    final updatedQuestions = List<QuestionModel>.from((state as QuizLoaded).quiz.questions);
-    QuestionModel currentQuestion = updatedQuestions[(state as QuizLoaded).index];
-    AnswerModel correctAnswer = currentQuestion.answers.firstWhere((element) => element.isCorrect == true);
-    if(currentQuestion.selectedAnswer == correctAnswer){
-      updatedQuestions[(state as QuizLoaded).index] = currentQuestion.copyWith(isCorrect: true, status: 1);
+    final updatedQuestions =
+        List<QuestionModel>.from((state as QuizLoaded).quiz.questions);
+    QuestionModel currentQuestion =
+        updatedQuestions[(state as QuizLoaded).index];
+    AnswerModel correctAnswer = currentQuestion.answers
+        .firstWhere((element) => element.isCorrect == true);
+    if (currentQuestion.selectedAnswer == correctAnswer) {
+      updatedQuestions[(state as QuizLoaded).index] =
+          currentQuestion.copyWith(isCorrect: true, status: 1);
     } else {
-      updatedQuestions[(state as QuizLoaded).index] = currentQuestion.copyWith(isCorrect: false, status: 2);
+      updatedQuestions[(state as QuizLoaded).index] =
+          currentQuestion.copyWith(isCorrect: false, status: 2);
     }
 
     // QuestionsBox().question = updatedQuestions[(state as QuestionsLoaded).index];
     // QuestionsBox().saveAnsweredQuestion(updatedQuestions[(state as QuizLoaded).index]);
 
-    QuizModel quizModel = (state as QuizLoaded).quiz.copyWith(questions: updatedQuestions);
+    QuizModel quizModel =
+        (state as QuizLoaded).quiz.copyWith(questions: updatedQuestions);
     emit((state as QuizLoaded).copyWith(quiz: quizModel));
   }
 
-
   void _resultQuizHandler(ResultQuizEvent event, Emitter<QuizState> emit) {
-
     final quiz = (state as QuizLoaded).quiz;
 
-    final correctCount = quiz.questions
-        .where((element) => element.status == 1)
-        .length;
-    final incorrectCount = quiz.questions
-        .where((element) => element.status == 2)
-        .length;
-    final didNotAnswerCount = quiz.questions
-        .where((element) => element.status == 0)
-        .length;
+    final correctCount =
+        quiz.questions.where((element) => element.status == 1).length;
+    final incorrectCount =
+        quiz.questions.where((element) => element.status == 2).length;
+    final didNotAnswerCount =
+        quiz.questions.where((element) => element.status == 0).length;
     final newQuiz = quiz.copyWith(
       correctCount: correctCount,
       incorrectCount: incorrectCount,
       didNotAnswerCount: didNotAnswerCount,
       status: 1,
+      time_used: (20*60) - event.time,
     );
 
     QuestionsBox().updateQuiz(newQuiz);

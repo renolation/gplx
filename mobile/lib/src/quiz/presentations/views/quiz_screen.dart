@@ -24,7 +24,6 @@ class QuizScreen extends StatelessWidget {
         } else if (state is QuizFinished) {
           return DefaultTabController(
             length: 4,
-
             child: Scaffold(
               appBar: AppBar(
                 title: const Text('Quizzes'),
@@ -39,19 +38,17 @@ class QuizScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text('Correct: ${state.quiz.correctCount}'),
-                            Text('Wrong: ${state.quiz.incorrectCount}'),
-                            Text('No answer: ${state.quiz.didNotAnswerCount}'),
-                            Text('Total: ${state.quiz.questions.length}'),
+                            Text('Time: ${state.quiz.time_used}'),
+                            Text('${state.quiz.correctCount}/${state.quiz.questions.length}'),
                           ],
                         ),
                       ),
                        TabBar(
-                        tabs: const [
-                          Tab(text: 'Total'),
-                          Tab(text: 'Correct'),
-                          Tab(text: 'Wrong'),
-                          Tab(text: 'Did not answer'),
+                        tabs:  [
+                          Tab(text: 'Total ${state.quiz.questions.length}'),
+                          Tab(text: 'Correct ${state.quiz.correctCount}'),
+                          Tab(text: 'Wrong ${state.quiz.incorrectCount}'),
+                          Tab(text: 'Did not answer ${state.quiz.didNotAnswerCount}'),
                         ],
                       )
                     ],
@@ -79,7 +76,8 @@ class QuizScreen extends StatelessWidget {
               actions: [
                 IconButton(
                   onPressed: () {
-                    context.read<QuizBloc>().add(const ResultQuizEvent());
+                    int time = context.read<CounterCubit>().time;
+                    context.read<QuizBloc>().add(ResultQuizEvent(time));
                   },
                   icon: const Icon(Icons.refresh),
                 ),
