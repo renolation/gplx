@@ -26,7 +26,6 @@ export class Question {
     @Column({nullable: true})
     explain: string;
 
-
     @Column({default: false})
     isImportant: boolean;
 

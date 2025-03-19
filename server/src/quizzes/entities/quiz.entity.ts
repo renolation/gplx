@@ -16,7 +16,8 @@ export class Quiz {
     name: string;
 
     @Column({nullable: true})
-    vehicle: string;
+    type: string;
+    //note: change vehicle to type: A1, A2, B1, B2, C1, C2...
 
     @ManyToMany(() => Question, (question) => question.quizzes)
     @JoinTable()

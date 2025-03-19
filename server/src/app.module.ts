@@ -13,9 +13,9 @@ import { Question } from "./quizzes/entities/question.entity";
   imports: [
     TypeOrmModule.forRoot({
      type: 'postgres',
-            host: '103.188.82.191',
-            port: 32770,
-            username: 'root',
+            host: 'aws-0-ap-southeast-1.pooler.supabase.com',
+            port: 5432,
+            username: 'postgres.bmkeuakzujzaerolpyga',
             password: 'Renolation29',
             database: 'postgres',
       // ssl: {

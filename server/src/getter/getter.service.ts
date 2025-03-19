@@ -59,10 +59,9 @@ export class GetterService {
                     const secondChildDiv = parentDiv.locator('div:nth-child(2)');
                     const listItems = secondChildDiv.locator('div.question-body');
 
-                    const quizNameElement = await page.locator('.flex.border-bottom p:has-text("Đề ")');
+                    const quizNameElement = page.locator('.flex.border-bottom p:has-text("Đề ")');
                     const quizName = await quizNameElement.textContent();
                     console.log(`Quiz Name: ${quizName}`);
-
 
                     const count = await listItems.count();
                     for (let i = 0; i < count; i++) {
@@ -95,7 +94,7 @@ export class GetterService {
                             console.log(`Question: ${correctQuestion.text}`);
                             const quiz = new Quiz();
                             quiz.name = quizName;
-                            quiz.vehicle = "B1";
+                            quiz.type = "B1";
                             await this.saveQuestionToQuiz(correctQuestion, quiz);
                         } else {
                             console.log("Correct question not found");
@@ -117,7 +116,7 @@ export class GetterService {
         const crawler = new PlaywrightCrawler({
             requestHandler: async ({page, request, enqueueLinks}) => {
                 console.log(`Processing: ${request.url}`);
-                await page.waitForTimeout(1500);
+                await page.waitForTimeout(1000);
                 const urlObj = new URL(request.url);
                 while (await page.locator(".btn-next").first().isVisible()) {
                     const body = page.locator(".question-body");
@@ -135,6 +134,15 @@ export class GetterService {
                         .locator(".question_content b")
                         .textContent();
 
+                    const firstImg = body.locator("img").first();
+                    let imgSrc  = '';
+                    if (await firstImg.count() > 0) {
+                        imgSrc = await firstImg.getAttribute("src");
+                        console.log(`Image Source: ${imgSrc}`);
+                    } else {
+                        console.log("No image found");
+                    }
+
                     let explainText = "";
                     if (await body.locator(".quest_explation .text_bold").count() > 0) {
                         explainText = await body.locator(".quest_explation .text_bold").textContent();
@@ -151,7 +159,8 @@ export class GetterService {
                         .locator(".chapter-title")
                         .first()
                         .textContent();
-                    const chapter = await this.saveChapterToDB(firstChapter);
+                    const type = url.match('600') ? 'Oto' : 'Moto';
+                    const chapter = await this.saveChapterToDB(firstChapter, type);
                     // console.log(chapter);
 
                     //endregion
@@ -160,8 +169,9 @@ export class GetterService {
                     questionEntity.index = parseInt(questionIndex);
                     questionEntity.text = questionContent;
                     questionEntity.explain = explainText ?? '';
-                    questionEntity.vehicle = "B";
+                    questionEntity.vehicle = type;
                     questionEntity.chapter = chapter;
+                    questionEntity.image = imgSrc;
                     console.log(questionContent);
                     const question = await this.saveQuestionToDB(questionEntity);
                     for (let i = 0; i < count; i++) {
@@ -177,18 +187,18 @@ export class GetterService {
                     }
                     // console.log(results);
                     await page.locator(".btn-next").first().click();
-                    await page.waitForTimeout(500);
+                    await page.waitForTimeout(600);
                 }
             },
             requestHandlerTimeoutSecs: 30000,
-            // headless: false
+            headless: false
         });
         await crawler.run([url]);
     }
 
     async saveQuestionToQuiz(question: Question, quiz: Quiz): Promise<Quiz> {
         const isExist = await this.quizRepository.findOne({
-            where: {name: quiz.name, vehicle: quiz.vehicle},
+            where: {name: quiz.name, type: quiz.type},
             relations: {questions: true}
         });
         if (isExist) {
@@ -206,15 +216,17 @@ export class GetterService {
 
     async saveQuestionToDB(question: Question): Promise<Question> {
         const isExist = await this.questionRepository.findOne({
-            where: {index: question.index, text: question.text, chapter: question.chapter}
+            where: {index: question.index, text: question.text}
         });
         if (isExist) {
             if (question.chapter.index === 8) {
                 isExist.isImportant = true;
                 return this.questionRepository.save(isExist);
             }
+        } else {
+            return this.questionRepository.save(question);
         }
-        return this.questionRepository.save(question);
+
     }
 
     async saveAnswerToDB(answer: Answer, question: Question): Promise<Answer> {
@@ -229,15 +241,14 @@ export class GetterService {
         return this.answerRepository.save(answer);
     }
 
-    async saveChapterToDB(text: string): Promise<Chapter> {
+    async saveChapterToDB(text: string, type: string): Promise<Chapter> {
         const regex = /Chương (\d+): (.+)/;
         const match = text.match(regex);
         if (match) {
             const chapterNumber = match[1];
             const description = match[2];
-
             const isExist = await this.chapterRepository.findOne({
-                where: {index: parseInt(chapterNumber), name: description}
+                where: {index: parseInt(chapterNumber), name: description, type: type}
             });
             if (isExist) {
                 // console.log("Chapter is exist");
@@ -246,6 +257,7 @@ export class GetterService {
                 const chapter = new Chapter();
                 chapter.index = parseInt(chapterNumber);
                 chapter.name = description;
+                chapter.type = type;
                 return this.chapterRepository.save(chapter);
             }
         } else {

@@ -31,7 +31,6 @@ export class GetterController {
 
     @Get('/url')
     findByUrl(@Query('link') link: string) {
-
         return this.getterService.findByUrl(`https://${link}`);
     }
 
