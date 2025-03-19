@@ -17,6 +17,8 @@ class InterstitialAdProvider {
   int _numInterstitialLoadAttempts = 0;
   static const int maxFailedLoadAttempts = 3;
 
+  int count = 0;
+
 
   initAds() {
     createInterstitialAd();
@@ -64,7 +66,11 @@ class InterstitialAdProvider {
       print('Warning: attempt to show interstitial before loaded.');
       return;
     }
-    _interstitialAd!.show();
-    _interstitialAd = null;
+    count++;
+    print('show interstitial $count');
+    if(count % 3 == 0) {
+      _interstitialAd!.show();
+      _interstitialAd = null;
+    }
   }
 }
