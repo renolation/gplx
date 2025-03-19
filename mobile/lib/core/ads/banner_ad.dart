@@ -87,7 +87,7 @@ class _AnchoredAdaptiveExampleState extends State<AnchoredAdaptiveExample> {
             _anchoredAdaptiveAd != null &&
             _isLoaded) {
           return Container(
-            color: Colors.green,
+            color: Colors.transparent,
             width: _anchoredAdaptiveAd!.size.width.toDouble(),
             height: _anchoredAdaptiveAd!.size.height.toDouble(),
             child: AdWidget(ad: _anchoredAdaptiveAd!),

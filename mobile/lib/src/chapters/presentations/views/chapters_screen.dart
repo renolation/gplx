@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gplx_app/src/chapters/presentations/bloc/chapters_bloc.dart';
 
+import '../../../../core/ads/inline_adaptive_ad.dart';
+
 class ChaptersScreen extends StatelessWidget {
   const ChaptersScreen({super.key});
 
@@ -25,8 +27,23 @@ class ChaptersScreen extends StatelessWidget {
               itemCount: state.chapters.length,
               itemBuilder: (context, index) {
                 final chapter = state.chapters[index];
+                if(index == 3) {
+                  return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const InlineAdaptiveExample(),
+                    ListTile(
+                      title: Text('Chuong ${chapter.index} ${chapter.name}'),
+                      subtitle: Text(chapter.questions.length.toString()),
+                      onTap: () {
+                        context.pushNamed('questions', pathParameters: {'chapterId': '${chapter.id}'});
+                      },
+                    )
+                  ],
+                );
+                }
                 return ListTile(
-                  title: Text(chapter.name),
+                  title: Text('Chuong ${chapter.index} ${chapter.name}'),
                   subtitle: Text(chapter.questions.length.toString()),
                   onTap: () {
                     context.pushNamed('questions', pathParameters: {'chapterId': '${chapter.id}'});

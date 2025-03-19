@@ -54,7 +54,8 @@ class TheoryScreen extends StatelessWidget {
 
         ],
       ),
-      bottomSheet: Padding(
+      bottomSheet: Container(
+        color: Colors.transparent,
         padding:  EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
         child: const AnchoredAdaptiveExample(),
       ),
