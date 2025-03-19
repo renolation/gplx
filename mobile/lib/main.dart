@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'core/ads/interstitials_ad.dart';
 import 'core/data/boxes.dart';
 import 'core/services/injection_container.dart';
 import 'core/services/router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  MobileAds.instance.initialize();
   await Supabase.initialize(
     url: 'https://bmkeuakzujzaerolpyga.supabase.co',
     anonKey:
@@ -15,6 +17,10 @@ Future<void> main() async {
   );
   await initBoxes();
   await init();
+
+  //note: init ad
+  InterstitialAdProvider().initAds();
+
   runApp(const MyApp());
 }
 

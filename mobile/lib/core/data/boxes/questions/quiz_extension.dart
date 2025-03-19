@@ -28,7 +28,6 @@ extension QuizExtension on QuestionsBox {
     listQuizzes = [];
   }
 
-  }
 
   QuizModel? getQuizById(int quizId) {
     print('aaa');

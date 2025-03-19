@@ -3,6 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:gplx_app/core/data/boxes.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 
+import '../../../../core/ads/banner_ad.dart';
+import '../../../../core/ads/interstitials_ad.dart';
+
 class TheoryScreen extends StatelessWidget {
   const TheoryScreen({super.key});
 
@@ -14,6 +17,7 @@ class TheoryScreen extends StatelessWidget {
         actions: [
           ValueListenableBuilder(valueListenable: SettingsBox().box.listenable(), builder: (context, box, _){
             return TextButton(onPressed: (){
+              InterstitialAdProvider().showInterstitialAd();
             }, child: Text('Type ${SettingsBox().vehicleTypeQuestion}'));
           }),
         ],
@@ -47,7 +51,12 @@ class TheoryScreen extends StatelessWidget {
               context.pushNamed('quizzes');
             },
           ),
+
         ],
+      ),
+      bottomSheet: Padding(
+        padding:  EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+        child: const AnchoredAdaptiveExample(),
       ),
     );
   }
