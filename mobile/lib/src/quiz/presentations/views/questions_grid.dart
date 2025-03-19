@@ -24,7 +24,6 @@ class QuestionsGrid extends StatelessWidget {
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 5, childAspectRatio: 1,
-
               mainAxisSpacing: 6,
             crossAxisSpacing: 6
           ),
@@ -34,7 +33,7 @@ class QuestionsGrid extends StatelessWidget {
             return Container(
               height: 20,
               width: 20,
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: Colors.red),

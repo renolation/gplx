@@ -26,6 +26,7 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
   Future<List<QuizModel>> getQuizzes() async {
     try {
       final quizzes = QuestionsBox().listQuizzes;
+      quizzes.sort((a, b) => a.id.compareTo(b.id));
       print(quizzes.length);
       if (quizzes.isEmpty) {
         final data = await _client.from('quiz').select('*, question(*, answer(*))');
@@ -61,6 +62,11 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
         String jsonString = jsonEncode(data);
         return quizModelFromJson(jsonString).first;
       }
+      quiz.questions.asMap().forEach((i, question) {
+        // question.index = i + 1;
+        quiz.questions[i] = question.copyWith(index: i + 1);
+        print('a');
+      });
       return quiz;
     } on ServerException {
       rethrow;

@@ -55,10 +55,10 @@ class QuizScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              body: Padding(
-                padding: const EdgeInsets.all(8.0),
+              body:const Padding(
+                padding:  EdgeInsets.all(8.0),
                 child:  TabBarView(
-                  children: const [
+                  children:  [
                     QuestionsGrid(),
                     QuestionsGrid(status: 1),
                     QuestionsGrid(status: 2),
@@ -73,17 +73,24 @@ class QuizScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: BlocProvider.value(value: context.read<CounterCubit>(), child: const CounterWidget()),
+              leading: const SizedBox(),
               actions: [
-                IconButton(
-                  onPressed: () {
-                    int time = context.read<CounterCubit>().time;
-                    context.read<QuizBloc>().add(ResultQuizEvent(time));
-                  },
-                  icon: const Icon(Icons.refresh),
-                ),
                 TextButton(onPressed: (){
-                  print(context.read<CounterCubit>().time);
-                }, child: Text('Submit')),
+                  showDialog(context: context, builder: (ctx) => AlertDialog(
+                    title: const Text('Submit quiz'),
+                    content: const Text('Are you sure you want to submit the quiz?'),
+                    actions: [
+                      TextButton(onPressed: (){
+                        Navigator.of(context).pop();
+                      }, child: const Text('No')),
+                      TextButton(onPressed: (){
+                        int time = context.read<CounterCubit>().time;
+                        context.read<QuizBloc>().add(ResultQuizEvent(time));
+                        Navigator.of(context).pop();
+                      }, child: const Text('Yes')),
+                    ],
+                  ));
+                }, child: const Text('Submit')),
               ],
             ),
             body: SingleChildScrollView(
