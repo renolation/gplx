@@ -7,6 +7,7 @@ import 'package:gplx_app/src/quiz/presentations/views/counter_widget.dart';
 import 'package:gplx_app/src/quiz/presentations/views/questions_grid.dart';
 import 'package:gplx_app/src/quizzes/presentations/bloc/quizzes_bloc.dart';
 
+import '../../../../core/ads/banner_ad.dart';
 import '../../../../core/common/features/data/models/answer_model.dart';
 import '../bloc/quiz_bloc.dart';
 
@@ -72,6 +73,10 @@ class QuizScreen extends StatelessWidget {
                     QuestionsGrid(status: 0),
                   ],
                 ),
+              ),
+              bottomSheet: Padding(
+                padding:  EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+                child: const AnchoredAdaptiveExample(),
               ),
             ),
           );
@@ -187,6 +192,10 @@ class QuizScreen extends StatelessWidget {
                       : Text(state.quiz.questions[index].explain),
                 ],
               ),
+            ),
+            bottomSheet: Padding(
+              padding:  EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+              child: const AnchoredAdaptiveExample(),
             ),
           );
         } else if (state is QuizError) {
