@@ -62,16 +62,18 @@ class QuizModel extends QuizEntity {
     required this.time_used,
     this.questions = const [],
   }) : super(
-            id: 0,
-            isTested: false,
-            correctCount: 0,
-            incorrectCount: 0,
-            didNotAnswerCount: 0,
-            status: 0,
-            type: '',
-            name: '',
-            time_to_do: 0,
-            time_used: 0);
+          id: id,
+          isTested: isTested,
+          correctCount: correctCount,
+          incorrectCount: incorrectCount,
+          didNotAnswerCount: didNotAnswerCount,
+          status: status,
+          type: type,
+          name: name,
+          time_to_do: time_to_do,
+          time_used: time_used,
+          questions: questions,
+        );
 
   QuizModel copyWith({
     int? id,

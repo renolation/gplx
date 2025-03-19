@@ -75,7 +75,7 @@ class QuizScreen extends StatelessWidget {
           final index = state.index;
           return Scaffold(
             appBar: AppBar(
-              title: CounterWidget(),
+              title: BlocProvider.value(value: context.read<CounterCubit>(), child: const CounterWidget()),
               actions: [
                 IconButton(
                   onPressed: () {
@@ -84,7 +84,7 @@ class QuizScreen extends StatelessWidget {
                   icon: const Icon(Icons.refresh),
                 ),
                 TextButton(onPressed: (){
-                  // print(context.read<CounterCubit>().time);
+                  print(context.read<CounterCubit>().time);
                 }, child: Text('Submit')),
               ],
             ),

@@ -17,9 +17,7 @@ class CounterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CounterCubit>(
-      create: (_) => CounterCubit(),
-      child: BlocBuilder<CounterCubit, int>(
+    return BlocBuilder<CounterCubit, int>(
         builder: (context, state) {
           return Text(
             formatTime(state),
@@ -29,7 +27,6 @@ class CounterWidget extends StatelessWidget {
             ),
           );
         },
-      ),
     );
   }
 }

@@ -28,11 +28,11 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
       final quizzes = QuestionsBox().listQuizzes;
       print(quizzes.length);
       if (quizzes.isEmpty) {
-        final data = await _client.from('quiz').select('*, question(*)');
+        final data = await _client.from('quiz').select('*, question(*, answer(*))');
         String jsonString = jsonEncode(data);
         final fetchedQuizzes = quizModelFromJson(jsonString);
         QuestionsBox().listQuizzes =
-            fetchedQuizzes; // Save fetched quizzes to Hive
+            fetchedQuizzes; // save to local storage
         return fetchedQuizzes;
       } else {
         return quizzes;

@@ -11,17 +11,19 @@ import 'package:gplx_app/src/quizzes/presentations/views/quizzes_screen.dart';
 
 import '../../src/home/presentations/views/home_screen.dart';
 import '../../src/questions/presentations/bloc/questions_bloc.dart';
+import '../../src/quiz/presentations/bloc/counter_cubit.dart';
 import '../../src/theory/presentations/views/theory_screen.dart';
 import 'injection_container.dart';
 
-final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
-final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'homeNav');
+final GlobalKey<NavigatorState> _rootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _homeNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'homeNav');
 
 final GoRouter goRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: '/theory',
   routes: <RouteBase>[
-
     GoRoute(
       path: '/',
       builder: (context, state) => const HomeScreen(),
@@ -32,11 +34,11 @@ final GoRouter goRouter = GoRouter(
       //   ),
       // ],
     ),
-
     GoRoute(
       name: 'theory',
       path: '/theory',
-      builder: (BuildContext context, GoRouterState state) => const TheoryScreen(),
+      builder: (BuildContext context, GoRouterState state) =>
+          const TheoryScreen(),
       routes: <RouteBase>[
         GoRoute(
           name: 'chapters',
@@ -64,25 +66,28 @@ final GoRouter goRouter = GoRouter(
         ),
       ],
     ),
-
     GoRoute(
       name: 'quiz',
       path: '/quiz/:quizId',
       builder: (BuildContext context, GoRouterState state) {
-        int quizId =  int.parse(state.pathParameters['quizId']!);
-        return BlocProvider(
-          create: (context) => QuizBloc(
-            getQuizById: sl(),
-          )..add(GetQuizByIdEvent(quizId)),
-          child: const QuizScreen(),
-        );
+        int quizId = int.parse(state.pathParameters['quizId']!);
+        return MultiBlocProvider(providers: [
+          BlocProvider<QuizBloc>(
+            create: (context) => QuizBloc(
+              getQuizById: sl(),
+            )..add(GetQuizByIdEvent(quizId)),
+          ),
+          BlocProvider<CounterCubit>(
+            create: (context) => CounterCubit(),
+          ),
+        ], child: const QuizScreen());
       },
     ),
     GoRoute(
       name: 'questions',
       path: '/questions/:chapterId',
       builder: (BuildContext context, GoRouterState state) {
-        int chapterId =  int.parse(state.pathParameters['chapterId']!);
+        int chapterId = int.parse(state.pathParameters['chapterId']!);
         return BlocProvider(
           create: (context) => QuestionsBloc(
             // getQuestions: sl(),
@@ -93,7 +98,6 @@ final GoRouter goRouter = GoRouter(
         );
       },
     ),
-
     GoRoute(
       name: 'wrongAnswers',
       path: '/wrongAnswers',
@@ -107,8 +111,6 @@ final GoRouter goRouter = GoRouter(
         );
       },
     ),
-
-
   ],
 );
 
