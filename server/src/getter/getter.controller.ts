@@ -24,8 +24,8 @@ export class GetterController {
 
     @Get("/quiz")
     getQuiz() {
-       const urls = Array.from({ length: 20 }, (_, i) => `https://taplaixe.vn/thi-thu-ly-thuyet-lai-xe-hang-b11?dethi=${i + 1}`);
-        console.log(urls);
+       const urls = Array.from({ length: 8 }, (_, i) => `https://taplaixe.vn/thi-thu-ly-thuyet-hang-a1?dethi=${i + 1}`);
+        // console.log(urls);
         return this.getterService.getQuiz(urls);
     }
 

@@ -64,48 +64,68 @@ export class GetterService {
                     console.log(`Quiz Name: ${quizName}`);
 
                     const count = await listItems.count();
+                    let countOfCorrectQuestions = 0;
+
                     for (let i = 0; i < count; i++) {
                         const listItem = listItems.nth(i);
                         const answers = listItem.locator("blockquote a");
                         const questionText = await listItem.locator(".question_content").textContent();
                         const answerTexts = [];
+
+
+                        const image = listItem.locator("img");
+                        let imgSrc = '';
+                        for (let j = 0; j < await image.count(); j++){
+                            imgSrc = await image.nth(j).getAttribute("data-src");
+                            console.log(`Image Source: ${imgSrc}`);
+                        }
+
+
                         for (let i = 0; i < await answers.count(); i++) {
                             let answerText = await answers.nth(i).textContent();
                             answerText = answerText.trim();
                             answerTexts.push(answerText);
                         }
+
                         const questions = await this.questionRepository.find({
-                            where: {text: questionText},
+                            where: {text: questionText, vehicle: 'Moto', image: imgSrc === '' ? null : imgSrc},
                             relations: {
                                 answers: true
                             }
                         });
 
                         let correctQuestion = null;
-                        for (const question of questions) {
+                        if(questions.length === 1) {
+                            correctQuestion = questions[0];
+                        } else {
+                            for (const question of questions) {
                             const questionAnswerTexts = question.answers.map(a => a.text);
                             if (answerTexts.every((answer, index) => answer === questionAnswerTexts[index])) {
                                 correctQuestion = question;
                                 break;
                             }
                         }
+                        }
+
 
                         if (correctQuestion) {
                             console.log(`Question: ${correctQuestion.text}`);
                             const quiz = new Quiz();
                             quiz.name = quizName;
-                            quiz.type = "B1";
+                            quiz.type = "A1";
+                            countOfCorrectQuestions++;
                             await this.saveQuestionToQuiz(correctQuestion, quiz);
+
                         } else {
                             console.log("Correct question not found");
                         }
                     }
-                    console.log(`Count of list items: ${count}`);
+                    console.log(`Count of list items: ${countOfCorrectQuestions}`);
 
                 }
             },
             requestHandlerTimeoutSecs: 5000,
-            headless: false,
+            // headless: false,
         });
         await crawler.run(urls);
     }
@@ -216,10 +236,10 @@ export class GetterService {
 
     async saveQuestionToDB(question: Question): Promise<Question> {
         const isExist = await this.questionRepository.findOne({
-            where: {index: question.index, text: question.text}
+            where: {index: question.index, text: question.text, vehicle: question.vehicle}
         });
         if (isExist) {
-            if (question.chapter.index === 8) {
+            if ((question.chapter.index === 8 && question.chapter.type === 'Oto') || (question.chapter.index === 4 && question.chapter.type === 'Moto')) {
                 isExist.isImportant = true;
                 return this.questionRepository.save(isExist);
             }
