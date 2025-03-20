@@ -30,11 +30,11 @@ class TheoryScreen extends StatelessWidget {
                         builder: (context) => Container(
                           child: ListView.builder(
                             itemCount: TypeEnum.values.length,
-                            itemBuilder: (context, index){
+                            itemBuilder: (context, index) {
                               final type = TypeEnum.values[index];
                               return ListTile(
                                 title: Text(type.name),
-                                onTap: (){
+                                onTap: () {
                                   SettingsBox().vehicleTypeQuestion = type.name;
                                   Navigator.pop(context);
                                 },
@@ -48,45 +48,66 @@ class TheoryScreen extends StatelessWidget {
               }),
         ],
       ),
-      body: ListView(
+      body: GridView(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+        ),
         children: [
-          ValueListenableBuilder(
-              valueListenable: SettingsBox().box.listenable(),
-              builder: (context, box, _) {
-                return TextButton(
-                    onPressed: () {
-                      SettingsBox().hasFinishedOnboarding =
-                          !SettingsBox().hasFinishedOnboarding;
-                    },
-                    child: Text(
-                        'Settings ${SettingsBox().hasFinishedOnboarding}'));
-              }),
-          ValueListenableBuilder(
-              valueListenable: QuestionsBox().box.listenable(),
-              builder: (context, box, _) {
-                return TextButton(
-                    onPressed: () {},
-                    child: Text(
-                        'Question ${QuestionsBox().wrongQuestions.length}'));
-              }),
-          TextButton(
-            child: Text('chapter'),
-            onPressed: () {
-              context.pushNamed('chapters');
-            },
+          Container(
+            color: Colors.green,
+            child: TextButton(
+              child: Text('De ngau nhien'),
+              onPressed: () {},
+            ),
           ),
-          TextButton(
-            child: Text('wrong answers'),
-            onPressed: () {
-              context.pushNamed('wrongAnswers');
-            },
+
+          Container(
+            color: Colors.green,
+            child: TextButton(
+              child: Text('On cau hoi'),
+              onPressed: () {
+                context.pushNamed('chapters');
+              },
+            ),
           ),
-          TextButton(
-            child: Text('quizzes'),
-            onPressed: () {
-              context.pushNamed('quizzes');
-            },
+          Container(
+            color: Colors.green,
+            child: TextButton(
+              child: Text('De thi'),
+              onPressed: () {
+                context.pushNamed('quizzes');
+              },
+            ),
           ),
+          Container(
+            color: Colors.green,
+            child: TextButton(
+              child: Text('Cac cau bi sai'),
+              onPressed: () {},
+            ),
+          ),
+
+          Container(
+            color: Colors.green,
+            child: TextButton(
+              child: Text('Cau diem liet'),
+              onPressed: () {
+
+              },
+            ),
+          ),
+          Container(
+            color: Colors.green,
+            child: TextButton(
+              child: Text('Bien bao'),
+              onPressed: () {
+
+              },
+            ),
+          )
         ],
       ),
       // bottomSheet: Container(
