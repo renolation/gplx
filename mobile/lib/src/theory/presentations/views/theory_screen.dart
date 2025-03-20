@@ -86,7 +86,9 @@ class TheoryScreen extends StatelessWidget {
             color: Colors.green,
             child: TextButton(
               child: Text('Cac cau bi sai'),
-              onPressed: () {},
+              onPressed: () {
+                context.pushNamed('wrongAnswers');
+              },
             ),
           ),
 

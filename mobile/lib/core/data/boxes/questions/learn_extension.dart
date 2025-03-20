@@ -88,6 +88,14 @@ extension LearnExtension on QuestionsBox {
     ) as List).cast<QuestionModel>().where((e) => e.status == 2).toList();
   }
 
+  set wrongQuestions(List<QuestionModel> value) {
+    if (value.isEmpty) {
+      box.delete(BoxKeys.wrongQuestions);
+      return;
+    }
+    box.put(BoxKeys.wrongQuestions, value);
+  }
+
   List<QuestionModel> get wrongQuestionsToScreen {
     List<QuestionModel> list = [...wrongQuestions];
     for (int i = 0; i < list.length; i++) {
