@@ -15,6 +15,14 @@ export class Chapter {
   @Column()
   type: string;
 
+  @Column(
+    {
+      nullable: true,
+      default: false,
+    }
+  )
+  isImportant: boolean;
+
   @OneToMany(() => Question, (question) => question.chapter)
   questions: Question[];
 }

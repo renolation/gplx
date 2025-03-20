@@ -27,17 +27,15 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
     try {
       final quizzes = QuestionsBox().listQuizzes;
       quizzes.sort((a, b) => a.id.compareTo(b.id));
-      print(quizzes.length);
-      if (quizzes.isEmpty) {
-        final data = await _client.from('quiz').select('*, question(*, answer(*))');
-        String jsonString = jsonEncode(data);
-        final fetchedQuizzes = quizModelFromJson(jsonString);
-        QuestionsBox().listQuizzes =
-            fetchedQuizzes; // save to local storage
-        return fetchedQuizzes;
-      } else {
+      if (quizzes.isNotEmpty) {
         return quizzes;
       }
+      final data =
+          await _client.from('quiz').select('*, question(*, answer(*))');
+      String jsonString = jsonEncode(data);
+      final fetchedQuizzes = quizModelFromJson(jsonString);
+      QuestionsBox().listQuizzes = fetchedQuizzes;
+      return fetchedQuizzes;
     } on ServerException {
       rethrow;
     } on CacheException {
@@ -52,7 +50,7 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
     try {
       print('id $quizId');
       final quiz = QuestionsBox().getQuizById(quizId);
-      if(quiz == null){
+      if (quiz == null) {
         final data = await _client
             .from('quiz')
             .select('*, question(*, answer(*))')

@@ -29,14 +29,20 @@ class QuestionRemoteDataSrcImpl extends QuestionRemoteDataSrc {
   @override
   Future<List<QuestionModel>> getQuestions() async {
     try {
-      final data = await _client
-          .from('question')
-          .select('*, answer(*), chapter(*)');
-      print(data);
-      String jsonString = jsonEncode(data);
+      final questions = QuestionsBox().listQuestions;
+      if(questions.isEmpty){
+        final data = await _client
+            .from('question')
+            .select('*, answer(*), chapter(*)');
+        print(data);
+        String jsonString = jsonEncode(data);
+        final jsonData = questionModelFromJson(jsonString);
+        QuestionsBox().listQuestions = jsonData;
+        return jsonData;
+      } else {
+        return questions;
+      }
 
-      final jsonData = questionModelFromJson(jsonString);
-      return jsonData;
     } on ServerException {
       rethrow;
     } catch (e) {
@@ -47,6 +53,10 @@ class QuestionRemoteDataSrcImpl extends QuestionRemoteDataSrc {
   @override
   Future<List<QuestionModel>> getQuestionsByChapterId(int chapterId) async {
     try {
+      final chapter = QuestionsBox().getChapterById(chapterId);
+      if(chapter != null){
+        return chapter.questions;
+      }
       final data = await _client
           .from('question')
           .select('*, answer(*), chapter(*)')

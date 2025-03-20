@@ -27,28 +27,24 @@ class ChaptersScreen extends StatelessWidget {
               itemCount: state.chapters.length,
               itemBuilder: (context, index) {
                 final chapter = state.chapters[index];
-                if(index == 3) {
-                  return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const InlineAdaptiveExample(),
-                    ListTile(
-                      title: Text('Chuong ${chapter.index} ${chapter.name}'),
-                      subtitle: Text(chapter.questions.length.toString()),
-                      onTap: () {
-                        context.pushNamed('questions', pathParameters: {'chapterId': '${chapter.id}'});
-                      },
-                    )
-                  ],
-                );
-                }
-                return ListTile(
+                final Widget item = ListTile(
                   title: Text('Chuong ${chapter.index} ${chapter.name}'),
                   subtitle: Text(chapter.questions.length.toString()),
+                  trailing:  Icon(Icons.add, color: chapter.isImportant ? Colors.red : Colors.blue,),
                   onTap: () {
                     context.pushNamed('questions', pathParameters: {'chapterId': '${chapter.id}'});
                   },
                 );
+                if(index == 3) {
+                  return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // const InlineAdaptiveExample(),
+                    item
+                  ],
+                );
+                }
+                return item;
               },
             );
           } else if (state is ChaptersError) {

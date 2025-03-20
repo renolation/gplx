@@ -16,6 +16,9 @@ class BoxKeys {
 
   static const String listQuizzes = 'listQuizzes';
 
+  static const String listChapters = 'listChapters';
+
+
 
 
   static const String allQuestions = 'allQuestions';

@@ -2,17 +2,8 @@ part of '../../boxes.dart';
 
 extension LearnExtension on QuestionsBox {
 
-  //note: test
-  bool get hasFinishedOnboarding {
-    return box.get(
-      BoxKeys.hasFinishedOnboarding,
-      defaultValue: false,
-    );
-  }
-//note: test
-  set hasFinishedOnboarding(bool value) {
-    box.put(BoxKeys.hasFinishedOnboarding, value);
-  }
+
+
 
   //note: get all questions from box
   List<QuestionModel> get listQuestions {
@@ -30,6 +21,23 @@ extension LearnExtension on QuestionsBox {
     }
     box.put(BoxKeys.listQuestions, value);
   }
+
+  List<ChapterModel> get listChapters {
+    return (box.get(
+      BoxKeys.listChapters,
+      defaultValue: [],
+    ) as List).cast<ChapterModel>();
+  }
+
+  set listChapters(List<ChapterModel> value) {
+    if (value.isEmpty) {
+      box.delete(BoxKeys.listChapters);
+      return;
+    }
+    box.put(BoxKeys.listChapters, value);
+  }
+
+
 
   addQuestion(QuestionModel question) {
     final questions = listQuestions;
@@ -104,4 +112,12 @@ extension LearnExtension on QuestionsBox {
   bool isAnswered(QuestionModel question) {
     return wrongQuestions.any((element) => element.index == question.index && element.type == question.type);
   }
+
+
+  ChapterModel? getChapterById(int chapterId) {
+    print('aaa');
+    return listChapters.singleWhere((e) => e.id == chapterId);
+  }
+
+
 }

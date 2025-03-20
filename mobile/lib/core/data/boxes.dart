@@ -5,6 +5,7 @@ import 'package:gplx_app/core/common/features/data/models/answer_model.dart';
 import 'package:gplx_app/core/common/features/data/models/chapter_model.dart';
 import 'package:gplx_app/core/common/features/data/models/question_model.dart';
 import 'package:gplx_app/core/common/features/data/models/quiz_model.dart';
+import 'package:gplx_app/core/utils/enums.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 
 import 'dart:convert';

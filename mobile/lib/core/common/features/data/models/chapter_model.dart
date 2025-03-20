@@ -27,6 +27,9 @@ class ChapterModel extends ChapterEntity {
   @HiveField(3)
   final List<QuestionModel> questions;
 
+  @HiveField(4)
+  final bool isImportant;
+
 
 
   const ChapterModel({
@@ -34,23 +37,27 @@ class ChapterModel extends ChapterEntity {
     required this.index,
     required this.name,
     this.questions = const [],
+    this.isImportant = false,
   }): super(
     id: id,
     index: index,
     name: name,
-    questions: questions);
+    questions: questions,
+    );
 
    ChapterModel copyWith({
     int? id,
     int? index,
     String? name,
     List<QuestionModel>? questions,
+     bool? isImportant,
   }) {
     return ChapterModel(
       id: id ?? this.id,
       index: index ?? this.index,
       name: name ?? this.name,
       questions: questions ?? this.questions,
+      isImportant: isImportant ?? this.isImportant,
     );
   }
 
@@ -59,6 +66,7 @@ class ChapterModel extends ChapterEntity {
       id: json['id'] as int,
       index: json['index'] as int,
       name: json['name'] as String,
+      isImportant: json['isImportant'] as bool,
       questions: (json['question'] as List<dynamic>?)
           ?.map((e) => QuestionModel.fromJson(e as Map<String, dynamic>))
           .toList() ??
@@ -71,6 +79,7 @@ class ChapterModel extends ChapterEntity {
       'id': id,
       'index': index,
       'name': name,
+      'isImportant': isImportant,
       'questions': questions.map((e) => (e as QuestionModel).toJson()).toList(),
     };
   }

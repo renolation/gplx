@@ -15,7 +15,7 @@ extension GeneralSettings on SettingsBox {
   String get vehicleTypeQuestion {
     return box.get(
       BoxKeys.vehicleTypeQuestion,
-      defaultValue: 'B1',
+      defaultValue: TypeEnum.b1.name,
     );
   }
 
