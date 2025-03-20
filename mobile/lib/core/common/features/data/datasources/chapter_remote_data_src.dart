@@ -6,6 +6,8 @@ import 'package:gplx_app/core/data/boxes.dart';
 import 'package:gplx_app/core/errors/exceptions.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../utils/functions.dart';
+
 abstract class ChapterRemoteDataSrc {
   const ChapterRemoteDataSrc();
 
@@ -28,12 +30,11 @@ class ChapterRemoteDataSrcImpl extends ChapterRemoteDataSrc {
       }
       final data = await _client
           .from('chapter')
-          .select('*, question(*, answer(*))')
-          .eq('vehicle', 'Oto');
+          .select('*, question(*, answer(*))');
       // print(data);
       String jsonString = jsonEncode(data);
       List<ChapterModel> listChapter = chapterModelFromJson(jsonString);
-      listChapter[listChapter.length - 1] = listChapter.last.copyWith(questions: addImportantQuestionsToChapter8(listChapter));
+      listChapter = addImportantQuestionsToChapter8(listChapter);
       QuestionsBox().listChapters = listChapter;
       return listChapter;
     } on ServerException {
@@ -44,16 +45,4 @@ class ChapterRemoteDataSrcImpl extends ChapterRemoteDataSrc {
   }
 }
 
-List<QuestionModel> addImportantQuestionsToChapter8(List<ChapterModel> listChapter) {
 
-  List<QuestionModel> listQuestion = [];
-
-  for (var chapter in listChapter) {
-    for (var question in chapter.questions) {
-      if (question.isImportant) {
-        listQuestion.add(question);
-      }
-    }
-  }
-  return listQuestion;
-}

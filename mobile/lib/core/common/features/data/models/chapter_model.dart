@@ -30,6 +30,9 @@ class ChapterModel extends ChapterEntity {
   @HiveField(4)
   final bool isImportant;
 
+  @HiveField(5)
+  final String vehicle;
+
 
 
   const ChapterModel({
@@ -38,6 +41,7 @@ class ChapterModel extends ChapterEntity {
     required this.name,
     this.questions = const [],
     this.isImportant = false,
+    required this.vehicle,
   }): super(
     id: id,
     index: index,
@@ -51,6 +55,7 @@ class ChapterModel extends ChapterEntity {
     String? name,
     List<QuestionModel>? questions,
      bool? isImportant,
+     String? vehicle,
   }) {
     return ChapterModel(
       id: id ?? this.id,
@@ -58,6 +63,7 @@ class ChapterModel extends ChapterEntity {
       name: name ?? this.name,
       questions: questions ?? this.questions,
       isImportant: isImportant ?? this.isImportant,
+      vehicle: vehicle ?? this.vehicle,
     );
   }
 
@@ -67,6 +73,7 @@ class ChapterModel extends ChapterEntity {
       index: json['index'] as int,
       name: json['name'] as String,
       isImportant: json['isImportant'] as bool,
+      vehicle: json['vehicle'] as String,
       questions: (json['question'] as List<dynamic>?)
           ?.map((e) => QuestionModel.fromJson(e as Map<String, dynamic>))
           .toList() ??
@@ -80,10 +87,11 @@ class ChapterModel extends ChapterEntity {
       'index': index,
       'name': name,
       'isImportant': isImportant,
+      'vehicle': vehicle,
       'questions': questions.map((e) => (e as QuestionModel).toJson()).toList(),
     };
   }
 
   @override
-  List<Object?> get props => [id, index, name, questions];
+  List<Object?> get props => [id, index, name, questions, isImportant, vehicle];
 }

@@ -49,7 +49,7 @@ class TheoryScreen extends StatelessWidget {
         ],
       ),
       body: GridView(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 1,
           crossAxisSpacing: 12,

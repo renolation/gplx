@@ -23,13 +23,15 @@ class ChapterModelAdapter extends TypeAdapter<ChapterModel> {
       questions: fields[3] == null
           ? const []
           : (fields[3] as List).cast<QuestionModel>(),
+      isImportant: fields[4] == null ? false : fields[4] as bool,
+      vehicle: fields[5] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, ChapterModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -37,7 +39,11 @@ class ChapterModelAdapter extends TypeAdapter<ChapterModel> {
       ..writeByte(2)
       ..write(obj.name)
       ..writeByte(3)
-      ..write(obj.questions);
+      ..write(obj.questions)
+      ..writeByte(4)
+      ..write(obj.isImportant)
+      ..writeByte(5)
+      ..write(obj.vehicle);
   }
 
   @override
