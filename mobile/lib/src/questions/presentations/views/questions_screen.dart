@@ -32,6 +32,9 @@ class QuestionsScreen extends StatelessWidget {
                 curve: Curves.easeInOut,
               );
             });
+            if (state.questions.isEmpty) {
+              return const Center(child: Text('No questions available'));
+            }
 
             return SingleChildScrollView(
               child: Column(

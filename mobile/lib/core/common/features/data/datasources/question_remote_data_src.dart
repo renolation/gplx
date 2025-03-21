@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:gplx_app/core/data/boxes.dart';
 import 'package:gplx_app/core/errors/exceptions.dart';
+import 'package:gplx_app/core/utils/enums.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/question_model.dart';
@@ -76,7 +77,16 @@ class QuestionRemoteDataSrcImpl extends QuestionRemoteDataSrc {
   @override
   Future<List<QuestionModel>> getWrongAnswers() async {
     try {
-      return QuestionsBox().wrongQuestions;
+      List<QuestionModel> list =
+      QuestionsBox().wrongQuestions
+          .where((e) {
+        return e.vehicle == SettingsBox().vehicleTypeQuestion.convertToVehicle();
+      }
+      ).toList();
+      if(list.isEmpty){
+        return [];
+      }
+      return list;
     } on ServerException {
       rethrow;
     } catch (e) {
