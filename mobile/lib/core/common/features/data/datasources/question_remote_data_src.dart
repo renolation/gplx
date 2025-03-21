@@ -56,7 +56,10 @@ class QuestionRemoteDataSrcImpl extends QuestionRemoteDataSrc {
     try {
       final chapter = QuestionsBox().getChapterById(chapterId);
       if(chapter != null){
-        return chapter.questions;
+        List<QuestionModel> list = chapter.questions;
+        list.sort((a, b) => a.index.compareTo(b.index));
+
+        return chapter.copyWith(questions: list).questions;
       }
       final data = await _client
           .from('question')
@@ -64,7 +67,6 @@ class QuestionRemoteDataSrcImpl extends QuestionRemoteDataSrc {
           .eq('chapterId', chapterId);
       print(data);
       String jsonString = jsonEncode(data);
-
       final jsonData = questionModelFromJson(jsonString);
       return jsonData;
     } on ServerException {
