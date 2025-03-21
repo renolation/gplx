@@ -29,6 +29,12 @@ export class GetterController {
         return this.getterService.getQuiz(urls);
     }
 
+
+    @Get("/sign")
+    getSign() {
+        return this.getterService.getSign();
+    }
+
     @Get('/url')
     findByUrl(@Query('link') link: string) {
         return this.getterService.findByUrl(`https://${link}`);

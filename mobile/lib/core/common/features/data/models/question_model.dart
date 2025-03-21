@@ -131,7 +131,7 @@ class QuestionModel extends QuestionEntity {
       answers: answers ?? this.answers,
       status: status ?? this.status,
       isCorrect: isCorrect ?? this.isCorrect,
-      selectedAnswer: selectedAnswer ?? this.selectedAnswer,
+      selectedAnswer: selectedAnswer,
       chapterId: chapterId ?? this.chapterId,
     );
   }

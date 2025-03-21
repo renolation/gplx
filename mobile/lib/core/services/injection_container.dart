@@ -29,6 +29,7 @@ Future<void> init() async {
 
 Future<void> _initQuestions() async {
   sl
+  //bloc
     ..registerFactory(
       () => QuestionsBloc(
         // getQuestions: sl(),
@@ -36,10 +37,13 @@ Future<void> _initQuestions() async {
         getWrongAnswers: sl(),
       ),
     )
+    //use case
     ..registerLazySingleton(() => GetQuestions(sl()))
     ..registerLazySingleton(() => GetWrongAnswers(sl()))
     ..registerLazySingleton(() => GetQuestionByChapterId(sl()))
+    //repo
     ..registerLazySingleton<QuestionRepo>(() => QuestionRepoImpl(sl()))
+    //data src
     ..registerLazySingleton<QuestionRemoteDataSrc>(
       () => QuestionRemoteDataSrcImpl(client: sl()),
     )

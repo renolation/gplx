@@ -43,6 +43,42 @@ export class GetterService {
         return `This action removes a #${id} getter`;
     }
 
+    async getSign() {
+        const crawler = new PlaywrightCrawler({
+                requestHandler: async ({page, request, enqueueLinks}) => {
+                    await page.waitForTimeout(1500);
+
+                    const rows = page.locator('.row.tips');
+                    const row = rows.nth(2);
+
+                    const divs = row.locator('div[id^="group"]');
+                    const tables = row.locator('table');
+
+                    const divCount = await divs.count();
+                    const tableCount = await tables.count();
+
+                    if (divCount !== tableCount) {
+                        console.error("Mismatch between number of divs and tables");
+                    } else {
+                        const mappings = [];
+                        for (let i = 0; i < divCount; i++) {
+                            const div = divs.nth(i);
+                            const table = tables.nth(i);
+                            const trCount = await table.locator('tr').count();
+                            console.log(trCount);
+                            const headerName = await div.textContent();
+                            mappings.push({headerName, table});
+                        }
+
+                        // console.log(mappings);
+                    }
+
+                }
+            }
+        );
+        await crawler.run(['https://taplaixe.vn/cac-bien-bao-giao-thong']);
+    }
+
     async getQuiz(urls: string[]) {
         const crawler = new PlaywrightCrawler({
             maxConcurrency: 1,
@@ -75,7 +111,7 @@ export class GetterService {
 
                         const image = listItem.locator("img");
                         let imgSrc = '';
-                        for (let j = 0; j < await image.count(); j++){
+                        for (let j = 0; j < await image.count(); j++) {
                             imgSrc = await image.nth(j).getAttribute("data-src");
                             console.log(`Image Source: ${imgSrc}`);
                         }
@@ -95,16 +131,16 @@ export class GetterService {
                         });
 
                         let correctQuestion = null;
-                        if(questions.length === 1) {
+                        if (questions.length === 1) {
                             correctQuestion = questions[0];
                         } else {
                             for (const question of questions) {
-                            const questionAnswerTexts = question.answers.map(a => a.text);
-                            if (answerTexts.every((answer, index) => answer === questionAnswerTexts[index])) {
-                                correctQuestion = question;
-                                break;
+                                const questionAnswerTexts = question.answers.map(a => a.text);
+                                if (answerTexts.every((answer, index) => answer === questionAnswerTexts[index])) {
+                                    correctQuestion = question;
+                                    break;
+                                }
                             }
-                        }
                         }
 
 
@@ -155,7 +191,7 @@ export class GetterService {
                         .textContent();
 
                     const firstImg = body.locator("img").first();
-                    let imgSrc  = '';
+                    let imgSrc = '';
                     if (await firstImg.count() > 0) {
                         imgSrc = await firstImg.getAttribute("src");
                         console.log(`Image Source: ${imgSrc}`);

@@ -88,6 +88,7 @@ class QuestionRemoteDataSrcImpl extends QuestionRemoteDataSrc {
       if(list.isEmpty){
         return [];
       }
+      list = [...list.map((e) => e.copyWith(status: 0, selectedAnswer: null))];
       return list;
     } on ServerException {
       rethrow;
