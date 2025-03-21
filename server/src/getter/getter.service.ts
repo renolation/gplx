@@ -8,6 +8,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Answer} from "../quizzes/entities/answer.entity";
 import {Chapter} from "../quizzes/entities/chapter.entity";
 import {Question} from "../quizzes/entities/question.entity";
+import {Sign} from "../quizzes/entities/sign.entity";
 
 @Injectable()
 export class GetterService {
@@ -19,7 +20,9 @@ export class GetterService {
         @InjectRepository(Chapter)
         private chapterRepository: Repository<Chapter>,
         @InjectRepository(Question)
-        private questionRepository: Repository<Question>
+        private questionRepository: Repository<Question>,
+        @InjectRepository(Sign)
+        private signRepository: Repository<Sign>
     ) {
     }
 
@@ -63,15 +66,61 @@ export class GetterService {
                         const mappings = [];
                         for (let i = 0; i < divCount; i++) {
                             const div = divs.nth(i);
-                            const table = tables.nth(i);
-                            const trCount = await table.locator('tr').count();
-                            console.log(trCount);
                             const headerName = await div.textContent();
+
+
+                            const table = tables.nth(i);
+                            const trCount = await table.locator('tbody tr').count();
+
+                            console.log(trCount);
+
+                            // console.log(await table.innerHTML());
+                            const trItem = table.locator('tr');
+                            const tdItemCount = await trItem.count();
+                            for (let j = 0; j < tdItemCount; j++) {
+                                console.log(headerName.trim());
+                                const imgTag = await trItem.nth(j).locator('.sign').locator('img').getAttribute("src");
+                                console.log(imgTag);
+
+                                const signDesc = await trItem.nth(j).locator('.sign_desc');
+                                const textBold = signDesc.locator('.text_bold');
+                                const primaryText = await textBold.locator('.text_primary').textContent();
+                                const boldText = await textBold.evaluate(node => node.childNodes[0].textContent.trim());
+
+                                const descDiv = await signDesc.locator("div").nth(1).textContent();
+
+
+                                console.log(`Bold Text: ${boldText}`);
+                                console.log(`Primary Text: ${primaryText}`);
+                                console.log(descDiv.trim());
+                                console.log('-----------')
+                                const sign = new Sign();
+                                sign.name = primaryText;
+                                sign.bold = boldText;
+                                sign.desc = descDiv;
+                                sign.image = imgTag;
+                                sign.type = headerName
+                                await this.saveSignToDB(sign);
+
+
+                            }
+
+
+                            // for (let i = 0; i< 1; i++) {
+                            //     const imageSrc = table.nth(i);
+                            //     const sign = imageSrc.locator("td.sign").first();
+                            //     console.log(sign.innerHTML());
+                            //     // const img =  imageSrc.locator('img').first();
+                            //     // console.log(img.getAttribute("src"));
+                            //     // console.log(img.getAttribute("data-src"));
+                            // }
+
                             mappings.push({headerName, table});
                         }
 
                         // console.log(mappings);
                     }
+
 
                 }
             }
@@ -283,6 +332,17 @@ export class GetterService {
             return this.questionRepository.save(question);
         }
 
+    }
+
+    async saveSignToDB(sign: Sign): Promise<Sign> {
+        const isExist = await this.signRepository.findOne({
+            where: {name: sign.name, type: sign.type, bold: sign.bold, image: sign.image},
+        });
+        if (isExist) {
+            return isExist;
+        } else {
+            return this.signRepository.save(sign);
+        }
     }
 
     async saveAnswerToDB(answer: Answer, question: Question): Promise<Answer> {

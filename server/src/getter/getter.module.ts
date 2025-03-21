@@ -6,9 +6,10 @@ import { Answer } from "../quizzes/entities/answer.entity";
 import { Question } from "../quizzes/entities/question.entity";
 import { Chapter } from "../quizzes/entities/chapter.entity";
 import { Quiz } from "../quizzes/entities/quiz.entity";
+import {Sign} from "../quizzes/entities/sign.entity";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Answer, Question, Chapter, Quiz
+  imports: [TypeOrmModule.forFeature([Answer, Question, Chapter, Quiz, Sign
   ])],
   controllers: [GetterController],
   providers: [GetterService],

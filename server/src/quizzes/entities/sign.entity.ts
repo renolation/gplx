@@ -10,6 +10,9 @@ export class Sign {
     name: string;
 
     @Column()
+    bold: string;
+
+    @Column()
     image: string;
 
     @Column({nullable: true})

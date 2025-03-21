@@ -8,6 +8,7 @@ import { GetterModule } from './getter/getter.module';
 import { Answer } from "./quizzes/entities/answer.entity";
 import { Chapter } from "./quizzes/entities/chapter.entity";
 import { Question } from "./quizzes/entities/question.entity";
+import {Sign} from "./quizzes/entities/sign.entity";
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { Question } from "./quizzes/entities/question.entity";
       // ssl: {
       //   rejectUnauthorized: false,
       // },
-      entities: [Quiz, Answer, Chapter, Question],
+      entities: [Quiz, Answer, Chapter, Question, Sign],
       synchronize: true,
     }),
     QuizzesModule,
