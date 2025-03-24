@@ -19,6 +19,8 @@ class BoxKeys {
 
   static const String listChapters = 'listChapters';
 
+  static const String listChaptersNew = 'listChaptersNew';
+
 
 
 

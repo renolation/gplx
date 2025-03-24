@@ -3,8 +3,6 @@ part of '../../boxes.dart';
 extension LearnExtension on QuestionsBox {
 
 
-
-
   //note: get all questions from box
   List<QuestionModel> get listQuestions {
     return (box.get(
@@ -36,7 +34,6 @@ extension LearnExtension on QuestionsBox {
     }
     box.put(BoxKeys.listChapters, value);
   }
-
 
 
   addQuestion(QuestionModel question) {
@@ -72,13 +69,6 @@ extension LearnExtension on QuestionsBox {
     listQuestions = questions;
   }
 
-  QuestionModel get question {
-    return box.get(BoxKeys.question, defaultValue: QuestionModel.empty());
-  }
-
-  set question(QuestionModel question) {
-      box.put(BoxKeys.question, question);
-  }
 
   //note: get all questions from box
   List<QuestionModel> get wrongQuestions {
