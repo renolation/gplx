@@ -20,7 +20,9 @@ class QuestionsScreen extends StatelessWidget {
     return BlocBuilder<QuestionsBloc, QuestionsState>(
       builder: (context, state) {
         if (state is QuestionsLoading) {
-          return const CircularProgressIndicator();
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
         } else if (state is QuestionsLoaded) {
           final index = state.index;
           WidgetsBinding.instance.addPostFrameCallback((_) {

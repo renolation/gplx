@@ -32,7 +32,7 @@ class SignsScreen extends StatelessWidget {
               final sign = signs.values.elementAt(index);
               return ExpansionTile(
                 title: Text(signs.keys.elementAt(index)),
-                initiallyExpanded: true,
+                initiallyExpanded: index == 0 ? true : false,
                 children: sign
                     .map(
                       (e) => ListTile(
