@@ -97,7 +97,7 @@ class TheoryScreen extends StatelessWidget {
             child: TextButton(
               child: Text('Cau diem liet'),
               onPressed: () {
-
+                context.pushNamed('importantQuestions');
               },
             ),
           ),

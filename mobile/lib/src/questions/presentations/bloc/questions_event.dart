@@ -24,6 +24,9 @@ class GetWrongAnswersEvent extends QuestionsEvent {
   const GetWrongAnswersEvent();
 }
 
+class GetImportantQuestionsEvent extends QuestionsEvent {
+  const GetImportantQuestionsEvent();
+}
 
 
 class IncreaseQuestionIndexEvent extends QuestionsEvent {

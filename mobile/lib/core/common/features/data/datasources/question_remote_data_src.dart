@@ -18,6 +18,10 @@ abstract class QuestionRemoteDataSrc {
 
   Future<List<QuestionModel>> getWrongAnswers();
 
+  Future<List<QuestionModel>> getImportantQuestions();
+
+
+
 }
 
 class QuestionRemoteDataSrcImpl extends QuestionRemoteDataSrc {
@@ -89,6 +93,32 @@ class QuestionRemoteDataSrcImpl extends QuestionRemoteDataSrc {
         return [];
       }
       list = [...list.map((e) => e.copyWith(status: 0, selectedAnswer: null))];
+      return list;
+    } on ServerException {
+      rethrow;
+    } catch (e) {
+      throw ServerException(message: e.toString(), statusCode: 505);
+    }
+  }
+
+  @override
+  Future<List<QuestionModel>> getImportantQuestions() async {
+    try {
+
+      final data = await _client
+          .from('question')
+          .select('*, answer(*)');
+
+      String jsonString = jsonEncode(data);
+      final jsonData = questionModelFromJson(jsonString);
+      QuestionsBox().listQuestions = jsonData;
+      List<QuestionModel> list =
+      jsonData
+          .where((e) {
+        return (e.vehicle == SettingsBox().vehicleTypeQuestion.convertToVehicle() && e.isImportant);
+      }
+      ).toList();
+      list.sort((a, b) => a.index.compareTo(b.index));
       return list;
     } on ServerException {
       rethrow;

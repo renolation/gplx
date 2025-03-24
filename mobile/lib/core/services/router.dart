@@ -90,9 +90,10 @@ final GoRouter goRouter = GoRouter(
         int chapterId = int.parse(state.pathParameters['chapterId']!);
         return BlocProvider(
           create: (context) => QuestionsBloc(
-            // getQuestions: sl(),
+            getQuestions: sl(),
             getQuestionByChapterId: sl(),
             getWrongAnswers: sl(),
+            getImportantQuestions: sl(),
           )..add(GetQuestionsByChapterIdEvent(chapterId)),
           child: const QuestionsScreen(),
         );
@@ -104,13 +105,33 @@ final GoRouter goRouter = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         return BlocProvider(
           create: (context) => QuestionsBloc(
+            getQuestions: sl(),
             getQuestionByChapterId: sl(),
             getWrongAnswers: sl(),
-          )..add(const GetWrongAnswersEvent()),
+            getImportantQuestions: sl(),
+          )
+            ..add(const GetWrongAnswersEvent()),
           child: const QuestionsScreen(),
         );
       },
     ),
+
+    GoRoute(
+      name: 'importantQuestions',
+      path: '/importantQuestions',
+      builder: (BuildContext context, GoRouterState state) {
+        return BlocProvider(
+          create: (context) => QuestionsBloc(
+            getQuestions: sl(),
+            getQuestionByChapterId: sl(),
+            getWrongAnswers: sl(),
+            getImportantQuestions: sl(),
+          )..add(const GetImportantQuestionsEvent()),
+          child: const QuestionsScreen(),
+        );
+      },
+    ),
+
   ],
 );
 

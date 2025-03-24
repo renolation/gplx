@@ -25,7 +25,7 @@ class QuestionsScreen extends StatelessWidget {
           final index = state.index;
           WidgetsBinding.instance.addPostFrameCallback((_) {
             scrollController.animateTo(
-              index * (40 + 8 * 2),
+              index * (80),
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
             );
@@ -63,10 +63,10 @@ class QuestionsScreen extends StatelessWidget {
                             .read<QuestionsBloc>()
                             .add(GoToQuestionEvent(i)),
                         child: Container(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           height: 40,
+                          width: 80,
                           decoration: BoxDecoration(
-                            // color: i == index ? Colors.red : Colors.blue,
                             border: Border(
                               bottom: BorderSide(
                                   width: 2,
@@ -90,7 +90,7 @@ class QuestionsScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                      'Cau hoi ${state.questions[index].index}: ${state.questions[index].text}',
+                      'Câu hỏi ${state.questions[index].index}: ${state.questions[index].text}',
                       style: kQuestionText),
                 ),
                 if (state.questions[index].image!.isNotEmpty)
@@ -221,8 +221,8 @@ class QuestionsScreen extends StatelessWidget {
                 ),
                 Container(
                   height: 50,
-                  color: Colors.blue,
-                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  color: Colors.grey.shade300,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Row(
                     children: [
                       IconButton(

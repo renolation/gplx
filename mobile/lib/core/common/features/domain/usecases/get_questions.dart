@@ -32,3 +32,12 @@ class GetWrongAnswers extends UseCaseWithoutParams<List<QuestionEntity>> {
   @override
   ResultFuture<List<QuestionEntity>> call() async => _repo.getWrongAnswers();
 }
+
+class GetImportantQuestions extends UseCaseWithoutParams<List<QuestionEntity>> {
+  const GetImportantQuestions(this._repo);
+
+  final QuestionRepo _repo;
+
+  @override
+  ResultFuture<List<QuestionEntity>> call() async => _repo.getImportantQuestions();
+}

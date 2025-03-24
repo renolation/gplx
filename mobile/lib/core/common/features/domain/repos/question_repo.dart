@@ -13,4 +13,6 @@ abstract class QuestionRepo {
 
   ResultFuture<List<QuestionEntity>> getWrongAnswers();
 
+  ResultFuture<List<QuestionEntity>> getImportantQuestions();
+
 }

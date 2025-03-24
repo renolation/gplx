@@ -43,4 +43,14 @@ class QuestionRepoImpl implements QuestionRepo {
      return Left(ServerFailure.fromException(e));
    }
   }
+
+  @override
+  ResultFuture<List<QuestionEntity>> getImportantQuestions() async {
+    try {
+      final questions = await _remoteDataSrc.getImportantQuestions();
+      return Right(questions);
+    } on ServerException catch(e){
+      return Left(ServerFailure.fromException(e));
+    }
+  }
 }

@@ -15,13 +15,19 @@ part 'questions_event.dart';
 
 class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
   QuestionsBloc({
+    required GetQuestions getQuestions,
     required GetQuestionByChapterId getQuestionByChapterId,
     required GetWrongAnswers getWrongAnswers,
-  })  : _getQuestionByChapterId = getQuestionByChapterId,
+    required GetImportantQuestions getImportantQuestions,
+  })  : _getQuestions = getQuestions,
+        _getQuestionByChapterId = getQuestionByChapterId,
         _getWrongAnswers = getWrongAnswers,
+        _getImportantQuestions = getImportantQuestions,
         super(QuestionsInitial()) {
+    on<GetQuestionsEvent>(_getQuestionsHandler);
     on<GetQuestionsByChapterIdEvent>(_getQuestionByChapterIdHandler);
     on<GetWrongAnswersEvent>(_getWrongAnswersHandler);
+    on<GetImportantQuestionsEvent>(_getImportantQuestionsHandler);
 
     on<IncreaseQuestionIndexEvent>(_increaseQuestionIndexHandler);
     on<DecreaseQuestionIndexEvent>(_decreaseQuestionIndexHandler);
@@ -30,8 +36,21 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
     on<CheckAnswerEvent>(_checkAnswerHandler);
   }
 
+  final GetQuestions _getQuestions;
   final GetQuestionByChapterId _getQuestionByChapterId;
   final GetWrongAnswers _getWrongAnswers;
+  final GetImportantQuestions _getImportantQuestions;
+
+
+  Future<void> _getQuestionsHandler(
+      GetQuestionsEvent event, Emitter<QuestionsState> emit) async {
+    emit(QuestionsLoading());
+    final questions = await _getQuestions();
+    questions.fold(
+      (failure) => emit(QuestionsError(failure.message)),
+      (questions) => emit(QuestionsLoaded(questions as List<QuestionModel>)),
+    );
+  }
 
   Future<void> _getQuestionByChapterIdHandler(
       GetQuestionsByChapterIdEvent event, Emitter<QuestionsState> emit) async {
@@ -47,6 +66,23 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
       GetWrongAnswersEvent event, Emitter<QuestionsState> emit) async {
     emit(QuestionsLoading());
     final questions = await _getWrongAnswers();
+    questions.fold(
+      (failure) => emit(
+        QuestionsError(failure.message),
+      ),
+      (questions) => emit(
+        QuestionsLoaded(
+          (questions as List<QuestionModel>)
+          ,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _getImportantQuestionsHandler(
+      GetImportantQuestionsEvent event, Emitter<QuestionsState> emit) async {
+    emit(QuestionsLoading());
+    final questions = await _getImportantQuestions();
     questions.fold(
       (failure) => emit(
         QuestionsError(failure.message),
