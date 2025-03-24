@@ -107,6 +107,8 @@ class TheoryScreen extends StatelessWidget {
               child: Text('Bien bao'),
               onPressed: () {
 
+                  context.pushNamed('signs');
+
               },
             ),
           )

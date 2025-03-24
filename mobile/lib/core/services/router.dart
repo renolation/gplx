@@ -8,6 +8,8 @@ import 'package:gplx_app/src/quiz/presentations/bloc/quiz_bloc.dart';
 import 'package:gplx_app/src/quiz/presentations/views/quiz_screen.dart';
 import 'package:gplx_app/src/quizzes/presentations/bloc/quizzes_bloc.dart';
 import 'package:gplx_app/src/quizzes/presentations/views/quizzes_screen.dart';
+import 'package:gplx_app/src/sign/presentations/bloc/sign_bloc.dart';
+import 'package:gplx_app/src/sign/presentations/views/signs_screen.dart';
 
 import '../../src/home/presentations/views/home_screen.dart';
 import '../../src/questions/presentations/bloc/questions_bloc.dart';
@@ -128,6 +130,18 @@ final GoRouter goRouter = GoRouter(
             getImportantQuestions: sl(),
           )..add(const GetImportantQuestionsEvent()),
           child: const QuestionsScreen(),
+        );
+      },
+    ),
+    GoRoute(
+      name: 'signs',
+      path: '/signs',
+      builder: (BuildContext context, GoRouterState state) {
+        return BlocProvider(
+          create: (context) => SignBloc(
+            getSigns: sl(),
+          )..add(const GetSignsEvent()),
+          child: const SignsScreen(),
         );
       },
     ),

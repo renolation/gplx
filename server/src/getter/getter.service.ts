@@ -97,9 +97,9 @@ export class GetterService {
                                 const sign = new Sign();
                                 sign.name = primaryText;
                                 sign.bold = boldText;
-                                sign.desc = descDiv;
+                                sign.desc = descDiv.trim();
                                 sign.image = imgTag;
-                                sign.type = headerName
+                                sign.type = headerName.trim()
                                 await this.saveSignToDB(sign);
 
 
