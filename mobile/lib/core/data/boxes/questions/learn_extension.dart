@@ -40,7 +40,7 @@ extension LearnExtension on QuestionsBox {
 
   ChapterModel? getChapterById(int chapterId) {
     print('aaa');
-    return listChapters.singleWhere((e) => e.id == chapterId);
+    return listChapters.singleWhere((e) => e.id == chapterId && e.vehicle == SettingsBox().vehicleTypeQuestion.convertToVehicle());
   }
 
 

@@ -5,6 +5,7 @@ import 'package:gplx_app/core/common/features/data/models/answer_model.dart';
 import 'package:gplx_app/core/common/features/data/models/chapter_model.dart';
 import 'package:gplx_app/core/common/features/data/models/question_model.dart';
 import 'package:gplx_app/core/common/features/data/models/quiz_model.dart';
+import 'package:gplx_app/core/common/features/data/models/sign_model.dart';
 import 'package:gplx_app/core/utils/enums.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 
@@ -31,6 +32,7 @@ Future<void> initBoxes() async {
   Hive.registerAdapter(AnswerModelAdapter());
   Hive.registerAdapter(ChapterModelAdapter());
   Hive.registerAdapter(QuizModelAdapter());
+  Hive.registerAdapter(SignModelAdapter());
   await SettingsBox().init();
   await QuestionsBox().init();
 

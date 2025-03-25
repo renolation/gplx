@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:gplx_app/core/data/boxes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../errors/exceptions.dart';
@@ -24,6 +25,12 @@ class SignRemoteDataSrcImpl implements SignRemoteDataSrc {
   @override
   Future<List<SignModel>> getSigns() async {
     try {
+
+      final signs = SettingsBox().listSigns;
+      if(signs.isNotEmpty){
+        return signs;
+      }
+
       final data = await _client
           .from('sign')
           .select('*');
@@ -31,6 +38,7 @@ class SignRemoteDataSrcImpl implements SignRemoteDataSrc {
 
       String jsonString = jsonEncode(data);
       final fetchedSigns = signModelFromJson(jsonString);
+      SettingsBox().listSigns = fetchedSigns;
       return fetchedSigns;
     } on ServerException {
       rethrow;

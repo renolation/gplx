@@ -27,6 +27,7 @@ class BoxKeys {
   static const String allQuestions = 'allQuestions';
 
   static const String vehicleTypeQuestion = 'vehicleTypeQuestion';
+  static const String listSigns = 'listSigns';
 
 
   static const String indexTypeQuestion = 'indexTypeQuestion';

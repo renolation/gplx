@@ -37,11 +37,29 @@ extension BaseExtension on QuestionsBox {
     allQuestions = questions;
 
     //note: update chapter
+    // final chapter = chapters.singleWhere((element) => element.id == question.chapterId);
+    // chapter.questions.removeWhere((element) => element.index == question.index && element.vehicle == question.vehicle);
+    // chapter.questions.add(question);
+    // chapters.removeWhere((element) => element.id == question.chapterId);
+    // chapters.add(chapter);
+    // listChapters = [...chapters];
+
+
     final chapter = chapters.singleWhere((element) => element.id == question.chapterId);
     chapter.questions.removeWhere((element) => element.index == question.index && element.vehicle == question.vehicle);
     chapter.questions.add(question);
-    listChapters = [...chapters];
-    
+
+
+    final chapterAll = chapters.singleWhere((element) => element.index == 0 && element.vehicle == question.vehicle);
+    chapterAll.questions.removeWhere((element) => element.index == question.index && element.vehicle == question.vehicle);
+    chapterAll.questions.add(question);
+
+
+    listChapters = [
+      for (var ch in chapters)
+        if (ch.id == question.chapterId) chapter else if (ch.id == chapterAll.id) chapterAll else ch
+    ];
+
   }
 
 }

@@ -96,6 +96,8 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
     );
   }
 
+  //region: Question Event Handlers
+
   void _increaseQuestionIndexHandler(
       IncreaseQuestionIndexEvent event, Emitter<QuestionsState> emit) {
     if ((state as QuestionsLoaded).index ==
@@ -153,4 +155,5 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
 
     emit((state as QuestionsLoaded).copyWith(questions: updatedQuestions));
   }
+  //endregion
 }

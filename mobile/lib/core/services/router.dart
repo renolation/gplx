@@ -14,7 +14,6 @@ import 'package:gplx_app/src/sign/presentations/views/signs_screen.dart';
 import '../../src/home/presentations/views/home_screen.dart';
 import '../../src/questions/presentations/bloc/questions_bloc.dart';
 import '../../src/quiz/presentations/bloc/counter_cubit.dart';
-import '../../src/theory/presentations/views/theory_screen.dart';
 import 'injection_container.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
@@ -24,23 +23,14 @@ final GlobalKey<NavigatorState> _homeNavigatorKey =
 
 final GoRouter goRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: '/theory',
+  initialLocation: '/home',
   routes: <RouteBase>[
+
     GoRoute(
-      path: '/',
-      builder: (context, state) => const HomeScreen(),
-      // routes: <RouteBase>[
-      //   GoRoute(
-      //     path: 'details',
-      //     builder: (BuildContext context, GoRouterState state) => const DetailsScreen(label: 'A'),
-      //   ),
-      // ],
-    ),
-    GoRoute(
-      name: 'theory',
-      path: '/theory',
+      name: 'home',
+      path: '/home',
       builder: (BuildContext context, GoRouterState state) =>
-          const TheoryScreen(),
+          const HomeScreen(),
       routes: <RouteBase>[
         GoRoute(
           name: 'chapters',

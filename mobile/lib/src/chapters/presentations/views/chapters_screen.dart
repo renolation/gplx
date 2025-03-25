@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -18,16 +15,16 @@ class ChaptersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         title: Text('Chapters'),
       ),
       body: BlocBuilder<ChaptersBloc, ChaptersState>(
-        builder: (context, state){
+        builder: (context, state) {
           if (state is ChaptersLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is ChaptersLoaded) {
-            List<ChapterModel> chapters = state.chapters.where((e) => e.vehicle == SettingsBox().vehicleTypeQuestion.convertToVehicle()).toList();
+            List<ChapterModel> chapters =
+                state.chapters.where((e) => e.vehicle == SettingsBox().vehicleTypeQuestion.convertToVehicle()).toList();
             return ListView.builder(
               itemCount: chapters.length,
               itemBuilder: (context, index) {
@@ -37,22 +34,67 @@ class ChaptersScreen extends StatelessWidget {
                 QuestionModel lastQuestion = chapter.questions.last;
                 int importantQuestionsCount = chapter.questions.where((element) => element.isImportant).length;
 
-                final Widget item = ListTile(
-                  title: Text('${chapter.name.split('về ').last.toUpperCase()}', style: TextStyle(color: chapter.isImportant ? Colors.red : Colors.black),),
+                final Widget item = InkWell(
+                  onTap: () {
+                    context.pushNamed('questions', pathParameters: {'chapterId': '${chapter.id}'});
+                  },
+                  child: Container(
+                    height: 80,
+                    width: double.infinity,
+                    color: Colors.amber[600],
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          chapter.name.split('về ').last.toUpperCase(),
+                          style: TextStyle(color: chapter.isImportant ? Colors.red : Colors.black),
+                        ),
+                        Text('${chapter.questions.length} câu: Từ câu ${firstQuestion.index}'
+                            ' đến câu ${lastQuestion.index}${importantQuestionsCount > 0 ? ', có $importantQuestionsCount câu điểm liệt' : '.'}'),
+                        Builder(
+                          builder: (context) {
+                            int countAnswered = chapter.questions.where((element) => element.status > 0).length;
+                            int questionsCount = chapter.questions.length;
+                            return Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    height: 3,
+                                    width: double.infinity,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                                Text('$countAnswered/$questionsCount'),
+                              ],
+                            );
+                          }
+                        )
+                      ],
+                    ),
+                  ),
+                );
+
+                final Widget item2 = ListTile(
+                  title: Text(
+                    '${chapter.name.split('về ').last.toUpperCase()}',
+                    style: TextStyle(color: chapter.isImportant ? Colors.red : Colors.black),
+                  ),
                   subtitle: Text('${chapter.questions.length} câu: Từ câu ${firstQuestion.index}'
-                      ' đến câu ${lastQuestion.index}${importantQuestionsCount > 0 ? ', có $importantQuestionsCount câu điểm liệt' :'.'}'),
+                      ' đến câu ${lastQuestion.index}${importantQuestionsCount > 0 ? ', có $importantQuestionsCount câu điểm liệt' : '.'}'),
                   onTap: () {
                     context.pushNamed('questions', pathParameters: {'chapterId': '${chapter.id}'});
                   },
                 );
-                if(index == 3) {
+                if (index == 3) {
                   return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // const InlineAdaptiveExample(),
-                    item
-                  ],
-                );
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // const InlineAdaptiveExample(),
+                      item
+                    ],
+                  );
                 }
                 return item;
               },
