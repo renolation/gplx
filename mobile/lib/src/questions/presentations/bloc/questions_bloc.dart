@@ -142,13 +142,15 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
           currentQuestion.copyWith(isCorrect: false, status: 2);
     }
 
-    // QuestionsBox().question = updatedQuestions[(state as QuestionsLoaded).index];
-    // QuestionsBox().saveAnsweredQuestion(updatedQuestions[(state as QuestionsLoaded).index]);
-    var list = [...QuestionsBox().wrongQuestions];
-    list.removeWhere((element) =>
-        element.id == updatedQuestions[(state as QuestionsLoaded).index].id);
-    list.add(updatedQuestions[(state as QuestionsLoaded).index]);
-    QuestionsBox().wrongQuestions = list;
+    // var list = [...QuestionsBox().wrongQuestions];
+    // list.removeWhere((element) =>
+    //     element.id == updatedQuestions[(state as QuestionsLoaded).index].id);
+    // list.add(updatedQuestions[(state as QuestionsLoaded).index]);
+    // QuestionsBox().wrongQuestions = list;
+
+    BaseExtension(QuestionsBox()).updateQuestion(updatedQuestions[(state as QuestionsLoaded).index]);
+
+
     emit((state as QuestionsLoaded).copyWith(questions: updatedQuestions));
   }
 }

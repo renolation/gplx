@@ -20,24 +20,16 @@ extension BaseExtension on QuestionsBox {
     }
     box.put(BoxKeys.allQuestions, value);
   }
-  List<ChapterModel> get listChaptersNew {
-    return (box.get(
-      BoxKeys.listChaptersNew,
-      defaultValue: [],
-    ) as List).cast<ChapterModel>();
-  }
 
-  set listChaptersNew(List<ChapterModel> value) {
-    if (value.isEmpty) {
-      box.delete(BoxKeys.listChaptersNew);
-      return;
-    }
-    box.put(BoxKeys.listChaptersNew, value);
+
+
+  List<QuestionModel> get wrongQuestions {
+    return allQuestions.where((e) => e.status == 2).toList();
   }
 
   void updateQuestion(QuestionModel question){
     final questions = allQuestions;
-    final chapters = listChaptersNew;
+    final chapters = listChapters;
 
     //note: update question
     questions.removeWhere((element) => element.index == question.index && element.vehicle == question.vehicle);
@@ -48,7 +40,7 @@ extension BaseExtension on QuestionsBox {
     final chapter = chapters.singleWhere((element) => element.id == question.chapterId);
     chapter.questions.removeWhere((element) => element.index == question.index && element.vehicle == question.vehicle);
     chapter.questions.add(question);
-    listChaptersNew = [...chapters];
+    listChapters = [...chapters];
     
   }
 

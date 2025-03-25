@@ -1,7 +1,7 @@
 
 enum TypeEnum {
-  a1('A1', 'Motorcycle'),
-  b1('B1', 'Moto');
+  a1('A1', 'Moto'),
+  b1('B1', 'Oto');
 
   const TypeEnum(this.name, this.desc);
   final String name;

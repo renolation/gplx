@@ -26,13 +26,11 @@ class ChapterRemoteDataSrcImpl extends ChapterRemoteDataSrc {
     try {
       final chapters = QuestionsBox().listChapters;
       if(chapters.isNotEmpty){
-
         return chapters;
       }
       final data = await _client
           .from('chapter')
           .select('*, question(*, answer(*))');
-      // print(data);
       String jsonString = jsonEncode(data);
       List<ChapterModel> listChapter = chapterModelFromJson(jsonString);
       listChapter = addImportantQuestionsToChapter8(listChapter);
