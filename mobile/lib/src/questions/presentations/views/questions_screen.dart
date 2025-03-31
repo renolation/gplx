@@ -37,7 +37,7 @@ class QuestionsScreen extends StatelessWidget {
           }
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Toan bo cau hoi'),
+              title:  Text(state.questions[index].chapter?.name ?? 'Toàn bộ câu hỏi'),
               actions: [
                 IconButton(
                     onPressed: () {
@@ -61,9 +61,7 @@ class QuestionsScreen extends StatelessWidget {
                     itemBuilder: (ctx, i) {
                       QuestionModel question = state.questions[i];
                       return InkWell(
-                        onTap: () => context
-                            .read<QuestionsBloc>()
-                            .add(GoToQuestionEvent(i)),
+                        onTap: () => context.read<QuestionsBloc>().add(GoToQuestionEvent(i)),
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           height: 40,
@@ -72,9 +70,7 @@ class QuestionsScreen extends StatelessWidget {
                             border: Border(
                               bottom: BorderSide(
                                   width: 2,
-                                  color: i == index && question.status == 0
-                                      ? Colors.blue
-                                      : Colors.transparent),
+                                  color: i == index && question.status == 0 ? Colors.blue : Colors.transparent),
                             ),
                             color: question.status == 2
                                 ? Colors.red
@@ -82,22 +78,19 @@ class QuestionsScreen extends StatelessWidget {
                                     ? Colors.green
                                     : Colors.transparent,
                           ),
-                          child: Center(
-                              child: Text('Câu ${state.questions[i].index}')),
+                          child: Center(child: Text('Câu ${state.questions[i].index}')),
                         ),
                       );
                     },
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                      'Câu hỏi ${state.questions[index].index}: ${state.questions[index].text}',
+                  padding: const EdgeInsets.all(12.0),
+                  child: Text('Câu hỏi ${state.questions[index].index}: ${state.questions[index].text}',
                       style: kQuestionText),
                 ),
                 if (state.questions[index].image!.isNotEmpty)
-                  Image.network(
-                      'https://taplaixe.vn${state.questions[index].image!}'),
+                  Image.network('https://taplaixe.vn${state.questions[index].image!}'),
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Divider(),
@@ -111,77 +104,93 @@ class QuestionsScreen extends StatelessWidget {
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: state.questions[index].status == 0
-                                      ? Colors.transparent
-                                      : answer.isCorrect
-                                          ? Colors.green
-                                          : (answer ==
-                                                  state.questions[index]
-                                                      .selectedAnswer
-                                              ? Colors.red
-                                              : Colors.transparent)),
+                                // color: state.questions[index].status == 0
+                                //     ? Colors.transparent
+                                //     : answer.isCorrect
+                                //         ? Colors.green
+                                //         : (answer == state.questions[index].selectedAnswer
+                                //             ? Colors.red
+                                //             : Colors.transparent),
+                                // color: Colors.red,
+                              ),
                               borderRadius: BorderRadius.circular(8),
                             ),
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
                             margin: const EdgeInsets.only(bottom: 8),
                             child: InkWell(
-                              onTap: (){
-                                context
-                                    .read<QuestionsBloc>()
-                                    .add(SelectAnswerEvent(answer, index));
+                              onTap: () {
+                                context.read<QuestionsBloc>().add(SelectAnswerEvent(answer, index));
                               },
-                              child: ListTile(
-                                title: Text(' ${answer.isCorrect} ${answer.text}',
-                                    style: kAnswerText),
-                                // title: Text(answer.text),
-                                leading: Radio<AnswerModel>(
-                                  value: answer,
-                                  fillColor:
-                                      WidgetStateProperty.resolveWith<Color>(
-                                    (states) {
-                                      if (state.questions[index].status == 0) {
-                                        return Colors
-                                            .black; // Default color before selection
-                                      }
-                                      return answer.isCorrect
-                                          ? Colors.green
-                                          : (answer ==
-                                                  state.questions[index]
-                                                      .selectedAnswer
-                                              ? Colors.red
-                                              : Colors.black);
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Radio<AnswerModel>(
+                                    value: answer,
+                                    fillColor: WidgetStateProperty.resolveWith<Color>(
+                                      (states) {
+                                        if (state.questions[index].status == 0) {
+                                          return Colors.black; // Default color before selection
+                                        }
+                                        return answer.isCorrect
+                                            ? Colors.green
+                                            : (answer == state.questions[index].selectedAnswer
+                                                ? Colors.pink
+                                                : Colors.black);
+                                      },
+                                    ),
+                                    groupValue: state.questions[index].selectedAnswer,
+                                    onChanged: (value) {
+                                      context.read<QuestionsBloc>().add(SelectAnswerEvent(value!, index));
                                     },
                                   ),
-                                  groupValue:
-                                      state.questions[index].selectedAnswer,
-                                  onChanged: (value) {
-                                    context
-                                        .read<QuestionsBloc>()
-                                        .add(SelectAnswerEvent(value!, index));
-                                  },
-                                ),
+                                  const SizedBox(width: 8,),
+                                  Expanded(
+                                    child: Text(answer.text, style: kAnswerText),
+                                  ),
+                                ],
                               ),
+                              // child: ListTile(
+                              //   selectedTileColor: Colors.green,
+                              //   title: Text(answer.text, style: kAnswerText),
+                              //   leading: Radio<AnswerModel>(
+                              //     value: answer,
+                              //     fillColor: WidgetStateProperty.resolveWith<Color>(
+                              //       (states) {
+                              //         if (state.questions[index].status == 0) {
+                              //           return Colors.black; // Default color before selection
+                              //         }
+                              //         return answer.isCorrect
+                              //             ? Colors.green
+                              //             : (answer == state.questions[index].selectedAnswer
+                              //                 ? Colors.red
+                              //                 : Colors.black);
+                              //       },
+                              //     ),
+                              //     groupValue: state.questions[index].selectedAnswer,
+                              //     onChanged: (value) {
+                              //       context.read<QuestionsBloc>().add(SelectAnswerEvent(value!, index));
+                              //     },
+                              //   ),
+                              // ),
                             ),
                           ),
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Divider(),
-                        ),
+                        // const Padding(
+                        //   padding: EdgeInsets.all(8.0),
+                        //   child: Divider(),
+                        // ),
                         if (state.questions[index].status != 0)
                           Container(
                             decoration: BoxDecoration(
                               color: Colors.green.shade100,
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               spacing: 5,
                               children: [
-                                const Text('Giai thich dap an',
-                                    style: kHeaderExplainText),
-                                Text(state.questions[index].explain,
-                                    style: kExplainText),
+                                const Text('Giải thích đáp án', style: kHeaderExplainText),
+                                Text(state.questions[index].explain, style: kExplainText),
                               ],
                             ),
                           )
@@ -189,15 +198,12 @@ class QuestionsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (state.questions[index].status == 0 &&
-                    state.questions[index].selectedAnswer != null)
+                if (state.questions[index].status == 0 && state.questions[index].selectedAnswer != null)
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: ElevatedButton(
                       onPressed: () {
-                        context
-                            .read<QuestionsBloc>()
-                            .add(const CheckAnswerEvent());
+                        context.read<QuestionsBloc>().add(const CheckAnswerEvent());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue.shade100,
@@ -205,7 +211,7 @@ class QuestionsScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
-                      child:  Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Icon(
@@ -223,14 +229,12 @@ class QuestionsScreen extends StatelessWidget {
                 ),
                 Container(
                   height: 50,
-                  color: Colors.grey.shade300,
+                  color: Colors.grey.shade100,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Row(
                     children: [
                       IconButton(
-                          onPressed: () => context
-                              .read<QuestionsBloc>()
-                              .add(const DecreaseQuestionIndexEvent()),
+                          onPressed: () => context.read<QuestionsBloc>().add(const DecreaseQuestionIndexEvent()),
                           icon: const Icon(FontAwesomeIcons.anglesLeft)),
                       IconButton(
                         onPressed: () {
@@ -244,20 +248,16 @@ class QuestionsScreen extends StatelessWidget {
                                 color: Colors.white,
                                 child: GridView.builder(
                                   padding: EdgeInsets.zero,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 6,
                                     childAspectRatio: 1,
                                   ),
                                   itemCount: state.questions.length,
                                   itemBuilder: (ctx, index) {
-                                    QuestionModel question =
-                                        state.questions[index];
+                                    QuestionModel question = state.questions[index];
                                     return InkWell(
                                       onTap: () {
-                                        context
-                                            .read<QuestionsBloc>()
-                                            .add(GoToQuestionEvent(index));
+                                        context.read<QuestionsBloc>().add(GoToQuestionEvent(index));
                                         ctx.pop();
                                       },
                                       child: Container(
@@ -269,8 +269,7 @@ class QuestionsScreen extends StatelessWidget {
                                                   ? Colors.green
                                                   : Colors.blue.shade50,
                                         ),
-                                        child: Center(
-                                            child: Text('${question.index}')),
+                                        child: Center(child: Text('${question.index}')),
                                       ),
                                     );
                                   },
@@ -279,13 +278,14 @@ class QuestionsScreen extends StatelessWidget {
                             ),
                           );
                         },
-                        icon: const Icon(FontAwesomeIcons.listUl, color: Colors.black,),
+                        icon: const Icon(
+                          FontAwesomeIcons.listUl,
+                          color: Colors.black,
+                        ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       IconButton(
-                          onPressed: () => context
-                              .read<QuestionsBloc>()
-                              .add(const IncreaseQuestionIndexEvent()),
+                          onPressed: () => context.read<QuestionsBloc>().add(const IncreaseQuestionIndexEvent()),
                           icon: const Icon(FontAwesomeIcons.anglesRight)),
                     ],
                   ),
@@ -336,15 +336,12 @@ class QuestionsScreen extends StatelessWidget {
                       controller: scrollController,
                       itemBuilder: (ctx, i) {
                         return InkWell(
-                          onTap: () => context
-                              .read<QuestionsBloc>()
-                              .add(GoToQuestionEvent(i)),
+                          onTap: () => context.read<QuestionsBloc>().add(GoToQuestionEvent(i)),
                           child: Container(
                             padding: const EdgeInsets.all(8.0),
                             height: 40,
                             color: i == index ? Colors.red : Colors.blue,
-                            child: Center(
-                                child: Text('Câu ${state.questions[i].index}')),
+                            child: Center(child: Text('Câu ${state.questions[i].index}')),
                           ),
                         );
                       },
@@ -352,17 +349,13 @@ class QuestionsScreen extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      context
-                          .read<QuestionsBloc>()
-                          .add(const DecreaseQuestionIndexEvent());
+                      context.read<QuestionsBloc>().add(const DecreaseQuestionIndexEvent());
                     },
                     child: Text('Previous'),
                   ),
                   TextButton(
                     onPressed: () {
-                      context
-                          .read<QuestionsBloc>()
-                          .add(const IncreaseQuestionIndexEvent());
+                      context.read<QuestionsBloc>().add(const IncreaseQuestionIndexEvent());
                     },
                     child: Text('Next'),
                   ),
@@ -379,23 +372,16 @@ class QuestionsScreen extends StatelessWidget {
                               fillColor: WidgetStateProperty.resolveWith<Color>(
                                 (states) {
                                   if (state.questions[index].status == 0) {
-                                    return Colors
-                                        .black; // Default color before selection
+                                    return Colors.black; // Default color before selection
                                   }
                                   return answer.isCorrect
                                       ? Colors.green
-                                      : (answer ==
-                                              state.questions[index]
-                                                  .selectedAnswer
-                                          ? Colors.red
-                                          : Colors.black);
+                                      : (answer == state.questions[index].selectedAnswer ? Colors.red : Colors.black);
                                 },
                               ),
                               groupValue: state.questions[index].selectedAnswer,
                               onChanged: (value) {
-                                context
-                                    .read<QuestionsBloc>()
-                                    .add(SelectAnswerEvent(value!, index));
+                                context.read<QuestionsBloc>().add(SelectAnswerEvent(value!, index));
                               },
                             ),
                           ),
@@ -404,15 +390,11 @@ class QuestionsScreen extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      context
-                          .read<QuestionsBloc>()
-                          .add(const CheckAnswerEvent());
+                      context.read<QuestionsBloc>().add(const CheckAnswerEvent());
                     },
                     child: Text('Check answer'),
                   ),
-                  state.questions[index].status == 0
-                      ? const SizedBox()
-                      : Text(state.questions[index].explain),
+                  state.questions[index].status == 0 ? const SizedBox() : Text(state.questions[index].explain),
                 ],
               ),
             );
