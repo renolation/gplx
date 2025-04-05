@@ -67,7 +67,25 @@ final GoRouter goRouter = GoRouter(
           BlocProvider<QuizBloc>(
             create: (context) => QuizBloc(
               getQuizById: sl(),
+              getRandomQuiz: sl(),
             )..add(GetQuizByIdEvent(quizId)),
+          ),
+          BlocProvider<CounterCubit>(
+            create: (context) => CounterCubit(),
+          ),
+        ], child: const QuizScreen());
+      },
+    ),
+    GoRoute(
+      name: 'randomQuiz',
+      path: '/randomQuiz',
+      builder: (BuildContext context, GoRouterState state) {
+        return MultiBlocProvider(providers: [
+          BlocProvider<QuizBloc>(
+            create: (context) => QuizBloc(
+              getQuizById: sl(),
+              getRandomQuiz: sl(),
+            )..add(const GetRandomQuizEvent()),
           ),
           BlocProvider<CounterCubit>(
             create: (context) => CounterCubit(),

@@ -81,11 +81,13 @@ Future<void> _initQuizzes() async {
     ..registerFactory(
       () => QuizBloc(
         getQuizById: sl(),
+        getRandomQuiz: sl(),
       ),
     )
 
     ..registerLazySingleton(() => GetQuizzes(sl()))
     ..registerLazySingleton(() => GetQuizById(sl()))
+    ..registerLazySingleton(() => GetRandomQuiz(sl()))
     ..registerLazySingleton<QuizRepo>(() => QuizRepoImpl(sl()))
     ..registerLazySingleton<QuizRemoteDataSrc>(
         () => QuizRemoteDataSrcImpl(client: sl()));

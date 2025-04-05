@@ -11,4 +11,6 @@ abstract class QuizRepo {
 
   ResultFuture<QuizEntity> getQuizById(int quizId);
 
+  ResultFuture<QuizEntity> getRandomQuiz();
+
 }

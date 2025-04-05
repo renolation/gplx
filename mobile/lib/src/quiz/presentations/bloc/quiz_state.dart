@@ -12,7 +12,6 @@ final class QuizInitial extends QuizState {
 
 }
 
-
 final class QuizLoading extends QuizState {
 
 }

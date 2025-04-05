@@ -12,6 +12,10 @@ class GetQuizByIdEvent extends QuizEvent {
   const GetQuizByIdEvent(this.id);
 }
 
+class GetRandomQuizEvent extends QuizEvent {
+  const GetRandomQuizEvent();
+}
+
 class IncreaseQuestionIndexEvent extends QuizEvent {
   const IncreaseQuestionIndexEvent();
 }

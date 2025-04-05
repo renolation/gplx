@@ -34,4 +34,13 @@ class QuizRepoImpl implements QuizRepo {
     }
   }
 
+  @override
+  ResultFuture<QuizEntity> getRandomQuiz() async {
+    try {
+      final quiz = await _remoteDataSrc.getRandomQuiz();
+      return Right(quiz);
+    } on ServerException catch(e){
+      return Left(ServerFailure.fromException(e));
+    }
+  }
 }

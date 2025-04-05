@@ -148,6 +148,7 @@ class QuizScreen extends StatelessWidget {
                     child: const Text('Next'),
                   ),
                   Text('Câu: ${index + 1}'),
+                  Text(state.quiz.questions[index].chapterId.toString()),
                   Text(state.quiz.questions[index].text),
                   Column(
                     children: [
@@ -193,10 +194,10 @@ class QuizScreen extends StatelessWidget {
                 ],
               ),
             ),
-            bottomSheet: Padding(
-              padding:  EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-              child: const AnchoredAdaptiveExample(),
-            ),
+            // bottomSheet: Padding(
+            //   padding:  EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+            //   child: const AnchoredAdaptiveExample(),
+            // ),
           );
         } else if (state is QuizError) {
           return Scaffold(

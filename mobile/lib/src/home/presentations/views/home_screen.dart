@@ -66,7 +66,7 @@ class HomeScreen extends StatelessWidget {
             ButtonHome(
               name: 'De ngau nhien',
               function: () {
-                // context.pushNamed('randomQuiz');
+                context.pushNamed('randomQuiz');
               },
             ),
             ButtonHome(

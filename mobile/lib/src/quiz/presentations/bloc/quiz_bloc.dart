@@ -13,10 +13,13 @@ part 'quiz_event.dart';
 part 'quiz_state.dart';
 
 class QuizBloc extends Bloc<QuizEvent, QuizState> {
-  QuizBloc({required GetQuizById getQuizById})
+  QuizBloc({required GetQuizById getQuizById, required GetRandomQuiz getRandomQuiz})
       : _getQuizById = getQuizById,
+        _getRandomQuiz = getRandomQuiz,
         super(QuizInitial()) {
     on<GetQuizByIdEvent>(_getQuizByIdHandler);
+    on<GetRandomQuizEvent>(_getRandomQuizHandler);
+
 
     on<IncreaseQuestionIndexEvent>(_increaseQuestionIndexHandler);
     on<DecreaseQuestionIndexEvent>(_decreaseQuestionIndexHandler);
@@ -27,12 +30,26 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
   }
 
   final GetQuizById _getQuizById;
+  final GetRandomQuiz _getRandomQuiz;
 
   Future<void> _getQuizByIdHandler(
       GetQuizByIdEvent event, Emitter<QuizState> emit) async {
     emit(QuizLoading());
     print('event.id: ${event.id}');
     final quiz = await _getQuizById(event.id);
+
+    quiz.fold((failure) => emit(QuizError(failure.message)), (quiz) {
+      if (quiz.status == 1) {
+        return emit(QuizFinished(quiz as QuizModel));
+      } else {
+        return emit(QuizLoaded(quiz as QuizModel, index: 0));
+      }
+    });
+  }
+
+  Future<void> _getRandomQuizHandler(GetRandomQuizEvent event, Emitter<QuizState> emit) async {
+    emit(QuizLoading());
+    final quiz = await _getRandomQuiz();
 
     quiz.fold((failure) => emit(QuizError(failure.message)), (quiz) {
       if (quiz.status == 1) {
