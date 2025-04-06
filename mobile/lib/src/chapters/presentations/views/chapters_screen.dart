@@ -1,9 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gplx_app/core/common/features/data/models/chapter_model.dart';
 import 'package:gplx_app/core/common/features/data/models/question_model.dart';
 import 'package:gplx_app/core/data/boxes.dart';
+import 'package:gplx_app/core/utils/colors.dart';
 import 'package:gplx_app/core/utils/enums.dart';
 import 'package:gplx_app/src/chapters/presentations/bloc/chapters_bloc.dart';
 
@@ -39,20 +41,36 @@ class ChaptersScreen extends StatelessWidget {
                     context.pushNamed('questions', pathParameters: {'chapterId': '${chapter.id}'});
                   },
                   child: Container(
-                    height: 80,
+                    height: 110,
                     width: double.infinity,
-                    color: Colors.amber[600],
-                    margin: EdgeInsets.symmetric(vertical: 5),
+                    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(
+                        AutoSizeText(
                           chapter.name.split('về ').last.toUpperCase(),
-                          style: TextStyle(color: chapter.isImportant ? Colors.red : Colors.black),
+                          minFontSize: 12,
+                          maxFontSize: 20,
+                          style: TextStyle(color: chapter.isImportant ? Colors.red : Colors.black, fontSize: 18),
                         ),
                         Text('${chapter.questions.length} câu: Từ câu ${firstQuestion.index}'
                             ' đến câu ${lastQuestion.index}${importantQuestionsCount > 0 ? ', có $importantQuestionsCount câu điểm liệt' : '.'}'),
+                        // const Spacer(),
                         Builder(
                           builder: (context) {
                             int countAnswered = chapter.questions.where((element) => element.status > 0).length;

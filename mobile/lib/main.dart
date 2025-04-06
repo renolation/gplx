@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:gplx_app/core/utils/colors.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/ads/interstitials_ad.dart';
@@ -33,11 +34,19 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: goRouter,
       title: 'Flutter Demo',
+
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple, primary: firstColor),
         useMaterial3: true,
         textTheme: GoogleFonts.overpassTextTheme(),
+        scaffoldBackgroundColor: const Color(0xffE4E0E1),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xffE4E0E1),
+          foregroundColor: Colors.black,
+          titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
       ),
     );
   }

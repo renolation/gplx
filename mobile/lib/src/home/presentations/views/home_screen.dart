@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gplx_app/core/data/boxes.dart';
+import 'package:gplx_app/core/utils/colors.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -64,37 +67,43 @@ class HomeScreen extends StatelessWidget {
           ),
           children: [
             ButtonHome(
-              name: 'De ngau nhien',
+              name: 'Đề ngẫu nhiên',
+              color: firstColor,
               function: () {
                 context.pushNamed('randomQuiz');
               },
             ),
             ButtonHome(
-              name: 'On cau hoi',
+              name: 'Ôn câu hỏi',
+              color: secondColor,
               function: () {
                 context.pushNamed('chapters');
               },
             ),
             ButtonHome(
-              name: 'De thi',
+              name: 'Đề thi',
+              color: thirdColor,
               function: () {
                 context.pushNamed('quizzes');
               },
             ),
             ButtonHome(
-              name: 'Cac cau bi sai',
+              name: 'Các câu sai',
+              color: fourthColor,
               function: () {
                 context.pushNamed('wrongAnswers');
               },
             ),
             ButtonHome(
-              name: 'Cau diem liet',
+              name: 'Câu điểm liệt',
+              color: firstColor,
               function: () {
                 context.pushNamed('importantQuestions');
               },
             ),
             ButtonHome(
-              name: 'Bien bao',
+              name: 'Biển báo',
+              color: secondColor,
               function: () {
                 context.pushNamed('signs');
               },
@@ -116,20 +125,22 @@ class ButtonHome extends StatelessWidget {
     super.key,
     required this.name,
     required this.function,
+    this.color = firstColor
   });
 
   final String name;
   final Function function;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.green,
+      color: color,
       child: TextButton(
         onPressed: () => function(),
         child: Text(
-          name,
-          style: const TextStyle(fontSize: 20),
+          name,textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
         ),
       ),
     );

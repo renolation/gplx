@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gplx_app/core/common/features/data/models/question_model.dart';
 import 'package:gplx_app/core/common/features/data/models/quiz_model.dart';
+import 'package:gplx_app/core/utils/colors.dart';
 import 'package:gplx_app/src/quiz/presentations/bloc/counter_cubit.dart';
 import 'package:gplx_app/src/quiz/presentations/views/counter_widget.dart';
 import 'package:gplx_app/src/quiz/presentations/views/questions_grid.dart';
@@ -110,7 +111,7 @@ class QuizScreen extends StatelessWidget {
                       }, child: const Text('Yes')),
                     ],
                   ));
-                }, child: const Text('Submit')),
+                }, child: const Text('Submit', style: TextStyle(color: Colors.blue, fontSize: 18, fontWeight: FontWeight.bold),)),
               ],
             ),
             body: Column(
@@ -141,9 +142,9 @@ class QuizScreen extends StatelessWidget {
                                   color: i == index && question.status == 0 ? Colors.blue : Colors.transparent),
                             ),
                             color: question.status == 2
-                                ? Colors.red
+                                ? Colors.red.withValues(alpha: 0.7)
                                 : question.status == 1
-                                ? Colors.green
+                                ? Colors.green.withValues(alpha: 0.7)
                                 : Colors.transparent,
                           ),
                           child: Center(child: Text('Câu ${state.quiz.questions[i].index}')),
@@ -228,7 +229,7 @@ class QuizScreen extends StatelessWidget {
                         context.read<QuizBloc>().add(const CheckAnswerEvent());
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.shade100,
+                        backgroundColor: Theme.of(context).colorScheme.error,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4),
                         ),
@@ -236,12 +237,16 @@ class QuizScreen extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(
+                           Icon(
                             Icons.check,
                             size: 24,
+                            color: Theme.of(context).colorScheme.onPrimary,
                           ),
                           const SizedBox(width: 8),
-                          Text('Kiem tra'.toUpperCase()),
+                          Text('Kiểm tra'.toUpperCase(), style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+
+                          ),),
                         ],
                       ),
                     ),
@@ -251,7 +256,7 @@ class QuizScreen extends StatelessWidget {
                 ),
                 Container(
                   height: 50,
-                  color: Colors.grey.shade100,
+                  color: secondColor.withValues(alpha: 0.7),
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Row(
                     children: [
