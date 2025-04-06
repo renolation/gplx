@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gplx_app/core/common/features/data/models/answer_model.dart';
 import 'package:gplx_app/core/common/features/data/models/question_model.dart';
+import 'package:gplx_app/core/widgets/explain_widget.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -104,14 +105,6 @@ class QuestionsScreen extends StatelessWidget {
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(
-                                // color: state.questions[index].status == 0
-                                //     ? Colors.transparent
-                                //     : answer.isCorrect
-                                //         ? Colors.green
-                                //         : (answer == state.questions[index].selectedAnswer
-                                //             ? Colors.red
-                                //             : Colors.transparent),
-                                // color: Colors.red,
                               ),
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -149,51 +142,12 @@ class QuestionsScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              // child: ListTile(
-                              //   selectedTileColor: Colors.green,
-                              //   title: Text(answer.text, style: kAnswerText),
-                              //   leading: Radio<AnswerModel>(
-                              //     value: answer,
-                              //     fillColor: WidgetStateProperty.resolveWith<Color>(
-                              //       (states) {
-                              //         if (state.questions[index].status == 0) {
-                              //           return Colors.black; // Default color before selection
-                              //         }
-                              //         return answer.isCorrect
-                              //             ? Colors.green
-                              //             : (answer == state.questions[index].selectedAnswer
-                              //                 ? Colors.red
-                              //                 : Colors.black);
-                              //       },
-                              //     ),
-                              //     groupValue: state.questions[index].selectedAnswer,
-                              //     onChanged: (value) {
-                              //       context.read<QuestionsBloc>().add(SelectAnswerEvent(value!, index));
-                              //     },
-                              //   ),
-                              // ),
+
                             ),
                           ),
-                        // const Padding(
-                        //   padding: EdgeInsets.all(8.0),
-                        //   child: Divider(),
-                        // ),
+
                         if (state.questions[index].status != 0)
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.green.shade100,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              spacing: 5,
-                              children: [
-                                const Text('Giải thích đáp án', style: kHeaderExplainText),
-                                Text(state.questions[index].explain, style: kExplainText),
-                              ],
-                            ),
-                          )
+                          ExplainWidget(explain: state.questions[index].explain),
                       ],
                     ),
                   ),

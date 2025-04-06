@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gplx_app/core/common/features/data/models/question_model.dart';
 import 'package:gplx_app/core/common/features/data/models/quiz_model.dart';
 import 'package:gplx_app/src/quiz/presentations/bloc/counter_cubit.dart';
 import 'package:gplx_app/src/quiz/presentations/views/counter_widget.dart';
 import 'package:gplx_app/src/quiz/presentations/views/questions_grid.dart';
 import 'package:gplx_app/src/quizzes/presentations/bloc/quizzes_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../core/ads/banner_ad.dart';
 import '../../../../core/common/features/data/models/answer_model.dart';
+import '../../../../core/utils/constants.dart';
+import '../../../../core/widgets/explain_widget.dart';
 import '../bloc/quiz_bloc.dart';
 
 class QuizScreen extends StatelessWidget {
@@ -16,6 +21,8 @@ class QuizScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ScrollController scrollController = ScrollController();
+
     return BlocBuilder<QuizBloc, QuizState>(
       builder: (context, state) {
         if (state is QuizLoading) {
@@ -74,14 +81,15 @@ class QuizScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              bottomSheet: Padding(
-                padding:  EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-                child: const AnchoredAdaptiveExample(),
-              ),
+              // bottomSheet: Padding(
+              //   padding:  EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+              //   child: const AnchoredAdaptiveExample(),
+              // ),
             ),
           );
         } else if (state is QuizLoaded) {
           final index = state.index;
+
           return Scaffold(
             appBar: AppBar(
               title: BlocProvider.value(value: context.read<CounterCubit>(), child: const CounterWidget()),
@@ -105,94 +113,209 @@ class QuizScreen extends StatelessWidget {
                 }, child: const Text('Submit')),
               ],
             ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 40,
-                    width: double.infinity,
-                    child: ListView.builder(
-                      itemCount: state.quiz.questions.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (ctx, i) {
-                        return InkWell(
-                          onTap: () => context
-                              .read<QuizBloc>()
-                              .add(GoToQuestionEvent(i)),
-                          child: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            height: 40,
-                            color: i == index ? Colors.red : Colors.blue,
-                            child: Center(
-                                child: Text(
-                                    'Câu ${i+1}')),
+            body: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 40,
+                  width: double.infinity,
+                  child: ListView.builder(
+                    itemCount: state.quiz.questions.length,
+                    scrollDirection: Axis.horizontal,
+                    controller: scrollController,
+                    itemBuilder: (ctx, i) {
+                      QuestionModel question = state.quiz.questions[i];
+                      return InkWell(
+                        onTap: () => context
+                            .read<QuizBloc>()
+                            .add(GoToQuestionEvent(i)),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          height: 40,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                  width: 2,
+                                  color: i == index && question.status == 0 ? Colors.blue : Colors.transparent),
+                            ),
+                            color: question.status == 2
+                                ? Colors.red
+                                : question.status == 1
+                                ? Colors.green
+                                : Colors.transparent,
                           ),
-                        );
-                      },
+                          child: Center(child: Text('Câu ${state.quiz.questions[i].index}')),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Text('Câu hỏi ${state.quiz.questions[index].index}: ${state.quiz.questions[index].text}',
+                      style: kQuestionText),
+                ),
+                if (state.quiz.questions[index].image!.isNotEmpty)
+                  Image.network('https://taplaixe.vn${state.quiz.questions[index].image!}'),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Divider(),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView(
+                      children: [
+                        for (final answer in state.quiz.questions[index].answers)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                            margin: const EdgeInsets.only(bottom: 8),
+                            child: InkWell(
+                              onTap: () {
+                                context.read<QuizBloc>().add(SelectAnswerEvent(answer, index));
+                              },
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Radio<AnswerModel>(
+                                    value: answer,
+                                    fillColor: WidgetStateProperty.resolveWith<Color>(
+                                          (states) {
+                                        if (state.quiz.questions[index].status == 0) {
+                                          return Colors.black; // Default color before selection
+                                        }
+                                        return answer.isCorrect
+                                            ? Colors.green
+                                            : (answer == state.quiz.questions[index].selectedAnswer
+                                            ? Colors.pink
+                                            : Colors.black);
+                                      },
+                                    ),
+                                    groupValue: state.quiz.questions[index].selectedAnswer,
+                                    onChanged: (value) {
+                                      context.read<QuizBloc>().add(SelectAnswerEvent(value!, index));
+                                    },
+                                  ),
+                                  const SizedBox(width: 8,),
+                                  Expanded(
+                                    child: Text(answer.text, style: kAnswerText),
+                                  ),
+                                ],
+                              ),
+
+                            ),
+                          ),
+
+                        if (state.quiz.questions[index].status != 0)
+                          ExplainWidget(explain: state.quiz.questions[index].explain),
+                      ],
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      context
-                          .read<QuizBloc>()
-                          .add(const DecreaseQuestionIndexEvent());
-                    },
-                    child: const Text('Previous'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      context
-                          .read<QuizBloc>()
-                          .add(const IncreaseQuestionIndexEvent());
-                    },
-                    child: const Text('Next'),
-                  ),
-                  Text('Câu: ${index + 1}'),
-                  Text(state.quiz.questions[index].chapterId.toString()),
-                  Text(state.quiz.questions[index].text),
-                  Column(
-                    children: [
-                      for (final answer in state.quiz.questions[index].answers)
-                        ListTile(
-                          title: Text(' ${answer.isCorrect} ${answer.text}'),
-                          leading: Radio<AnswerModel>(
-                            value: answer,
-                            fillColor: WidgetStateProperty.resolveWith<Color>(
-                              (states) {
-                                final question = state.quiz.questions[index];
-                                if (question.status == 0) {
-                                  return Colors
-                                      .black; // Default color before selection
-                                }
-                                return answer.isCorrect
-                                    ? Colors.green
-                                    : (answer == question.selectedAnswer
-                                        ? Colors.red
-                                        : Colors.black);
-                              },
-                            ),
-                            groupValue:
-                                (state.quiz.questions[index]).selectedAnswer,
-                            onChanged: (value) {
-                              context
-                                  .read<QuizBloc>()
-                                  .add(SelectAnswerEvent(value!, index));
-                            },
-                          ),
+                ),
+
+                if (state.quiz.questions[index].status == 0 && state.quiz.questions[index].selectedAnswer != null)
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        context.read<QuizBloc>().add(const CheckAnswerEvent());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue.shade100,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
                         ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.check,
+                            size: 24,
+                          ),
+                          const SizedBox(width: 8),
+                          Text('Kiem tra'.toUpperCase()),
+                        ],
+                      ),
+                    ),
+                  ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 50,
+                  color: Colors.grey.shade100,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () => context.read<QuizBloc>().add(const DecreaseQuestionIndexEvent()),
+                          icon: const Icon(FontAwesomeIcons.anglesLeft)),
+                      IconButton(
+                        onPressed: () {
+                          showMaterialModalBottomSheet(
+                            context: context,
+                            expand: false,
+                            builder: (ctx) => Material(
+                              clipBehavior: Clip.antiAlias,
+                              child: Container(
+                                height: 400,
+                                color: Colors.white,
+                                child: GridView.builder(
+                                  padding: EdgeInsets.zero,
+                                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 6,
+                                    childAspectRatio: 1,
+                                  ),
+                                  itemCount: state.quiz.questions.length,
+                                  itemBuilder: (ctx, index) {
+                                    QuestionModel question = state.quiz.questions[index];
+                                    return InkWell(
+                                      onTap: () {
+                                        context.read<QuizBloc>().add(GoToQuestionEvent(index));
+                                        ctx.pop();
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                          color: question.status == 2
+                                              ? Colors.red
+                                              : question.status == 1
+                                              ? Colors.green
+                                              : Colors.blue.shade50,
+                                        ),
+                                        child: Center(child: Text('${question.index}')),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        icon: const Icon(
+                          FontAwesomeIcons.listUl,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                          onPressed: () => context.read<QuizBloc>().add(const IncreaseQuestionIndexEvent()),
+                          icon: const Icon(FontAwesomeIcons.anglesRight)),
                     ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      context.read<QuizBloc>().add(const CheckAnswerEvent());
-                    },
-                    child: const Text('Check answer'),
-                  ),
-                  state.quiz.questions[index].status == 0
-                      ? const SizedBox()
-                      : Text(state.quiz.questions[index].explain),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).padding.bottom,
+                )
+              ],
             ),
             // bottomSheet: Padding(
             //   padding:  EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
