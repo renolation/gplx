@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gplx_app/core/common/features/data/models/answer_model.dart';
 import 'package:gplx_app/core/common/features/data/models/question_model.dart';
+import 'package:gplx_app/core/extenstions/context_extension.dart';
 import 'package:gplx_app/core/utils/colors.dart';
 import 'package:gplx_app/core/widgets/explain_widget.dart';
 import 'package:hive_ce/hive.dart';
@@ -86,73 +87,70 @@ class QuestionsScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Text('Câu hỏi ${state.questions[index].index}: ${state.questions[index].text}',
-                      style: kQuestionText),
-                ),
-                if (state.questions[index].image!.isNotEmpty)
-                  Image.network('https://taplaixe.vn${state.questions[index].image!}'),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Divider(),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListView(
-                      children: [
-                        for (final answer in state.questions[index].answers)
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                            margin: const EdgeInsets.only(bottom: 8),
-                            child: InkWell(
-                              onTap: () {
-                                context.read<QuestionsBloc>().add(SelectAnswerEvent(answer, index));
-                              },
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Radio<AnswerModel>(
-                                    value: answer,
-                                    fillColor: WidgetStateProperty.resolveWith<Color>(
+                Expanded(child: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text('Câu hỏi ${state.questions[index].index}: ${state.questions[index].text}',
+                          style: kQuestionText),
+                    ),
+                    if (state.questions[index].image!.isNotEmpty)
+                      Center(child: Image.network('https://taplaixe.vn${state.questions[index].image!}', width: context.width * 0.8,)),
+                    const Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: Divider(),
+                    ),
+                    for (final answer in state.questions[index].answers)
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+                        child: InkWell(
+                          onTap: () {
+                            context.read<QuestionsBloc>().add(SelectAnswerEvent(answer, index));
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Radio<AnswerModel>(
+                                value: answer,
+                                fillColor: WidgetStateProperty.resolveWith<Color>(
                                       (states) {
-                                        if (state.questions[index].status == 0) {
-                                          return Colors.black; // Default color before selection
-                                        }
-                                        return answer.isCorrect
-                                            ? Colors.green
-                                            : (answer == state.questions[index].selectedAnswer
-                                                ? Colors.pink
-                                                : Colors.black);
-                                      },
-                                    ),
-                                    groupValue: state.questions[index].selectedAnswer,
-                                    onChanged: (value) {
-                                      context.read<QuestionsBloc>().add(SelectAnswerEvent(value!, index));
-                                    },
-                                  ),
-                                  const SizedBox(width: 8,),
-                                  Expanded(
-                                    child: Text(answer.text, style: kAnswerText),
-                                  ),
-                                ],
+                                    if (state.questions[index].status == 0) {
+                                      return Colors.black; // Default color before selection
+                                    }
+                                    return answer.isCorrect
+                                        ? Colors.green
+                                        : (answer == state.questions[index].selectedAnswer
+                                        ? Colors.pink
+                                        : Colors.black);
+                                  },
+                                ),
+                                groupValue: state.questions[index].selectedAnswer,
+                                onChanged: (value) {
+                                  context.read<QuestionsBloc>().add(SelectAnswerEvent(value!, index));
+                                },
                               ),
-
-                            ),
+                              const SizedBox(width: 8,),
+                              Expanded(
+                                child: Text(answer.text, style: kAnswerText),
+                              ),
+                            ],
                           ),
 
-                        if (state.questions[index].status != 0)
-                          ExplainWidget(explain: state.questions[index].explain),
-                      ],
-                    ),
-                  ),
-                ),
+                        ),
+                      ),
+
+                    if (state.questions[index].status != 0)
+                      ExplainWidget(explain: state.questions[index].explain),
+                  ],
+                )),
+
+
                 if (state.questions[index].status == 0 && state.questions[index].selectedAnswer != null)
                   Align(
                     alignment: Alignment.bottomCenter,
