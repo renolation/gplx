@@ -28,16 +28,15 @@ class SignRemoteDataSrcImpl implements SignRemoteDataSrc {
 
       final signs = SettingsBox().listSigns;
       if(signs.isNotEmpty){
+        signs.sort((a, b) => a.type.compareTo(b.type));
         return signs;
       }
-
       final data = await _client
           .from('sign')
           .select('*');
-
-
       String jsonString = jsonEncode(data);
       final fetchedSigns = signModelFromJson(jsonString);
+      fetchedSigns.sort((a, b) => a.type.compareTo(b.type));
       SettingsBox().listSigns = fetchedSigns;
       return fetchedSigns;
     } on ServerException {

@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('On thi GPLX'),
+        title: const Text('Ôn thi GIẤY PHÉP LÁI XE'),
         actions: [
           // TextButton(
           //     onPressed: () => InterstitialAdProvider().showInterstitialAd(),
@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
                         context: context,
                         builder: (context) => Scaffold(
                           appBar: AppBar(
-                            title: Text('Chon loai xe'),
+                            title: const Text('Chọn loại xe'),
                             backgroundColor: Colors.black12,
                           ),
                           body: ListView.builder(
@@ -52,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    child: Text('Type ${SettingsBox().vehicleTypeQuestion}'));
+                    child: Text('Hạng ${SettingsBox().vehicleTypeQuestion}', style: TextStyle(color: Colors.red, fontSize: 16),));
               }),
         ],
       ),

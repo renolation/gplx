@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gplx_app/core/common/features/data/models/answer_model.dart';
 import 'package:gplx_app/core/common/features/data/models/question_model.dart';
+import 'package:gplx_app/core/data/boxes.dart';
 import 'package:gplx_app/core/extenstions/context_extension.dart';
 import 'package:gplx_app/core/utils/colors.dart';
 import 'package:gplx_app/core/widgets/explain_widget.dart';
@@ -40,14 +41,35 @@ class QuestionsScreen extends StatelessWidget {
           }
           return Scaffold(
             appBar: AppBar(
-              title:  Text(state.questions[index].chapter?.name ?? 'Toàn bộ câu hỏi'),
+              title: Text(state.questions[index].chapter?.name ?? 'Toàn bộ câu hỏi'),
               actions: [
                 IconButton(
                     onPressed: () {
-                      //note: reset all questions belong to chapter
-                      // loop list, set status = 0, selectedAnswer = null
+                      showDialog(
+                          context: context,
+                          builder: (ctx) {
+                            return AlertDialog(
+                              title: Text('Reset'),
+                              content: Text('Ban co muon xoa tat ca cau tra loi'),
+                              actions: [
+                                TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Huỷ')),
+                                TextButton(
+                                    onPressed: () {
+                                      QuestionsBox().resetChapterById(state.questions[index].chapterId!);
+                                      context
+                                          .read<QuestionsBloc>()
+                                          .add(ResetQuestionEvent(state.questions[index].chapterId!));
+                                      Navigator.pop(ctx);
+                                    },
+                                    child: Text('Xoá')),
+                              ],
+                            );
+                          });
                     },
-                    icon: const Icon(FontAwesomeIcons.arrowsRotate, color: thirdColor,))
+                    icon: const Icon(
+                      FontAwesomeIcons.arrowsRotate,
+                      color: thirdColor,
+                    ))
               ],
             ),
             body: Column(
@@ -87,24 +109,28 @@ class QuestionsScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                Expanded(child: ListView(
+                Expanded(
+                    child: ListView(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(12.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       child: Text('Câu hỏi ${state.questions[index].index}: ${state.questions[index].text}',
                           style: kQuestionText),
                     ),
                     if (state.questions[index].image!.isNotEmpty)
-                      Center(child: Image.network('https://taplaixe.vn${state.questions[index].image!}', width: context.width * 0.8,)),
+                      Center(
+                          child: Image.network(
+                        'https://taplaixe.vn${state.questions[index].image!}',
+                        width: context.width * 0.8,
+                      )),
                     const Padding(
-                      padding: EdgeInsets.all(4.0),
+                      padding: EdgeInsets.symmetric(horizontal: 8),
                       child: Divider(),
                     ),
                     for (final answer in state.questions[index].answers)
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(
-                          ),
+                          border: Border.all(),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
@@ -119,15 +145,15 @@ class QuestionsScreen extends StatelessWidget {
                               Radio<AnswerModel>(
                                 value: answer,
                                 fillColor: WidgetStateProperty.resolveWith<Color>(
-                                      (states) {
+                                  (states) {
                                     if (state.questions[index].status == 0) {
                                       return Colors.black; // Default color before selection
                                     }
                                     return answer.isCorrect
                                         ? Colors.green
                                         : (answer == state.questions[index].selectedAnswer
-                                        ? Colors.pink
-                                        : Colors.black);
+                                            ? Colors.pink
+                                            : Colors.black);
                                   },
                                 ),
                                 groupValue: state.questions[index].selectedAnswer,
@@ -135,22 +161,19 @@ class QuestionsScreen extends StatelessWidget {
                                   context.read<QuestionsBloc>().add(SelectAnswerEvent(value!, index));
                                 },
                               ),
-                              const SizedBox(width: 8,),
+                              const SizedBox(
+                                width: 8,
+                              ),
                               Expanded(
                                 child: Text(answer.text, style: kAnswerText),
                               ),
                             ],
                           ),
-
                         ),
                       ),
-
-                    if (state.questions[index].status != 0)
-                      ExplainWidget(explain: state.questions[index].explain),
+                    if (state.questions[index].status != 0) ExplainWidget(explain: state.questions[index].explain),
                   ],
                 )),
-
-
                 if (state.questions[index].status == 0 && state.questions[index].selectedAnswer != null)
                   Align(
                     alignment: Alignment.bottomCenter,
@@ -167,17 +190,18 @@ class QuestionsScreen extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                           Icon(
+                          Icon(
                             Icons.check,
                             size: 24,
                             color: Theme.of(context).colorScheme.onPrimary,
-
                           ),
                           const SizedBox(width: 8),
-                          Text('Kiểm tra'.toUpperCase(), style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-
-                          ),),
+                          Text(
+                            'Kiểm tra'.toUpperCase(),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ),
                         ],
                       ),
                     ),

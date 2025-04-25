@@ -30,7 +30,6 @@ extension QuizExtension on QuestionsBox {
 
 
   QuizModel? getQuizById(int quizId) {
-    print('aaa');
     return listQuizzes.singleWhere((e) => e.id == quizId);
   }
 }

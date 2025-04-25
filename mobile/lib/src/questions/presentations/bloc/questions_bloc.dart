@@ -34,6 +34,9 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
     on<GoToQuestionEvent>(_goToQuestionHandler);
     on<SelectAnswerEvent>(_selectAnswerHandler);
     on<CheckAnswerEvent>(_checkAnswerHandler);
+
+    on<ResetQuestionEvent>(_resetQuestionEvent);
+
   }
 
   final GetQuestions _getQuestions;
@@ -155,5 +158,15 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
 
     emit((state as QuestionsLoaded).copyWith(questions: updatedQuestions));
   }
+
+  void _resetQuestionEvent(
+      ResetQuestionEvent event, Emitter<QuestionsState> emit) {
+    var updatedQuestions =
+    List<QuestionModel>.from((state as QuestionsLoaded).questions);
+    updatedQuestions = updatedQuestions.map((element) => element.copyWith(status: 0, selectedAnswer: null)).toList();
+
+    emit((state as QuestionsLoaded).copyWith(questions: updatedQuestions));
+  }
+
   //endregion
 }

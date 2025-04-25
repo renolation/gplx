@@ -52,3 +52,8 @@ class GoToQuestionEvent extends QuestionsEvent {
   const GoToQuestionEvent(this.index);
   final int index;
 }
+
+class ResetQuestionEvent extends QuestionsEvent {
+  final int chapterId;
+  const ResetQuestionEvent(this.chapterId);
+}

@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
 
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple, primary: firstColor),
+        colorScheme: ColorScheme.fromSeed(seedColor: fourthColor, primary: Colors.amber),
         useMaterial3: true,
         textTheme: GoogleFonts.overpassTextTheme(),
         scaffoldBackgroundColor: const Color(0xffE4E0E1),
@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.black,
           titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
           iconTheme: IconThemeData(color: Colors.black),
+          toolbarTextStyle: TextStyle(color: Colors.black),
         ),
       ),
     );

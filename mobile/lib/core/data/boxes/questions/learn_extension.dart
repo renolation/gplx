@@ -39,8 +39,32 @@ extension LearnExtension on QuestionsBox {
 
 
   ChapterModel? getChapterById(int chapterId) {
-    print('aaa');
     return listChapters.singleWhere((e) => e.id == chapterId && e.vehicle == SettingsBox().vehicleTypeQuestion.convertToVehicle());
+  }
+
+  void resetChapterById(int chapterId) {
+   print('aaa');
+    final chapter = getChapterById(chapterId);
+    print(chapter);
+    if (chapter != null) {
+      var questions = [...chapter.questions];
+      questions = questions.map((element) => element.copyWith(status: 0, selectedAnswer: null)).toList();
+      final updatedChapter = chapter.copyWith(questions: questions);
+      final chapters = listChapters;
+      chapters.removeWhere((element) => element.id == chapterId);
+      chapters.add(updatedChapter);
+      listChapters = [...chapters];
+
+      final allQuestionsChapter = listChapters.firstWhere((element) => element.index == 0 && element.vehicle == SettingsBox().vehicleTypeQuestion.convertToVehicle());
+      var allQuestions = [...allQuestionsChapter.questions.where((element) => element.chapterId == chapterId)];
+      allQuestions = allQuestions.map((element) => element.copyWith(status: 0, selectedAnswer: null)).toList();
+      final updatedAllQuestionsChapter = allQuestionsChapter.copyWith(questions: allQuestions);
+      final allChapters = listChapters;
+      allChapters.removeWhere((element) => element.id == allQuestionsChapter.id);
+      allChapters.add(updatedAllQuestionsChapter);
+      listChapters = [...allChapters];
+
+    }
   }
 
 

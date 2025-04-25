@@ -28,6 +28,7 @@ class ChaptersScreen extends StatelessWidget {
           } else if (state is ChaptersLoaded) {
             List<ChapterModel> chapters =
                 state.chapters.where((e) => e.vehicle == SettingsBox().vehicleTypeQuestion.convertToVehicle()).toList();
+            chapters.sort((a, b) => a.index.compareTo(b.index));
             return ValueListenableBuilder(
                 valueListenable: QuestionsBox().box.listenable(),
                 builder: (context, box, _) {
@@ -53,7 +54,7 @@ class ChaptersScreen extends StatelessWidget {
                           margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: Theme.of(context).colorScheme.primaryContainer,
                             borderRadius: BorderRadius.circular(8),
                             boxShadow: [
                               BoxShadow(
