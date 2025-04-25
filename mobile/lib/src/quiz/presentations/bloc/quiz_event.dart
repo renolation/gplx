@@ -42,5 +42,6 @@ class GoToQuestionEvent extends QuizEvent {
 
 class ResultQuizEvent extends QuizEvent {
   final int time;
-  const ResultQuizEvent(this.time);
+  final QuizModel quiz;
+  const ResultQuizEvent(this.time, this.quiz);
 }

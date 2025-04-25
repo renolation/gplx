@@ -19,7 +19,7 @@ class ChaptersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chapters'),
+        title: Text('Tất cả các chương',),
       ),
       body: BlocBuilder<ChaptersBloc, ChaptersState>(
         builder: (context, state) {

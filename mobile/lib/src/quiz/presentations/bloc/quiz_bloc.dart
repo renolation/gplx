@@ -119,7 +119,6 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
 
   void _resultQuizHandler(ResultQuizEvent event, Emitter<QuizState> emit) {
     final quiz = (state as QuizLoaded).quiz;
-
     final correctCount =
         quiz.questions.where((element) => element.status == 1).length;
     final incorrectCount =
@@ -134,7 +133,9 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
       time_used: (20*60) - event.time,
     );
 
-    QuestionsBox().updateQuiz(newQuiz);
+    if(quiz.id != 0){
+      QuestionsBox().updateQuiz(newQuiz);
+    }
     emit(QuizFinished(newQuiz));
   }
 }

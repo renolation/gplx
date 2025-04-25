@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:gplx_app/core/common/features/data/models/question_model.dart';
 import 'package:gplx_app/core/common/features/data/models/quiz_model.dart';
 import 'package:gplx_app/core/utils/colors.dart';
+import 'package:gplx_app/core/utils/functions.dart';
 import 'package:gplx_app/src/quiz/presentations/bloc/counter_cubit.dart';
 import 'package:gplx_app/src/quiz/presentations/views/counter_widget.dart';
 import 'package:gplx_app/src/quiz/presentations/views/questions_grid.dart';
@@ -36,7 +37,7 @@ class QuizScreen extends StatelessWidget {
             length: 4,
             child: Scaffold(
               appBar: AppBar(
-                title: const Text('Quizzes'),
+                title: Text('Bộ đề: ${state.quiz.id == 0 ? 'Ngẫu nhiên' : state.quiz.name}'),
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () {
@@ -48,23 +49,24 @@ class QuizScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text('Khong dat'),
+                      Text('Không đạt'.toUpperCase(), style: TextStyle(fontSize: 18),),
                       SizedBox(
                         height: 30,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text('Time: ${state.quiz.time_used}'),
+                            Text('Thời gian: ${state.quiz.time_used.convertToTime()}'),
+
                             Text('${state.quiz.correctCount}/${state.quiz.questions.length}'),
                           ],
                         ),
                       ),
                        TabBar(
                         tabs:  [
-                          Tab(text: 'Total ${state.quiz.questions.length}'),
-                          Tab(text: 'Correct ${state.quiz.correctCount}'),
-                          Tab(text: 'Wrong ${state.quiz.incorrectCount}'),
-                          Tab(text: 'Did not answer ${state.quiz.didNotAnswerCount}'),
+                          Tab(text: 'Tổng ${state.quiz.questions.length}'),
+                          Tab(text: 'Đúng ${state.quiz.correctCount}'),
+                          Tab(text: 'Sai ${state.quiz.incorrectCount}'),
+                          Tab(text: 'Chưa trả lời ${state.quiz.didNotAnswerCount}'),
                         ],
                       )
                     ],
@@ -98,20 +100,20 @@ class QuizScreen extends StatelessWidget {
               actions: [
                 TextButton(onPressed: (){
                   showDialog(context: context, builder: (ctx) => AlertDialog(
-                    title: const Text('Submit quiz'),
-                    content: const Text('Are you sure you want to submit the quiz?'),
+                    title: const Text('Hoàn tất'),
+                    content: const Text('Bạn có muốn hoàn thành bộ đề?'),
                     actions: [
                       TextButton(onPressed: (){
                         Navigator.of(context).pop();
-                      }, child: const Text('No')),
+                      }, child: const Text('Huỷ')),
                       TextButton(onPressed: (){
                         int time = context.read<CounterCubit>().time;
-                        context.read<QuizBloc>().add(ResultQuizEvent(time));
+                        context.read<QuizBloc>().add(ResultQuizEvent(time, state.quiz));
                         Navigator.of(context).pop();
-                      }, child: const Text('Yes')),
+                      }, child: const Text('Có')),
                     ],
                   ));
-                }, child: const Text('Submit', style: TextStyle(color: Colors.blue, fontSize: 18, fontWeight: FontWeight.bold),)),
+                }, child: const Text('Hoàn thành', style: TextStyle(color: Colors.blue, fontSize: 18, fontWeight: FontWeight.bold),)),
               ],
             ),
             body: Column(

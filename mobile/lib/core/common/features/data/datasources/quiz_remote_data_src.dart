@@ -79,9 +79,7 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
   @override
   Future<QuizModel> getRandomQuiz() async {
     try {
-      // final questions = QuestionsBox().listQuestions;
       final data = await _client.from('question').select('*, answer(*), chapter(*)');
-      print(data);
       String jsonString = jsonEncode(data);
       final jsonData = questionModelFromJson(jsonString);
       QuestionsBox().listQuestions = jsonData;
@@ -89,7 +87,7 @@ class QuizRemoteDataSrcImpl extends QuizRemoteDataSrc {
       questions = questions.where((e) => e.vehicle == SettingsBox().vehicleTypeQuestion.convertToVehicle()).toList();
       QuizModel quiz = QuizModel(
         id: 0,
-        name: 'Đề thi ngẫu nhiên',
+        name: 'Ngẫu nhiên',
         type: SettingsBox().vehicleTypeQuestion,
         questions: [], isTested: false, correctCount: 0,
         status: 0,

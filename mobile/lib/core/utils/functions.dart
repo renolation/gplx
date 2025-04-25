@@ -36,3 +36,11 @@ List<ChapterModel> addImportantQuestionsToChapter8(List<ChapterModel> listChapte
 
   return listChapters;
 }
+
+extension convertIntToTime on int {
+  String convertToTime() {
+    int minutes = this ~/ 60;
+    int seconds = this % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+}

@@ -30,6 +30,9 @@ class QuestionsScreen extends StatelessWidget {
         } else if (state is QuestionsLoaded) {
           final index = state.index;
           WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (state.questions.isEmpty){
+              return;
+            }
             scrollController.animateTo(
               index * (80),
               duration: const Duration(milliseconds: 300),
@@ -37,7 +40,12 @@ class QuestionsScreen extends StatelessWidget {
             );
           });
           if (state.questions.isEmpty) {
-            return const Center(child: Text('No questions available'));
+            return Scaffold(
+              appBar: AppBar(
+                title: Text('Câu hỏi'),
+              ),
+            body: const Center(child: Text('Không có câu hỏi')),
+            );
           }
           return Scaffold(
             appBar: AppBar(
